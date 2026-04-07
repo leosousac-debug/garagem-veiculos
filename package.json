@@ -1,12 +1,9 @@
 {
   "name": "garagem-veiculos",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Site de vendas - Garagem Veículos",
   "scripts": {
     "dev": "vercel dev"
   },
-  "dependencies": {
-    "@vercel/kv": "^2.0.0",
-    "uuid": "^9.0.0"
-  }
+  "dependencies": {}
 }

@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Garage Veículos — Araguari MG</title>
-<meta name="description" content="Garage Veículos em Araguari MG. Compre, venda e financie seu veículo com segurança.">
+<meta name="description" content="Garagem Veículos em Araguari MG. Compre, venda e financie seu veículo com segurança.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;500;600;700&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
@@ -655,13 +655,13 @@ footer{
         <h5>Atendimento</h5>
         <p>Seg–Sex: 8h às 18h</p>
         <p>Sábado: 8h às 13h</p>
-        <a href="tel:+5534999990000">(34) 99999-0000</a>
+        <a href="tel:+5534988920535">(34) 98892-0535</a>
         <a href="mailto:contato@garageveiculos.com.br">contato@garageveiculos.com.br</a>
       </div>
       <div class="fc">
         <h5>Localização</h5>
         <p>Araguari – MG</p>
-        <a href="https://maps.google.com" target="_blank">Ver no mapa ↗</a>
+        <a href="https://maps.app.goo.gl/tZt6Yg7u3heWRs2L9" target="_blank">Ver no mapa ↗</a>
       </div>
       <div class="fc">
         <h5>Redes Sociais</h5>
@@ -970,7 +970,7 @@ footer{
         <div class="contact-card">
           <h4>TENHO INTERESSE</h4>
           <input type="text" class="cf" id="mc-nome" placeholder="Seu nome">
-          <input type="tel" class="cf" id="mc-fone" placeholder="WhatsApp: (34) 99999-9999">
+          <input type="tel" class="cf" id="mc-fone" placeholder="WhatsApp: (34) 98892-0535">
           <button class="btn-prop" onclick="enviarContato()">ENVIAR PROPOSTA</button>
           <button class="btn-wpp" onclick="abrirWhats()">📱 WHATSAPP</button>
         </div>
@@ -1301,7 +1301,7 @@ function enviarContato(){
 function abrirWhats(){
   if(!mCar) return;
   const msg = encodeURIComponent(`Olá! Vi o ${mCar.marca} ${mCar.modelo} ${mCar.versao||''} (${mCar.anofab}/${mCar.anomod}) por R$ ${(mCar.preco||0).toLocaleString('pt-BR')} no site da Garage Veículos. Tenho interesse!`);
-  window.open(`https://wa.me/5534999990000?text=${msg}`,'_blank');
+  window.open(`https://wa.me/5534988920535?text=${msg}`,'_blank');
 }
 
 // ════════════════════════════════════════
@@ -1384,17 +1384,24 @@ async function salvarVeiculo(){
 
   // upload fotos pendentes
   if(pendingFiles.length){
-    document.getElementById('upload-status').textContent='Enviando fotos...';
+    document.getElementById('upload-status').textContent=`Enviando ${pendingFiles.length} foto(s)...`;
+    const errosUpload=[];
     for(const f of pendingFiles){
       try {
         const b64 = await fileToBase64(f);
         const r = await fetch(`${API}/api/upload`,{method:'POST',headers:authHeader(),body:JSON.stringify({filename:f.name,data:b64})});
         const d = await r.json();
         if(d.url) adminPhotos.push({url:d.url,name:f.name});
-      } catch(e){ /* ignora erro individual */ }
+        else errosUpload.push(`${f.name}: ${d.error||'sem URL'}`);
+      } catch(e){ errosUpload.push(`${f.name}: ${e.message}`); }
     }
     pendingFiles=[];
-    document.getElementById('upload-status').textContent='';
+    if(errosUpload.length){
+      document.getElementById('upload-status').textContent='⚠️ Erros no upload: '+errosUpload.join(' | ');
+      toast('Aviso: algumas fotos não enviaram. O veículo será salvo sem elas.','err');
+    } else {
+      document.getElementById('upload-status').textContent='';
+    }
   }
 
   const opcs = Array.from(document.querySelectorAll('.opt-ck:checked')).map(c=>c.value);
@@ -1419,16 +1426,23 @@ async function salvarVeiculo(){
     } else {
       r=await fetch(`${API}/api/veiculos`,{method:'POST',headers:authHeader(),body:JSON.stringify(payload)});
     }
-    if(!r.ok) throw new Error('Erro '+r.status);
+    // Captura mensagem real de erro da API
+    if(!r.ok){
+      let errMsg='Erro '+r.status;
+      try{ const d=await r.json(); errMsg=d.error||errMsg; }catch{}
+      throw new Error(errMsg);
+    }
     toast(editId?'Veículo atualizado!':'Veículo cadastrado!');
     resetForm();
     await loadCarsAdmin();
     showSub('lista',null);
     document.getElementById('atab-lista').classList.add('active');
   } catch(e){
-    toast('Erro ao salvar. Verifique a conexão.','err');
+    // Mostra o erro real na tela
+    toast('Erro: '+e.message,'err');
+    console.error('salvarVeiculo error:', e);
   } finally {
-    document.getElementById('btn-salvar').textContent='SALVAR VEÍCULO';
+    document.getElementById('btn-salvar').textContent= document.getElementById('edit-id').value ? 'ATUALIZAR VEÍCULO' : 'SALVAR VEÍCULO';
     document.getElementById('btn-salvar').disabled=false;
   }
 }
@@ -1494,7 +1508,7 @@ function toast(msg,type='ok'){
   el.className='toast'+(type==='err'?' err':'');
   el.classList.add('show');
   clearTimeout(toastTimer);
-  toastTimer=setTimeout(()=>el.classList.remove('show'),3200);
+  toastTimer=setTimeout(()=>el.classList.remove('show'), type==='err' ? 7000 : 3200);
 }
 
 // ════════════════════════════════════════
