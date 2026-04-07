@@ -1323,6 +1323,22 @@ async function enviarContato(){
     document.getElementById('contato-success').classList.add('show');
   }
 }
+
+// Proposta do modal de veiculo
+async function enviarContatoModal(){
+  const nome=document.getElementById('mc-nome').value;
+  const fone=document.getElementById('mc-fone').value;
+  if(!nome||!fone){toast('Preencha nome e WhatsApp','err');return;}
+  try {
+    await fetch(`${API}/api/contato`,{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({nome,fone,assunto:'interesse',msg:`Interesse no veiculo: ${mCar?mCar.marca+' '+mCar.modelo+' '+mCar.versao:''} - R$ ${mCar?(mCar.preco||0).toLocaleString('pt-BR'):''}`})
+    });
+  } catch(e){}
+  toast('Proposta enviada! Entraremos em contato.');
+  document.getElementById('mc-nome').value='';
+  document.getElementById('mc-fone').value='';
+}
 function abrirWhats(){
   if(!mCar) return;
   const msg = encodeURIComponent(`Olá! Vi o ${mCar.marca} ${mCar.modelo} ${mCar.versao||''} (${mCar.anofab}/${mCar.anomod}) por R$ ${(mCar.preco||0).toLocaleString('pt-BR')} no site da Garage Veículos. Tenho interesse!`);
