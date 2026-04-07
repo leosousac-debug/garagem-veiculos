@@ -1290,13 +1290,38 @@ function mNav(d){
 }
 function setMGal(i){ mGalIdx=i; renderMGal(); }
 
-function enviarContato(){
-  const nome=document.getElementById('mc-nome').value;
-  const fone=document.getElementById('mc-fone').value;
-  if(!nome||!fone){toast('Preencha nome e WhatsApp','err');return;}
-  toast('Proposta enviada! Entraremos em contato.');
-  document.getElementById('mc-nome').value='';
-  document.getElementById('mc-fone').value='';
+async function enviarContato(){
+  // Contato da pagina de contato
+  const nome=(document.getElementById('ct-nome')?.value||'').trim();
+  const fone=(document.getElementById('ct-fone')?.value||'').trim();
+  const email=(document.getElementById('ct-email')?.value||'').trim();
+  const assunto=(document.getElementById('ct-assunto')?.value||'interesse');
+  const msg=(document.getElementById('ct-msg')?.value||'').trim();
+  if(!nome||!fone){toast('Preencha seu nome e WhatsApp.','err');return;}
+  const btn=document.getElementById('btn-contato');
+  btn.textContent='ENVIANDO...'; btn.disabled=true;
+  try {
+    const r = await fetch(`${API}/api/contato`,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({nome,fone,email,assunto,msg})
+    });
+    const d = await r.json();
+    if(r.ok && d.ok){
+      document.getElementById('contato-form').style.display='none';
+      document.getElementById('contato-success').classList.add('show');
+    } else {
+      document.getElementById('contato-error').textContent='Erro ao enviar: '+(d.error||'tente novamente.');
+      document.getElementById('contato-error').classList.add('show');
+      btn.textContent='ENVIAR MENSAGEM'; btn.disabled=false;
+    }
+  } catch(e){
+    // Fallback: abre whatsapp direto
+    const wtxt=encodeURIComponent(`Ola! Meu nome e ${nome}, WhatsApp: ${fone}. ${msg||'Gostaria de mais informacoes sobre os veiculos.'}`);
+    window.open(`https://wa.me/5534988920535?text=${wtxt}`,'_blank');
+    document.getElementById('contato-form').style.display='none';
+    document.getElementById('contato-success').classList.add('show');
+  }
 }
 function abrirWhats(){
   if(!mCar) return;
