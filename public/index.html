@@ -556,6 +556,25 @@ footer{
   .modal{margin:0}
   .login-box{margin:1rem}
 }
+
+/* ====== ABAS FINANCIAMENTO ====== */
+.fin-tab{
+  background:transparent;border:none;border-bottom:3px solid transparent;
+  color:var(--muted);padding:.75rem 1.5rem;font-family:'Bebas Neue',sans-serif;
+  font-size:1rem;letter-spacing:.1em;cursor:pointer;transition:all .15s;
+}
+.fin-tab:hover{color:var(--white)}
+.fin-tab.active{color:var(--red);border-bottom-color:var(--red)}
+/* Botao WPP no footer */
+.wpp-fab{
+  position:fixed;bottom:1.5rem;right:1.5rem;z-index:300;
+  width:56px;height:56px;background:#25d366;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 20px rgba(37,211,102,.4);
+  text-decoration:none;transition:transform .2s,box-shadow .2s;
+}
+.wpp-fab:hover{transform:scale(1.1);box-shadow:0 6px 28px rgba(37,211,102,.6)}
+.wpp-fab svg{width:28px;height:28px;fill:#fff}
 </style>
 </head>
 <body>
@@ -656,7 +675,7 @@ footer{
         <p>Seg–Sex: 8h às 18h</p>
         <p>Sábado: 8h às 13h</p>
         <a href="tel:+5534988920535">(34) 98892-0535</a>
-        <a href="mailto:Garageveiculosaraguari@gmail.com">Garageveiculosaraguari@gmail.com</a>
+        <a href="https://wa.me/5534988920535" target="_blank">(34) 98892-0535</a>
       </div>
       <div class="fc">
         <h5>Localização</h5>
@@ -676,28 +695,126 @@ footer{
   </footer>
 </div>
 
-<!-- ═══ FINANCIAMENTO ═══ -->
+<!-- ══<!-- ═══ FINANCIAMENTO ═══ -->
 <div class="page" id="page-financiamento">
-  <div class="page-inner">
-    <div class="page-tag">Simule agora</div>
+  <div style="max-width:900px;margin:0 auto;padding:2.5rem 2rem">
+
+    <div class="page-tag">Crédito Automotivo</div>
     <h2 class="page-h2">FINANCIAMENTO</h2>
-    <p class="page-p">Simule as parcelas e descubra as melhores condições para sair hoje com seu veículo.</p>
-    <div class="fin-box">
-      <div class="fg"><label class="fl2">Valor do veículo (R$)</label><input type="number" class="fi" id="fin-valor" placeholder="Ex: 45000" oninput="calcFin()"></div>
-      <div class="fg"><label class="fl2">Entrada (R$)</label><input type="number" class="fi" id="fin-entrada" placeholder="Ex: 10000" oninput="calcFin()"></div>
-      <div class="fg"><label class="fl2">Prazo</label>
-        <select class="fs" id="fin-prazo" onchange="calcFin()">
-          <option value="12">12 meses</option><option value="24">24 meses</option>
-          <option value="36" selected>36 meses</option><option value="48">48 meses</option>
-          <option value="60">60 meses</option>
-        </select>
-      </div>
-      <div class="fin-result" id="fin-result">
-        <div class="fin-pn">Parcela estimada</div>
-        <div class="fin-pv" id="fin-pv">R$ 0</div>
-        <div class="fin-obs">* Taxa média de mercado 1,49% a.m. Sujeito a análise de crédito.</div>
+    <p class="page-p">Simule as parcelas ou envie sua proposta diretamente para nossa equipe pelo WhatsApp.</p>
+
+    <!-- REQUISITOS -->
+    <div style="background:var(--navy3);border:1px solid var(--border);border-left:3px solid var(--warning);padding:1.25rem 1.5rem;margin-bottom:2rem">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:.1em;color:var(--warning);margin-bottom:.75rem">✅ REQUISITOS PARA FINANCIAMENTO</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:.6rem">
+        <div style="display:flex;align-items:center;gap:8px;font-size:.88rem;color:var(--silver)"><span style="color:var(--success)">✓</span> Nome limpo (SPC/Serasa)</div>
+        <div style="display:flex;align-items:center;gap:8px;font-size:.88rem;color:var(--silver)"><span style="color:var(--success)">✓</span> Score alto</div>
+        <div style="display:flex;align-items:center;gap:8px;font-size:.88rem;color:var(--silver)"><span style="color:var(--success)">✓</span> Bom relacionamento bancário</div>
+        <div style="display:flex;align-items:center;gap:8px;font-size:.88rem;color:var(--silver)"><span style="color:var(--success)">✓</span> Preferencialmente ter CNH</div>
       </div>
     </div>
+
+    <!-- ABAS -->
+    <div style="display:flex;border-bottom:1px solid var(--border);margin-bottom:2rem">
+      <button class="fin-tab active" id="tab-simular" onclick="finTab('simular')">SIMULAR PARCELA</button>
+      <button class="fin-tab" id="tab-proposta" onclick="finTab('proposta')">ENVIAR PROPOSTA</button>
+    </div>
+
+    <!-- ABA 1: SIMULADOR -->
+    <div id="fin-pane-simular">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem">
+        <div class="fg" style="grid-column:1/-1">
+          <label class="fl2">Veículo do estoque (opcional)</label>
+          <select class="fs" id="fin-veiculo-sel" onchange="finSelecionarVeiculo()">
+            <option value="">Selecione um veículo ou digite o valor abaixo</option>
+          </select>
+        </div>
+        <div class="fg"><label class="fl2">Valor do veículo (R$)</label><input type="number" class="fi" id="fin-valor" placeholder="Ex: 45000" oninput="calcFin()"></div>
+        <div class="fg"><label class="fl2">Entrada (R$)</label><input type="number" class="fi" id="fin-entrada" placeholder="Ex: 10000" oninput="calcFin()"></div>
+        <div class="fg"><label class="fl2">Prazo</label>
+          <select class="fs" id="fin-prazo" onchange="calcFin()">
+            <option value="12">12 meses</option><option value="24">24 meses</option>
+            <option value="36" selected>36 meses</option><option value="48">48 meses</option>
+            <option value="60">60 meses</option>
+          </select>
+        </div>
+      </div>
+      <div id="fin-result" style="display:none;background:var(--navy3);border:1px solid var(--border);border-left:3px solid var(--red);padding:1.5rem;margin-bottom:1.5rem">
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;margin-bottom:1rem">
+          <div><div style="font-size:.7rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px">Parcela estimada</div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:2.2rem;color:var(--white)" id="fin-pv">R$ 0</div></div>
+          <div><div style="font-size:.7rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px">Total financiado</div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:2.2rem;color:var(--silver)" id="fin-total">R$ 0</div></div>
+          <div><div style="font-size:.7rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px">Total a pagar</div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:2.2rem;color:var(--muted)" id="fin-total-pagar">R$ 0</div></div>
+        </div>
+        <div style="font-size:.78rem;color:var(--muted);font-family:'Barlow',sans-serif">* Taxa média de mercado 1,49% a.m. Sujeito à análise de crédito.</div>
+      </div>
+      <button class="btn-save2" style="background:#25d366;border-color:#25d366;width:100%;font-size:1.05rem;display:flex;align-items:center;justify-content:center;gap:10px" onclick="finEnviarSimulacao()">
+        <svg style="width:20px;height:20px;fill:#fff" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        QUERO ESTE FINANCIAMENTO — ENVIAR PELO WHATSAPP
+      </button>
+    </div>
+
+    <!-- ABA 2: PROPOSTA COMPLETA -->
+    <div id="fin-pane-proposta" style="display:none">
+      <p style="color:var(--muted);font-size:.88rem;font-family:'Barlow',sans-serif;margin-bottom:1.5rem">Preencha os dados abaixo. Sua proposta chegará diretamente no nosso WhatsApp e retornaremos rapidamente.</p>
+
+      <div style="background:var(--navy3);border:1px solid var(--border);padding:1.25rem;margin-bottom:1.25rem">
+        <div class="fsec-t" style="margin-bottom:1rem">🚗 VEÍCULO DE INTERESSE</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+          <div class="fg" style="grid-column:1/-1"><label class="fl2">Veículo do estoque</label>
+            <select class="fs" id="prop-veiculo-sel" onchange="propSelecionarVeiculo()">
+              <option value="">Selecione um veículo ou informe abaixo</option>
+            </select>
+          </div>
+          <div class="fg"><label class="fl2">Valor (R$)</label><input type="number" class="fi" id="prop-valor" placeholder="Ex: 45000"></div>
+          <div class="fg"><label class="fl2">Entrada disponível (R$)</label><input type="number" class="fi" id="prop-entrada" placeholder="Ex: 10000"></div>
+          <div class="fg"><label class="fl2">Prazo desejado</label>
+            <select class="fs" id="prop-prazo">
+              <option value="12">12 meses</option><option value="24">24 meses</option>
+              <option value="36" selected>36 meses</option><option value="48">48 meses</option>
+              <option value="60">60 meses</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:var(--navy3);border:1px solid var(--border);padding:1.25rem;margin-bottom:1.25rem">
+        <div class="fsec-t" style="margin-bottom:1rem">👤 DADOS PESSOAIS</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+          <div class="fg" style="grid-column:1/-1"><label class="fl2">Nome completo <span class="req">*</span></label><input type="text" class="fi" id="prop-nome" placeholder="Seu nome completo"></div>
+          <div class="fg"><label class="fl2">CPF (somente números) <span class="req">*</span></label><input type="text" class="fi" id="prop-cpf" placeholder="00000000000" maxlength="14" oninput="this.value=this.value.replace(/[^0-9]/g,'')"></div>
+          <div class="fg"><label class="fl2">Data de nascimento <span class="req">*</span></label><input type="date" class="fi" id="prop-nasc"></div>
+          <div class="fg"><label class="fl2">Telefone / WhatsApp <span class="req">*</span></label><input type="tel" class="fi" id="prop-fone" placeholder="(34) 99999-9999"></div>
+          <div class="fg"><label class="fl2">Possui CNH? <span class="req">*</span></label>
+            <select class="fs" id="prop-cnh">
+              <option value="">Selecione</option>
+              <option value="Sim">Sim</option>
+              <option value="Nao">Não</option>
+              <option value="Em processo">Em processo</option>
+            </select>
+          </div>
+          <div class="fg"><label class="fl2">Renda comprovada por</label>
+            <select class="fs" id="prop-renda">
+              <option value="">Selecione</option>
+              <option value="Holerite">Holerite</option>
+              <option value="Extrato bancario">Extrato bancário</option>
+              <option value="Declaracao IR">Declaração de IR</option>
+              <option value="Pro labore">Pró-labore</option>
+              <option value="Nao tenho">Não tenho comprovante</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn-save2" style="background:#25d366;border-color:#25d366;width:100%;font-size:1.05rem;display:flex;align-items:center;justify-content:center;gap:10px" onclick="propEnviarWhats()">
+        <svg style="width:20px;height:20px;fill:#fff" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        ENVIAR PROPOSTA PELO WHATSAPP
+      </button>
+      <p style="font-size:.75rem;color:var(--muted);text-align:center;margin-top:.75rem;font-family:'Barlow',sans-serif">Seus dados serão usados apenas para análise de crédito.</p>
+    </div>
+
   </div>
 </div>
 
@@ -723,14 +840,50 @@ footer{
 
 <!-- ═══ CONTATO ═══ -->
 <div class="page" id="page-contato">
-  <div class="page-inner">
+  <div style="max-width:640px;margin:0 auto;padding:2.5rem 2rem">
     <div class="page-tag">Fale conosco</div>
     <h2 class="page-h2">CONTATO</h2>
-    <div class="fg"><label class="fl2">Nome</label><input type="text" class="fi" placeholder="Seu nome completo"></div>
-    <div class="fg"><label class="fl2">WhatsApp</label><input type="tel" class="fi" placeholder="(34) 99999-9999"></div>
-    <div class="fg"><label class="fl2">E-mail</label><input type="email" class="fi" placeholder="email@exemplo.com"></div>
-    <div class="fg"><label class="fl2">Mensagem</label><textarea class="ft" placeholder="Como podemos ajudar?"></textarea></div>
-    <button class="btn-save2" onclick="toast('Mensagem enviada! Entraremos em contato em breve.')">ENVIAR MENSAGEM</button>
+    <p class="page-p">Mande uma mensagem pelo WhatsApp ou preencha o formulário e te retornamos rapidamente.</p>
+
+    <!-- CTA WHATSAPP DESTAQUE -->
+    <a href="https://wa.me/5534988920535?text=Ol%C3%A1%21+Vi+o+site+da+Garage+Ve%C3%ADculos+e+gostaria+de+mais+informa%C3%A7%C3%B5es." target="_blank"
+      style="display:flex;align-items:center;justify-content:center;gap:12px;background:#25d366;color:#fff;padding:1rem;text-decoration:none;margin-bottom:2rem;font-family:'Bebas Neue',sans-serif;font-size:1.15rem;letter-spacing:.1em;transition:background .15s"
+      onmouseover="this.style.background='#1ebe5b'" onmouseout="this.style.background='#25d366'">
+      <svg style="width:22px;height:22px;fill:#fff;flex-shrink:0" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      FALAR NO WHATSAPP AGORA
+    </a>
+
+    <!-- FORMULÁRIO -->
+    <div style="background:var(--navy3);border:1px solid var(--border);padding:1.5rem">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:.9rem;letter-spacing:.1em;color:var(--muted);margin-bottom:1rem">OU ENVIE UMA MENSAGEM</div>
+      <div class="fg"><label class="fl2">Nome <span class="req">*</span></label><input type="text" class="fi" id="ct-nome" placeholder="Seu nome completo"></div>
+      <div class="fg"><label class="fl2">WhatsApp <span class="req">*</span></label><input type="tel" class="fi" id="ct-fone" placeholder="(34) 99999-9999"></div>
+      <div class="fg"><label class="fl2">Assunto</label>
+        <select class="fs" id="ct-assunto">
+          <option value="interesse">Interesse em um veículo</option>
+          <option value="proposta">Fazer proposta</option>
+          <option value="financiamento">Dúvida sobre financiamento</option>
+          <option value="troca">Troca de veículo</option>
+          <option value="outro">Outro assunto</option>
+        </select>
+      </div>
+      <div class="fg"><label class="fl2">Mensagem</label><textarea class="ft" id="ct-msg" placeholder="Descreva o que procura..."></textarea></div>
+      <button class="btn-save2" style="background:#25d366;border-color:#25d366;width:100%;display:flex;align-items:center;justify-content:center;gap:10px" onclick="enviarContatoWhats()">
+        <svg style="width:18px;height:18px;fill:#fff" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        ENVIAR PELO WHATSAPP
+      </button>
+    </div>
+
+    <div style="margin-top:1.5rem;display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+      <div style="background:var(--card);border:1px solid var(--border);padding:1rem;text-align:center">
+        <div style="font-size:.7rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px">Atendimento</div>
+        <div style="font-size:.9rem;color:var(--silver);font-family:'Barlow',sans-serif">Seg–Sex: 8h às 18h<br>Sábado: 8h às 13h</div>
+      </div>
+      <div style="background:var(--card);border:1px solid var(--border);padding:1rem;text-align:center">
+        <div style="font-size:.7rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px">Localização</div>
+        <div style="font-size:.9rem;color:var(--silver);font-family:'Barlow',sans-serif">Araguari – MG<br><a href="https://maps.app.goo.gl/tZt6Yg7u3heWRs2L9" target="_blank" style="color:var(--red);text-decoration:none">Ver no mapa ↗</a></div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -970,9 +1123,10 @@ footer{
         <div class="contact-card">
           <h4>TENHO INTERESSE</h4>
           <input type="text" class="cf" id="mc-nome" placeholder="Seu nome">
-          <input type="tel" class="cf" id="mc-fone" placeholder="WhatsApp: (34) 98892-0535">
-          <button class="btn-prop" onclick="enviarContato()">ENVIAR PROPOSTA</button>
-          <button class="btn-wpp" onclick="abrirWhats()">📱 WHATSAPP</button>
+          <input type="tel" class="cf" id="mc-fone" placeholder="WhatsApp: (34) 99999-9999">
+          <button class="btn-wpp" onclick="abrirWhats()" style="margin-bottom:.5rem">📱 CHAMAR NO WHATSAPP</button>
+          <button class="btn-prop" onclick="enviarContatoModal()">ENVIAR PROPOSTA POR MENSAGEM</button>
+          <button style="width:100%;background:transparent;border:1px solid var(--border);color:var(--muted);padding:.6rem;font-family:'Bebas Neue',sans-serif;font-size:.9rem;letter-spacing:.08em;cursor:pointer;margin-top:.5rem;transition:all .15s" onmouseover="this.style.borderColor='var(--red)';this.style.color='var(--red)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--muted)'" onclick="finComEsteVeiculo()">SIMULAR FINANCIAMENTO</button>
         </div>
       </div>
     </div>
@@ -993,6 +1147,11 @@ footer{
     <button class="btn-login" onclick="doLogin()">ENTRAR</button>
   </div>
 </div>
+
+<!-- FAB WHATSAPP -->
+<a class="wpp-fab" href="https://wa.me/5534988920535?text=Ol%C3%A1%21+Vi+o+site+da+Garage+Ve%C3%ADculos+e+gostaria+de+mais+informa%C3%A7%C3%B5es." target="_blank" title="Falar no WhatsApp">
+  <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</a>
 
 <div class="toast" id="toast-el"></div>
 
@@ -1023,6 +1182,7 @@ function showPage(p) {
   const n = document.getElementById('nav-'+p);
   if(n) n.classList.add('active');
   if(p==='estoque') loadCars();
+  if(p==='financiamento') { loadCars().then ? loadCars().then(()=>popularFinSelects()) : setTimeout(popularFinSelects, 500); }
   if(p==='admin') { if(!adminToken){openLogin();return} renderAdminList(); }
   window.scrollTo(0,0);
 }
@@ -1290,60 +1450,7 @@ function mNav(d){
 }
 function setMGal(i){ mGalIdx=i; renderMGal(); }
 
-async function enviarContato(){
-  // Contato da pagina de contato
-  const nome=(document.getElementById('ct-nome')?.value||'').trim();
-  const fone=(document.getElementById('ct-fone')?.value||'').trim();
-  const email=(document.getElementById('ct-email')?.value||'').trim();
-  const assunto=(document.getElementById('ct-assunto')?.value||'interesse');
-  const msg=(document.getElementById('ct-msg')?.value||'').trim();
-  if(!nome||!fone){toast('Preencha seu nome e WhatsApp.','err');return;}
-  const btn=document.getElementById('btn-contato');
-  btn.textContent='ENVIANDO...'; btn.disabled=true;
-  try {
-    const r = await fetch(`${API}/api/contato`,{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({nome,fone,email,assunto,msg})
-    });
-    const d = await r.json();
-    if(r.ok && d.ok){
-      document.getElementById('contato-form').style.display='none';
-      document.getElementById('contato-success').classList.add('show');
-    } else {
-      document.getElementById('contato-error').textContent='Erro ao enviar: '+(d.error||'tente novamente.');
-      document.getElementById('contato-error').classList.add('show');
-      btn.textContent='ENVIAR MENSAGEM'; btn.disabled=false;
-    }
-  } catch(e){
-    // Fallback: abre whatsapp direto
-    const wtxt=encodeURIComponent(`Ola! Meu nome e ${nome}, WhatsApp: ${fone}. ${msg||'Gostaria de mais informacoes sobre os veiculos.'}`);
-    window.open(`https://wa.me/5534988920535?text=${wtxt}`,'_blank');
-    document.getElementById('contato-form').style.display='none';
-    document.getElementById('contato-success').classList.add('show');
-  }
-}
 
-// Proposta do modal de veiculo
-async function enviarContatoModal(){
-  const nome=document.getElementById('mc-nome').value;
-  const fone=document.getElementById('mc-fone').value;
-  if(!nome||!fone){toast('Preencha nome e WhatsApp','err');return;}
-  try {
-    await fetch(`${API}/api/contato`,{
-      method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({nome,fone,assunto:'interesse',msg:`Interesse no veiculo: ${mCar?mCar.marca+' '+mCar.modelo+' '+mCar.versao:''} - R$ ${mCar?(mCar.preco||0).toLocaleString('pt-BR'):''}`})
-    });
-  } catch(e){}
-  toast('Proposta enviada! Entraremos em contato.');
-  document.getElementById('mc-nome').value='';
-  document.getElementById('mc-fone').value='';
-}
-function abrirWhats(){
-  if(!mCar) return;
-  const msg = encodeURIComponent(`Olá! Vi o ${mCar.marca} ${mCar.modelo} ${mCar.versao||''} (${mCar.anofab}/${mCar.anomod}) por R$ ${(mCar.preco||0).toLocaleString('pt-BR')} no site da Garage Veículos. Tenho interesse!`);
-  window.open(`https://wa.me/5534988920535?text=${msg}`,'_blank');
-}
 
 // ════════════════════════════════════════
 // ADMIN
@@ -1528,6 +1635,40 @@ function fileToBase64(file){ return new Promise((res,rej)=>{const r=new FileRead
 // ════════════════════════════════════════
 // FINANCIAMENTO
 // ════════════════════════════════════════
+// FINANCIAMENTO + WHATSAPP
+// ════════════════════════════════════════
+const WPP = '5534988920535';
+function wppLink(msg){ return 'https://wa.me/'+WPP+'?text='+encodeURIComponent(msg); }
+
+function popularFinSelects(){
+  const ativos=allCars.filter(v=>v.status==='Ativo');
+  ['fin-veiculo-sel','prop-veiculo-sel'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(!el)return;
+    const base=el.options[0];
+    el.innerHTML='';el.appendChild(base);
+    ativos.forEach(v=>{
+      const opt=document.createElement('option');
+      opt.value=v.id;
+      opt.textContent=v.marca+' '+v.modelo+(v.versao?' '+v.versao:'')+' — R$ '+(v.preco||0).toLocaleString('pt-BR');
+      opt.dataset.preco=v.preco||0;
+      el.appendChild(opt);
+    });
+  });
+}
+
+function finSelecionarVeiculo(){
+  const sel=document.getElementById('fin-veiculo-sel');
+  const opt=sel.options[sel.selectedIndex];
+  if(opt&&opt.dataset.preco){document.getElementById('fin-valor').value=opt.dataset.preco;calcFin();}
+}
+
+function propSelecionarVeiculo(){
+  const sel=document.getElementById('prop-veiculo-sel');
+  const opt=sel.options[sel.selectedIndex];
+  if(opt&&opt.dataset.preco)document.getElementById('prop-valor').value=opt.dataset.preco;
+}
+
 function calcFin(){
   const val=parseFloat(document.getElementById('fin-valor')?.value)||0;
   const ent=parseFloat(document.getElementById('fin-entrada')?.value)||0;
@@ -1535,9 +1676,121 @@ function calcFin(){
   if(val<=0){document.getElementById('fin-result').style.display='none';return;}
   const pv=val-ent;const r=0.0149;
   const par=Math.round(pv*(r*Math.pow(1+r,n))/(Math.pow(1+r,n)-1));
+  const totalPagar=Math.round(par*n);
   document.getElementById('fin-pv').textContent=par.toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+  const tf=document.getElementById('fin-total');const tp=document.getElementById('fin-total-pagar');
+  if(tf)tf.textContent=pv.toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+  if(tp)tp.textContent=totalPagar.toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
   document.getElementById('fin-result').style.display='block';
 }
+
+function finTab(tab){
+  document.getElementById('fin-pane-simular').style.display=tab==='simular'?'':'none';
+  document.getElementById('fin-pane-proposta').style.display=tab==='proposta'?'':'none';
+  document.getElementById('tab-simular').classList.toggle('active',tab==='simular');
+  document.getElementById('tab-proposta').classList.toggle('active',tab==='proposta');
+}
+
+function finEnviarSimulacao(){
+  const val=parseFloat(document.getElementById('fin-valor')?.value)||0;
+  const ent=parseFloat(document.getElementById('fin-entrada')?.value)||0;
+  const n=parseInt(document.getElementById('fin-prazo')?.value)||36;
+  const sel=document.getElementById('fin-veiculo-sel');
+  const veiculo=sel&&sel.selectedIndex>0?sel.options[sel.selectedIndex].textContent:'não especificado';
+  if(!val){toast('Informe o valor do veículo.','err');return;}
+  const pv=val-ent;const r=0.0149;
+  const par=Math.round(pv*(r*Math.pow(1+r,n))/(Math.pow(1+r,n)-1));
+  const msg='Olá! Fiz uma simulação no site da Garage Veículos e quero continuar:\n\n'
+    +'Veículo: '+veiculo+'\n'
+    +'Valor: R$ '+val.toLocaleString('pt-BR')+'\n'
+    +'Entrada: R$ '+ent.toLocaleString('pt-BR')+'\n'
+    +'Prazo: '+n+' meses\n'
+    +'Parcela estimada: '+par.toLocaleString('pt-BR',{style:'currency',currency:'BRL'})+'\n\n'
+    +'Podemos continuar?';
+  window.open(wppLink(msg),'_blank');
+}
+
+function propEnviarWhats(){
+  const nome=(document.getElementById('prop-nome')?.value||'').trim();
+  const cpf=(document.getElementById('prop-cpf')?.value||'').trim();
+  const nasc=document.getElementById('prop-nasc')?.value||'';
+  const fone=(document.getElementById('prop-fone')?.value||'').trim();
+  const cnh=document.getElementById('prop-cnh')?.value||'';
+  const renda=document.getElementById('prop-renda')?.value||'';
+  const val=parseFloat(document.getElementById('prop-valor')?.value)||0;
+  const ent=parseFloat(document.getElementById('prop-entrada')?.value)||0;
+  const prazo=document.getElementById('prop-prazo')?.value||'36';
+  const selV=document.getElementById('prop-veiculo-sel');
+  const veiculo=selV&&selV.selectedIndex>0?selV.options[selV.selectedIndex].textContent:'Não especificado';
+  if(!nome||!cpf||!fone||!cnh){toast('Preencha os campos obrigatórios: Nome, CPF, Telefone e CNH.','err');return;}
+  const nascFmt=nasc?new Date(nasc+'T12:00:00').toLocaleDateString('pt-BR'):'não informado';
+  const msg='PROPOSTA DE FINANCIAMENTO — GARAGE VEICULOS\n\n'
+    +'DADOS PESSOAIS\n'
+    +'Nome: '+nome+'\n'
+    +'CPF: '+cpf+'\n'
+    +'Nascimento: '+nascFmt+'\n'
+    +'Telefone: '+fone+'\n'
+    +'CNH: '+(cnh||'não informado')+'\n'
+    +'Renda: '+(renda||'não informado')+'\n\n'
+    +'VEICULO DE INTERESSE\n'
+    +veiculo+'\n'
+    +'Valor: R$ '+(val?val.toLocaleString('pt-BR'):'a consultar')+'\n'
+    +'Entrada: R$ '+(ent?ent.toLocaleString('pt-BR'):'a combinar')+'\n'
+    +'Prazo: '+prazo+' meses';
+  window.open(wppLink(msg),'_blank');
+}
+
+function finComEsteVeiculo(){
+  if(!mCar)return;
+  showPage('financiamento');
+  document.getElementById('overlay').classList.remove('open');
+  document.body.style.overflow='';
+  setTimeout(()=>{
+    popularFinSelects();
+    const sel=document.getElementById('fin-veiculo-sel');
+    if(!sel)return;
+    for(let i=0;i<sel.options.length;i++){
+      if(sel.options[i].value===mCar.id||sel.options[i].value==mCar.id){
+        sel.selectedIndex=i;finSelecionarVeiculo();break;
+      }
+    }
+  },150);
+}
+
+// ════════════════════════════════════════
+// CONTATO — WHATSAPP
+// ════════════════════════════════════════
+function enviarContatoWhats(){
+  const nome=(document.getElementById('ct-nome')?.value||'').trim();
+  const fone=(document.getElementById('ct-fone')?.value||'').trim();
+  const assunto=(document.getElementById('ct-assunto')?.value||'interesse');
+  const msg=(document.getElementById('ct-msg')?.value||'').trim();
+  if(!nome||!fone){toast('Preencha seu nome e WhatsApp.','err');return;}
+  const assMap={interesse:'Interesse em veiculo',proposta:'Proposta de compra',financiamento:'Duvida sobre financiamento',troca:'Troca de veiculo',outro:'Outro assunto'};
+  const assLabel=assMap[assunto]||assunto;
+  const txt='Ola! Meu nome e '+nome+', WhatsApp: '+fone+'\nAssunto: '+assLabel+(msg?'\nMensagem: '+msg:'')+'\n\nVi o site da Garage Veiculos.';
+  window.open(wppLink(txt),'_blank');
+}
+
+function enviarContato(){ enviarContatoWhats(); }
+
+function enviarContatoModal(){
+  const nome=document.getElementById('mc-nome').value;
+  const fone=document.getElementById('mc-fone').value;
+  if(!nome||!fone){toast('Preencha nome e WhatsApp','err');return;}
+  const vInfo=mCar?mCar.marca+' '+mCar.modelo+(mCar.versao?' '+mCar.versao:'')+' — R$ '+(mCar.preco||0).toLocaleString('pt-BR'):'';
+  const txt='Ola! Sou '+nome+', WhatsApp: '+fone+'.\nTenho interesse no veiculo: '+vInfo+'\nGostaria de mais informacoes!';
+  window.open(wppLink(txt),'_blank');
+  document.getElementById('mc-nome').value='';
+  document.getElementById('mc-fone').value='';
+}
+
+function abrirWhats(){
+  if(!mCar)return;
+  const msg='Ola! Vi o '+mCar.marca+' '+mCar.modelo+(mCar.versao?' '+mCar.versao:'')+' ('+mCar.anofab+'/'+mCar.anomod+') por R$ '+(mCar.preco||0).toLocaleString('pt-BR')+' no site da Garage Veiculos. Tenho interesse!';
+  window.open(wppLink(msg),'_blank');
+}
+
 
 // ════════════════════════════════════════
 // TOAST
@@ -1552,10 +1805,4 @@ function toast(msg,type='ok'){
   toastTimer=setTimeout(()=>el.classList.remove('show'), type==='err' ? 7000 : 3200);
 }
 
-// ════════════════════════════════════════
-// INIT
-// ════════════════════════════════════════
-loadCars();
-</script>
-</body>
-</html>
+// ═══════�
