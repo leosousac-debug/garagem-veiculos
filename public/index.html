@@ -2380,12 +2380,12 @@ async function salvarEntrega(){
   const btn=document.querySelector('#form-entrega .btn-save2');
   if(btn){btn.textContent='SALVANDO...';btn.disabled=true;}
   if(entregaPendingFiles.length){
-    const st=document.getElementById('ent-upload-status');if(st)st.textContent='Enviando fotos...';
+    const stEl=document.getElementById('ent-upload-status');if(stEl)stEl.textContent='Enviando fotos...';
     for(const f of entregaPendingFiles){
       try{const b64=await fileToBase64(f);const r=await fetch(`${API}/api/upload`,{method:'POST',headers:authHeader(),body:JSON.stringify({filename:f.name,data:b64})});if(!r.ok)throw new Error('Upload falhou: HTTP '+r.status);const d=await r.json();if(d.url)entregaPhotos.push(d.url);else throw new Error(d.error||'Sem URL');}
       catch(e){toast('Erro no upload: '+e.message,'err');}
     }
-    entregaPendingFiles=[];const st=document.getElementById('ent-upload-status');if(st)st.textContent='';
+    entregaPendingFiles=[];const stEl2=document.getElementById('ent-upload-status');if(stEl2)stEl2.textContent='';
   }
   const editId=document.getElementById('ent-edit-id')?.value||'';
   try{
