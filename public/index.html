@@ -855,6 +855,26 @@ footer{
   width:16px;height:16px;font-size:.6rem;font-weight:700;
   margin-left:4px;vertical-align:middle;
 }
+
+/* ══ FLOAT COMPARE BUTTON ══ */
+.comp-float-btn{
+  position:fixed;bottom:6rem;right:1.5rem;z-index:300;
+  display:none;align-items:center;gap:8px;
+  background:var(--red);color:#fff;border:none;
+  padding:.65rem 1.25rem;font-family:'Bebas Neue',sans-serif;
+  font-size:.95rem;letter-spacing:.1em;cursor:pointer;
+  box-shadow:0 4px 20px rgba(204,31,31,.5);
+  animation:slideInRight .3s ease;
+}
+.comp-float-btn.visible{display:flex}
+.comp-float-btn:hover{background:var(--red3)}
+@keyframes slideInRight{from{transform:translateX(100px);opacity:0}to{transform:none;opacity:1}}
+/* ══ VENDIDOS CSS ══ */
+.vendido-row td{opacity:.7}
+.vendido-row td:first-child{opacity:1}
+.sold-badge{background:rgba(29,185,84,.15);color:var(--success);font-size:.72rem;font-weight:700;padding:2px 8px;letter-spacing:.06em;text-transform:uppercase}
+.btn-vender{background:rgba(29,185,84,.15);border:1px solid var(--success);color:var(--success);padding:3px 8px;font-size:.75rem;font-family:'Rajdhani',sans-serif;cursor:pointer;transition:all .15s;margin-right:4px}
+.btn-vender:hover{background:var(--success);color:#000}
 </style>
 </head>
 <body>
@@ -1276,6 +1296,7 @@ footer{
     </div>
     <div style="display:flex;gap:0.75rem;align-items:center">
       <button class="btn-save2" onclick="showSub('form-novo',null)">+ NOVO VEÍCULO</button>
+      <button class="btn-cancel2" style="border-color:var(--success);color:var(--success)" onclick="showSub('vendidos',document.getElementById('atab-vendidos'))">&#10003; VENDIDOS</button>
       <button class="btn-cancel2" onclick="adminLogout()">SAIR</button>
     </div>
   </div>
@@ -1283,6 +1304,7 @@ footer{
     <div class="atab active" id="atab-lista" onclick="showSub('lista',this)">Lista de Veículos</div>
     <div class="atab" id="atab-form-novo" onclick="showSub('form-novo',this)">Cadastrar Veículo</div>
     <div class="atab" id="atab-entregas-admin" onclick="showSub('entregas-admin',this)">Entregas</div>
+    <div class="atab" id="atab-vendidos" onclick="showSub('vendidos',this)" style="color:var(--success)">&#10003; Vendidos</div>
   </div>
   <div class="admin-content">
 
@@ -1507,6 +1529,18 @@ footer{
       <div id="admin-entregas-list"></div>
     </div>
   </div>
+
+    <!-- VENDIDOS -->
+    <div class="asub" id="sub-vendidos">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;flex-wrap:wrap;gap:.75rem">
+        <div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:.08em;color:var(--success)">&#10003; HISTÓRICO DE VENDAS</div>
+          <div style="font-size:.8rem;color:var(--muted);font-family:'Barlow',sans-serif;margin-top:2px">Veículos vendidos permanecem aqui como histórico. Use "Reativar" para devolver ao estoque.</div>
+        </div>
+      </div>
+      <div id="vendidos-admin-list"></div>
+    </div>
+  </div>
 </div>
 
 <!-- ═══ MODAL DETALHES ═══ -->
@@ -1571,6 +1605,30 @@ footer{
   </div>
 </div>
 
+<!-- ═══ COMPARAÇÃO ═══ -->
+<div class="comp-overlay" id="comp-overlay">
+  <div class="comp-modal">
+    <div class="comp-hd">
+      <h3>&#9878; COMPARAR VEÍCULOS</h3>
+      <button class="comp-close" onclick="fecharComp()">&#10005;</button>
+    </div>
+    <div class="comp-grid" id="comp-grid"></div>
+  </div>
+</div>
+
+<!-- ═══ HISTÓRICO DE VENDIDOS ═══ -->
+<div class="overlay" id="vendidos-overlay" style="display:none">
+  <div class="modal" style="max-width:900px">
+    <button class="modal-x" onclick="fecharVendidos()">&#10005;</button>
+    <div style="padding:1.5rem">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:.06em;margin-bottom:1.25rem;display:flex;align-items:center;gap:10px">
+        <span style="color:var(--success)">&#10003;</span> HISTÓRICO DE VENDIDOS
+      </div>
+      <div id="vendidos-list"></div>
+    </div>
+  </div>
+</div>
+
 <!-- ═══ LOGIN ═══ -->
 <div class="login-overlay" id="login-overlay">
   <div class="login-box">
@@ -1594,13 +1652,18 @@ footer{
   <div class="wpp-balloon">Falar no WhatsApp</div>
 </a>
 
+<!-- BOTÃO COMPARAR FLUTUANTE -->
+<button class="comp-float-btn" id="comp-float-btn" onclick="abrirComp()">
+  &#9878; COMPARAR (<span id="comp-float-count">0</span>)
+</button>
+
 <div class="toast" id="toast-el"></div>
 <div class="share-toast" id="share-toast">Link copiado! 🔗</div>
 
 <script>
-// ═══════════════════════════════════════════════════
+// ════════════════════════════════════════
 // CONFIG
-// ═══════════════════════════════════════════════════
+// ════════════════════════════════════════
 const API = '';
 const WPP = '5534984408003';
 let adminToken = sessionStorage.getItem('gv_token') || null;
@@ -1616,21 +1679,18 @@ let adminPhotos = [];
 let pendingFiles = [];
 let entregaPhotos = [];
 let entregaPendingFiles = [];
-// Comparação
-let compCars = [null, null]; // [carro A, carro B]
-
-function wppLink(msg){ return 'https://wa.me/'+WPP+'?text='+encodeURIComponent(msg); }
-
-// ═══════════════════════════════════════════════════
-// LIKES & VIEWS — Redis + 1 like por IP (via API)
-// Fallback em localStorage se API indisponível
-// ═══════════════════════════════════════════════════
+let compCars = [null, null];
 let likesCache = {};
 let viewsCache = {};
 
+function wppLink(msg){ return 'https://wa.me/'+WPP+'?text='+encodeURIComponent(msg); }
+
+// ════════════════════════════════════════
+// LIKES & VIEWS — Redis (1 like por IP) + fallback localStorage
+// ════════════════════════════════════════
 async function fetchStats(){
   try{
-    const r = await fetch(`${API}/api/stats`);
+    const r = await fetch(API+'/api/stats');
     if(!r.ok) throw new Error();
     const d = await r.json();
     likesCache = d.likes || {};
@@ -1640,11 +1700,11 @@ async function fetchStats(){
     try{ const raw=localStorage.getItem('gv_views_v2'); if(raw) viewsCache=JSON.parse(raw); }catch{}
   }
 }
-
-function getLikes(id){ return (likesCache[id]?.total) || 0; }
+function getLikes(id){ return (likesCache[id] && likesCache[id].total) || 0; }
 function hasLiked(id){
   try{ return !!(JSON.parse(localStorage.getItem('gv_my_likes')||'{}')[id]); }catch{ return false; }
 }
+function getViews(id){ return viewsCache[id] || 0; }
 
 async function addLike(id, e){
   e.stopPropagation();
@@ -1654,83 +1714,49 @@ async function addLike(id, e){
   const already = hasLiked(id);
   const action = already ? 'unlike' : 'like';
   try{
-    const r = await fetch(`${API}/api/stats`,{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({ action, id })
+    const r = await fetch(API+'/api/stats',{
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({action, id})
     });
     if(r.ok){
       const d = await r.json();
+      if(d.alreadyLiked){ btn.classList.remove('loading'); toast('Você já curtiu este veículo! 😊'); return; }
       if(!likesCache[id]) likesCache[id]={total:0};
       likesCache[id].total = d.total;
-      if(d.alreadyLiked){
-        btn.classList.remove('loading');
-        toast('Você já curtiu este veículo!');
-        return;
-      }
     } else throw new Error();
   }catch(e){
     if(!likesCache[id]) likesCache[id]={total:0};
     likesCache[id].total = Math.max(0,(likesCache[id].total||0)+(already?-1:1));
-    try{
-      const lc=JSON.parse(localStorage.getItem('gv_likes_v2')||'{}');
-      lc[id]=likesCache[id].total;
-      localStorage.setItem('gv_likes_v2',JSON.stringify(lc));
-    }catch{}
+    try{ const lc=JSON.parse(localStorage.getItem('gv_likes_v2')||'{}'); lc[id]=likesCache[id].total; localStorage.setItem('gv_likes_v2',JSON.stringify(lc)); }catch{}
   }
-  // Salvar preferência local
-  try{
-    const ml=JSON.parse(localStorage.getItem('gv_my_likes')||'{}');
-    if(already) delete ml[id]; else ml[id]=1;
-    localStorage.setItem('gv_my_likes',JSON.stringify(ml));
-  }catch{}
-  // Atualizar UI
-  const cnt=btn.querySelector('.like-count');
-  const heart=btn.querySelector('.like-heart');
+  try{ const ml=JSON.parse(localStorage.getItem('gv_my_likes')||'{}'); if(already) delete ml[id]; else ml[id]=1; localStorage.setItem('gv_my_likes',JSON.stringify(ml)); }catch{}
+  const cnt = btn.querySelector('.like-count');
+  const heart = btn.querySelector('.like-heart');
   if(cnt) cnt.textContent = getLikes(id);
-  if(!already){
-    btn.classList.add('liked');
-    if(heart){heart.style.animation='none';void heart.offsetWidth;heart.style.animation='heartPop .3s ease';}
-  } else {
-    btn.classList.remove('liked');
-  }
+  if(!already){ btn.classList.add('liked'); if(heart){heart.style.animation='none';void heart.offsetWidth;heart.style.animation='heartPop .3s ease';} }
+  else btn.classList.remove('liked');
   btn.classList.remove('loading');
 }
 
 async function addView(id){
-  try{
-    const seen=JSON.parse(sessionStorage.getItem('gv_seen')||'{}');
-    if(seen[id]) return;
-    seen[id]=1;
-    sessionStorage.setItem('gv_seen',JSON.stringify(seen));
-  }catch{}
+  try{ const seen=JSON.parse(sessionStorage.getItem('gv_seen')||'{}'); if(seen[id])return; seen[id]=1; sessionStorage.setItem('gv_seen',JSON.stringify(seen)); }catch{}
   if(!viewsCache[id]) viewsCache[id]=0;
   viewsCache[id]++;
   try{
-    await fetch(`${API}/api/stats`,{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({action:'view',id})
-    });
+    await fetch(API+'/api/stats',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'view',id})});
   }catch(e){
-    try{
-      const vc=JSON.parse(localStorage.getItem('gv_views_v2')||'{}');
-      vc[id]=viewsCache[id];
-      localStorage.setItem('gv_views_v2',JSON.stringify(vc));
-    }catch{}
+    try{ const vc=JSON.parse(localStorage.getItem('gv_views_v2')||'{}'); vc[id]=viewsCache[id]; localStorage.setItem('gv_views_v2',JSON.stringify(vc)); }catch{}
   }
 }
-function getViews(id){ return viewsCache[id]||0; }
 
-// ═══════════════════════════════════════════════════
+// ════════════════════════════════════════
 // NAVEGAÇÃO
-// ═══════════════════════════════════════════════════
+// ════════════════════════════════════════
 function showPage(p){
   document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
   document.querySelectorAll('.nav-links a').forEach(x=>x.classList.remove('active'));
   document.getElementById('page-'+p).classList.add('active');
-  const n=document.getElementById('nav-'+p);
-  if(n) n.classList.add('active');
+  const n=document.getElementById('nav-'+p); if(n) n.classList.add('active');
   if(p==='estoque') loadCars();
   if(p==='financiamento') setTimeout(popularFinSelects,400);
   if(p==='entregas') loadEntregas();
@@ -1738,16 +1764,15 @@ function showPage(p){
   window.scrollTo(0,0);
 }
 
-// ═══════════════════════════════════════════════════
+// ════════════════════════════════════════
 // AUTH
-// ═══════════════════════════════════════════════════
+// ════════════════════════════════════════
 function openLogin(){ document.getElementById('login-overlay').classList.add('open'); setTimeout(()=>document.getElementById('login-pwd').focus(),100); }
 function closeLogin(){ document.getElementById('login-overlay').classList.remove('open'); document.getElementById('login-pwd').value=''; document.getElementById('login-err').style.display='none'; }
 async function doLogin(){
-  const pwd=document.getElementById('login-pwd').value;
-  if(!pwd) return;
+  const pwd=document.getElementById('login-pwd').value; if(!pwd)return;
   try{
-    const r=await fetch(`${API}/api/auth`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:pwd})});
+    const r=await fetch(API+'/api/auth',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:pwd})});
     const d=await r.json();
     if(r.ok){adminToken=d.token;sessionStorage.setItem('gv_token',adminToken);closeLogin();showPage('admin');}
     else{document.getElementById('login-err').style.display='block';document.getElementById('login-pwd').value='';}
@@ -1756,81 +1781,88 @@ async function doLogin(){
 function adminLogout(){ adminToken=null;sessionStorage.removeItem('gv_token');showPage('estoque');toast('Sessão encerrada.'); }
 function authHeader(){ return{'Content-Type':'application/json','Authorization':'Bearer '+adminToken}; }
 
-// ═══════════════════════════════════════════════════
+// ════════════════════════════════════════
 // CARREGAR VEÍCULOS
-// ═══════════════════════════════════════════════════
+// ════════════════════════════════════════
 async function loadCars(){
   try{
-    const r=await fetch(`${API}/api/veiculos`);
+    const r=await fetch(API+'/api/veiculos');
     if(!r.ok) throw new Error('Erro '+r.status);
     allCars=await r.json();
   }catch(e){ allCars=getDemoCars(); }
   await fetchStats();
   applyFilterSort();
-  updateCompBadge();
+  updateCompUI();
 }
 async function loadCarsAdmin(){
   try{
-    const r=await fetch(`${API}/api/veiculos?admin=1`,{headers:authHeader()});
+    const r=await fetch(API+'/api/veiculos?admin=1',{headers:authHeader()});
     if(!r.ok) throw new Error();
     allCars=await r.json();
   }catch(e){ allCars=getDemoCars(); }
-  await fetchStats();
+  await fetchStats();  // carrega likes/views para exibir na tabela admin
   renderAdminList();
 }
 function getDemoCars(){
   return[
-    {id:'demo1',marca:'Toyota',modelo:'Corolla',versao:'XEi 2.0 Flex',anofab:2021,anomod:2022,tipo:'Sedan',cond:'Usado',cor:'Branco',km:38000,combustivel:'Flex',cambio:'Automático',motor:'2.0 Flex 170cv',potencia:170,portas:'4 portas',tracao:'FWD',direcao:'Elétrica',placa:'3 e 4',donos:'1 dono',ipva:'Sim',revisao:'Sim',preco:120000,precoAnt:129900,troca:'Sim',financ:'Sim',destaque:'Sim',status:'Ativo',opcionais:['Ar-condicionado','Central multimídia','Câmera de ré','Freios ABS','Apple CarPlay/Android Auto'],descricao:'Único dono, revisões na concessionária.',fotos:[]},
-    {id:'demo2',marca:'Volkswagen',modelo:'T-Cross',versao:'Highline 1.4 TSI',anofab:2022,anomod:2023,tipo:'SUV',cond:'Seminovo',cor:'Prata/Cinza',km:18500,combustivel:'Flex',cambio:'Automático',motor:'1.4 TSI 150cv',potencia:150,portas:'5 portas',tracao:'FWD',direcao:'Elétrica',placa:'5 e 6',donos:'1 dono',ipva:'Sim',revisao:'Sim',preco:145000,precoAnt:null,troca:'Consultar',financ:'Sim',destaque:'Não',status:'Ativo',opcionais:['Teto solar','Bancos de couro','Apple CarPlay/Android Auto'],descricao:'SUV com baixa quilometragem.',fotos:[]},
+    {id:'demo1',marca:'Toyota',modelo:'Corolla',versao:'XEi 2.0 Flex',anofab:2021,anomod:2022,tipo:'Sedan',cond:'Usado',cor:'Branco',km:38000,combustivel:'Flex',cambio:'Automático',motor:'2.0 Flex 170cv',potencia:170,portas:'4 portas',tracao:'FWD',direcao:'Elétrica',placa:'3 e 4',donos:'1 dono',ipva:'Sim',revisao:'Sim',preco:120000,precoAnt:129900,troca:'Sim',financ:'Sim',destaque:'Sim',status:'Ativo',opcionais:['Ar-condicionado','Central multimídia','Câmera de ré','Freios ABS'],descricao:'Único dono, revisões na concessionária.',fotos:[]},
+    {id:'demo2',marca:'Volkswagen',modelo:'T-Cross',versao:'Highline 1.4 TSI',anofab:2022,anomod:2023,tipo:'SUV',cond:'Seminovo',cor:'Prata/Cinza',km:18500,combustivel:'Flex',cambio:'Automático',motor:'1.4 TSI 150cv',potencia:150,portas:'5 portas',tracao:'FWD',direcao:'Elétrica',placa:'5 e 6',donos:'1 dono',ipva:'Sim',revisao:'Sim',preco:145000,precoAnt:null,troca:'Consultar',financ:'Sim',destaque:'Não',status:'Ativo',opcionais:['Teto solar','Bancos de couro'],descricao:'SUV com baixa quilometragem.',fotos:[]},
     {id:'demo3',marca:'Fiat',modelo:'Pulse',versao:'Audace 1.3 Turbo',anofab:2023,anomod:2023,tipo:'SUV',cond:'Seminovo',cor:'Vermelho',km:8000,combustivel:'Flex',cambio:'CVT',motor:'1.3 Turbo 107cv',potencia:107,portas:'5 portas',tracao:'FWD',direcao:'Elétrica',placa:'1 e 2',donos:'1 dono',ipva:'Sim',revisao:'Sim',preco:98000,precoAnt:null,troca:'Não',financ:'Sim',destaque:'Sim',status:'Ativo',opcionais:['Ar-condicionado','Central multimídia'],descricao:'Apenas 8 mil km.',fotos:[]},
-    {id:'demo4',marca:'Chevrolet',modelo:'S10',versao:'High Country 2.8 4x4',anofab:2020,anomod:2021,tipo:'Pickup',cond:'Usado',cor:'Preto',km:65000,combustivel:'Diesel',cambio:'Automático',motor:'2.8 Diesel 200cv',potencia:200,portas:'4 portas',tracao:'AWD',direcao:'Hidráulica',placa:'7 e 8',donos:'2 donos',ipva:'Sim',revisao:'Sim',preco:185000,precoAnt:199000,troca:'Sim',financ:'Sim',destaque:'Não',status:'Ativo',opcionais:['Bancos de couro','4x4','GPS/Navegação'],descricao:'Pickup topo de linha.',fotos:[]},
-    {id:'demo5',marca:'Honda',modelo:'Civic',versao:'EXL 1.5 Turbo',anofab:2019,anomod:2020,tipo:'Sedan',cond:'Usado',cor:'Azul',km:72000,combustivel:'Flex',cambio:'CVT',motor:'1.5 Turbo 173cv',potencia:173,portas:'4 portas',tracao:'FWD',direcao:'Elétrica',placa:'9 e 0',donos:'2 donos',ipva:'Sim',revisao:'Não',preco:89000,precoAnt:95000,troca:'Sim',financ:'Sim',destaque:'Não',status:'Ativo',opcionais:['Teto solar','Bancos de couro','Cruise control'],descricao:'Civic EXL completo.',fotos:[]},
-    {id:'demo6',marca:'Jeep',modelo:'Compass',versao:'Longitude 1.3 T270',anofab:2022,anomod:2023,tipo:'SUV',cond:'Seminovo',cor:'Branco',km:22000,combustivel:'Flex',cambio:'Automático',motor:'1.3 Turbo 185cv',potencia:185,portas:'5 portas',tracao:'FWD',direcao:'Elétrica',placa:'3 e 4',donos:'1 dono',ipva:'Sim',revisao:'Sim',preco:162000,precoAnt:null,troca:'Consultar',financ:'Sim',destaque:'Não',status:'Ativo',opcionais:['Câmera de ré','Apple CarPlay/Android Auto'],descricao:'Compass bem conservado.',fotos:[]},
+    {id:'demo4',marca:'Chevrolet',modelo:'S10',versao:'High Country 2.8 4x4',anofab:2020,anomod:2021,tipo:'Pickup',cond:'Usado',cor:'Preto',km:65000,combustivel:'Diesel',cambio:'Automático',motor:'2.8 Diesel 200cv',potencia:200,portas:'4 portas',tracao:'AWD',direcao:'Hidráulica',placa:'7 e 8',donos:'2 donos',ipva:'Sim',revisao:'Sim',preco:185000,precoAnt:199000,troca:'Sim',financ:'Sim',destaque:'Não',status:'Ativo',opcionais:['Bancos de couro','4x4'],descricao:'Pickup 4x4.',fotos:[]},
+    {id:'demo5',marca:'Honda',modelo:'Civic',versao:'EXL 1.5 Turbo',anofab:2019,anomod:2020,tipo:'Sedan',cond:'Usado',cor:'Azul',km:72000,combustivel:'Flex',cambio:'CVT',motor:'1.5 Turbo 173cv',potencia:173,portas:'4 portas',tracao:'FWD',direcao:'Elétrica',placa:'9 e 0',donos:'2 donos',ipva:'Sim',revisao:'Não',preco:89000,precoAnt:95000,troca:'Sim',financ:'Sim',destaque:'Não',status:'Ativo',opcionais:['Teto solar','Bancos de couro'],descricao:'Civic EXL completo.',fotos:[]},
+    {id:'demo6',marca:'Jeep',modelo:'Compass',versao:'Longitude 1.3 T270',anofab:2022,anomod:2023,tipo:'SUV',cond:'Seminovo',cor:'Branco',km:22000,combustivel:'Flex',cambio:'Automático',motor:'1.3 Turbo 185cv',potencia:185,portas:'5 portas',tracao:'FWD',direcao:'Elétrica',placa:'3 e 4',donos:'1 dono',ipva:'Sim',revisao:'Sim',preco:162000,precoAnt:null,troca:'Consultar',financ:'Sim',destaque:'Não',status:'Ativo',opcionais:['Câmera de ré'],descricao:'Compass bem conservado.',fotos:[]},
   ];
 }
 
-// ═══════════════════════════════════════════════════
+// ════════════════════════════════════════
 // COMPARAÇÃO DE VEÍCULOS
-// ═══════════════════════════════════════════════════
+// ════════════════════════════════════════
 function toggleComp(id, e){
   e.stopPropagation();
-  const car = allCars.find(v=>v.id===id||v.id==id);
+  const car=allCars.find(v=>v.id===id||v.id==id);
   if(!car) return;
-  // Se já está em alguma posição, remove
-  const existIdx = compCars.findIndex(c=>c&&(c.id===id||c.id==id));
+  const existIdx=compCars.findIndex(c=>c&&(c.id===id||c.id==id));
   if(existIdx>=0){
     compCars[existIdx]=null;
-    const btn=document.getElementById('comp-btn-'+id);
-    if(btn){ btn.textContent='COMPARAR'; btn.classList.remove('selected'); }
-    updateCompBadge();
+    updateCompUI();
     toast('Removido da comparação.');
     return;
   }
-  // Adiciona na primeira posição livre
-  const freeIdx = compCars.findIndex(c=>c===null);
-  if(freeIdx<0){ toast('Já há 2 veículos na comparação. Remova um primeiro.','err'); return; }
+  const freeIdx=compCars.findIndex(c=>c===null);
+  if(freeIdx<0){ toast('Máximo 2 veículos. Remova um primeiro.','err'); return; }
   compCars[freeIdx]=car;
-  const btn=document.getElementById('comp-btn-'+id);
-  if(btn){ btn.textContent='✓ COMPARANDO'; btn.classList.add('selected'); }
-  updateCompBadge();
-  const count = compCars.filter(Boolean).length;
-  if(count===2){ toast('2 veículos prontos! Clique em COMPARAR no menu.'); }
-  else { toast('Selecione mais 1 veículo para comparar.'); }
+  updateCompUI();
+  const count=compCars.filter(Boolean).length;
+  if(count===2) toast('✓ 2 veículos prontos! Clique em "COMPARAR" para ver.');
+  else toast('Selecione mais 1 veículo para comparar.');
 }
-function updateCompBadge(){
-  const count = compCars.filter(Boolean).length;
-  // Adicionar/atualizar badge no nav de estoque
-  let badge = document.getElementById('comp-nav-badge');
+function updateCompUI(){
+  const count=compCars.filter(Boolean).length;
+  // Badge no nav
+  let badge=document.getElementById('comp-nav-badge');
   if(count>0){
     if(!badge){
-      badge=document.createElement('span');badge.id='comp-nav-badge';badge.className='comp-badge';
+      badge=document.createElement('span'); badge.id='comp-nav-badge'; badge.className='comp-badge';
       const navLink=document.getElementById('nav-estoque');
       if(navLink) navLink.appendChild(badge);
     }
     badge.textContent=count;
-  } else {
-    if(badge) badge.remove();
+  }else{ if(badge) badge.remove(); }
+  // Botão flutuante — aparece quando há 2 selecionados
+  const floatBtn=document.getElementById('comp-float-btn');
+  const floatCount=document.getElementById('comp-float-count');
+  if(floatBtn){
+    if(count===2){ floatBtn.classList.add('visible'); }
+    else{ floatBtn.classList.remove('visible'); }
   }
+  if(floatCount) floatCount.textContent=count;
+  // Atualizar botões nos cards
+  document.querySelectorAll('[id^="comp-btn-"]').forEach(btn=>{
+    const cardId=btn.id.replace('comp-btn-','');
+    const inComp=compCars.some(c=>c&&(c.id===cardId||c.id==cardId));
+    btn.textContent=inComp?'✓ COMP':'COMP';
+    btn.classList.toggle('selected',inComp);
+  });
 }
 function abrirComp(){
   if(compCars.filter(Boolean).length<2){ toast('Selecione 2 veículos para comparar.','err'); return; }
@@ -1845,51 +1877,53 @@ function fecharComp(){
 document.getElementById('comp-overlay').addEventListener('click',function(e){ if(e.target===this) fecharComp(); });
 
 function renderComp(){
-  const [a,b] = compCars;
-  if(!a||!b) return;
+  const [a,b]=compCars; if(!a||!b) return;
   const fields=[
-    {label:'Preço',   key:'preco',  fmt:(v)=>`R$ ${(v.preco||0).toLocaleString('pt-BR')}`, compare:(a,b)=>a.preco<b.preco?'a':a.preco>b.preco?'b':'eq'},
-    {label:'Km',      key:'km',     fmt:(v)=>`${(v.km||0).toLocaleString('pt-BR')} km`, compare:(a,b)=>a.km<b.km?'a':a.km>b.km?'b':'eq'},
-    {label:'Ano',     key:'anomod', fmt:(v)=>`${v.anofab}/${v.anomod}`, compare:(a,b)=>a.anomod>b.anomod?'a':a.anomod<b.anomod?'b':'eq'},
-    {label:'Motor',   key:'motor',  fmt:(v)=>v.motor||'—', compare:()=>'eq'},
-    {label:'Potência',key:'potencia',fmt:(v)=>v.potencia?v.potencia+'cv':'—', compare:(a,b)=>a.potencia>b.potencia?'a':a.potencia<b.potencia?'b':'eq'},
-    {label:'Câmbio',  key:'cambio', fmt:(v)=>v.cambio||'—', compare:()=>'eq'},
-    {label:'Combustível',key:'combustivel',fmt:(v)=>v.combustivel||'—', compare:()=>'eq'},
-    {label:'Portas',  key:'portas', fmt:(v)=>v.portas||'—', compare:()=>'eq'},
-    {label:'Tração',  key:'tracao', fmt:(v)=>v.tracao||'—', compare:()=>'eq'},
-    {label:'Condição',key:'cond',   fmt:(v)=>v.cond||'—', compare:()=>'eq'},
-    {label:'IPVA',    key:'ipva',   fmt:(v)=>v.ipva||'—', compare:(a,b)=>a.ipva==='Sim'&&b.ipva!=='Sim'?'a':b.ipva==='Sim'&&a.ipva!=='Sim'?'b':'eq'},
-    {label:'Revisão', key:'revisao',fmt:(v)=>v.revisao||'—', compare:(a,b)=>a.revisao==='Sim'&&b.revisao!=='Sim'?'a':b.revisao==='Sim'&&a.revisao!=='Sim'?'b':'eq'},
-    {label:'Troca',   key:'troca',  fmt:(v)=>v.troca||'—', compare:()=>'eq'},
+    {l:'Preço',     fmt:(v)=>`<span class="comp-price">R$ ${(v.preco||0).toLocaleString('pt-BR')}</span>`, cmp:(a,b)=>a.preco<b.preco?'a':'b'},
+    {l:'Km',        fmt:(v)=>`${(v.km||0).toLocaleString('pt-BR')} km`, cmp:(a,b)=>a.km<b.km?'a':'b'},
+    {l:'Ano',       fmt:(v)=>`${v.anofab}/${v.anomod}`, cmp:(a,b)=>a.anomod>b.anomod?'a':'b'},
+    {l:'Motor',     fmt:(v)=>v.motor||'—', cmp:()=>'eq'},
+    {l:'Potência',  fmt:(v)=>v.potencia?v.potencia+'cv':'—', cmp:(a,b)=>a.potencia>b.potencia?'a':'b'},
+    {l:'Câmbio',    fmt:(v)=>v.cambio||'—', cmp:()=>'eq'},
+    {l:'Combustível',fmt:(v)=>v.combustivel||'—', cmp:()=>'eq'},
+    {l:'Portas',    fmt:(v)=>v.portas||'—', cmp:()=>'eq'},
+    {l:'Tração',    fmt:(v)=>v.tracao||'—', cmp:()=>'eq'},
+    {l:'Condição',  fmt:(v)=>v.cond||'—', cmp:()=>'eq'},
+    {l:'IPVA pago', fmt:(v)=>v.ipva||'—', cmp:(a,b)=>a.ipva==='Sim'&&b.ipva!=='Sim'?'a':b.ipva==='Sim'?'b':'eq'},
+    {l:'Revisão ok',fmt:(v)=>v.revisao||'—', cmp:(a,b)=>a.revisao==='Sim'&&b.revisao!=='Sim'?'a':b.revisao==='Sim'?'b':'eq'},
+    {l:'Aceita troca',fmt:(v)=>v.troca||'—', cmp:()=>'eq'},
+    {l:'❤ Curtidas',fmt:(v)=>String(getLikes(v.id)), cmp:(a,b)=>getLikes(a.id)>getLikes(b.id)?'a':'b'},
+    {l:'👁 Visitas', fmt:(v)=>String(getViews(v.id)), cmp:(a,b)=>getViews(a.id)>getViews(b.id)?'a':'b'},
   ];
-
-  const colA = (car, side) => `
+  const col=(car,side)=>`
     <div class="comp-col">
       <div class="comp-car-img">${car.fotos&&car.fotos.length?`<img src="${car.fotos[0]}" loading="lazy">`:`<div class="comp-car-img-ph">&#128663;</div>`}</div>
       <div class="comp-car-hd">
         <div class="comp-car-nm">${car.marca} ${car.modelo}</div>
-        <div class="comp-car-vr">${car.versao||''} — ${car.cor||''}</div>
+        <div class="comp-car-vr">${car.versao||''} &mdash; ${car.cor||''}</div>
       </div>
       ${fields.map(f=>{
-        const winner=f.compare(a,b);
+        const winner=f.cmp(a,b);
         const isWin=(side==='a'&&winner==='a')||(side==='b'&&winner==='b');
         const isLose=(side==='a'&&winner==='b')||(side==='b'&&winner==='a');
         return `<div class="comp-row">
-          <div class="comp-label">${f.label}</div>
-          <div class="comp-val${isWin?' win':isLose?' lose':''}">${f.key==='preco'?`<span class="comp-price">${f.fmt(car)}</span>`:f.fmt(car)}</div>
+          <div class="comp-label">${f.l}</div>
+          <div class="comp-val${isWin?' win':isLose?' lose':''}">${f.fmt(car)}</div>
         </div>`;
       }).join('')}
-      <div style="padding:.875rem 1rem">
-        <button class="btn-wpp" style="width:100%;padding:.65rem" onclick="fecharComp();openModal('${car.id}')">VER DETALHES</button>
+      <div style="padding:.875rem 1rem;display:flex;gap:.5rem">
+        <button class="btn-wpp" style="flex:1;padding:.6rem" onclick="fecharComp();openModal('${car.id}')">VER DETALHES</button>
+        <button class="like-btn${hasLiked(car.id)?' liked':''}" onclick="addLike('${car.id}',event)" style="flex-shrink:0">
+          <span class="like-heart">&#10084;</span> <span>${getLikes(car.id)}</span>
+        </button>
       </div>
     </div>`;
-
-  document.getElementById('comp-grid').innerHTML = colA(a,'a') + colA(b,'b');
+  document.getElementById('comp-grid').innerHTML = col(a,'a') + col(b,'b');
 }
 
-// ═══════════════════════════════════════════════════
-// FILTROS — COM BUSCA AVANÇADA
-// ═══════════════════════════════════════════════════
+// ════════════════════════════════════════
+// FILTROS
+// ════════════════════════════════════════
 function setF(key,val,btn){
   filters2[key]=val;
   btn.closest('.filter-group').querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
@@ -1928,9 +1962,9 @@ function applyFilterSort(){
   renderGrid();
 }
 
-// ═══════════════════════════════════════════════════
+// ════════════════════════════════════════
 // RENDER GRID
-// ═══════════════════════════════════════════════════
+// ════════════════════════════════════════
 function renderGrid(){
   const pages=Math.ceil(filteredCars.length/PER);
   const slice=filteredCars.slice((currentPage2-1)*PER,currentPage2*PER);
@@ -1951,7 +1985,7 @@ function cardHTML(v){
   const likes=getLikes(v.id);
   const liked=hasLiked(v.id);
   const views=getViews(v.id);
-  const isInComp=compCars.some(c=>c&&(c.id===v.id||c.id==v.id));
+  const inComp=compCars.some(c=>c&&(c.id===v.id||c.id==v.id));
   return `<div class="car-card" id="card-${v.id}" onclick="openModal('${v.id}')">
     <div class="car-gallery">
       <div class="slides" id="slides-${v.id}">${slides}</div>
@@ -1979,11 +2013,10 @@ function cardHTML(v){
         <div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px">
           <div class="km-badge">${(v.km||0).toLocaleString('pt-BR')} km</div>
           <div style="display:flex;align-items:center;gap:5px">
-            <button class="like-btn${liked?' liked':''}" id="like-btn-${v.id}" onclick="addLike('${v.id}',event)" title="${liked?'Remover curtida':'Curtir'}">
-              <span class="like-heart">&#10084;</span>
-              <span class="like-count">${likes}</span>
+            <button class="like-btn${liked?' liked':''}" id="like-btn-${v.id}" onclick="addLike('${v.id}',event)">
+              <span class="like-heart">&#10084;</span><span class="like-count">${likes}</span>
             </button>
-            <button class="comp-add-btn${isInComp?' selected':''}" id="comp-btn-${v.id}" onclick="toggleComp('${v.id}',event)" title="Adicionar à comparação">${isInComp?'&#10003; COMP':'COMP'}</button>
+            <button class="comp-add-btn${inComp?' selected':''}" id="comp-btn-${v.id}" onclick="toggleComp('${v.id}',event)" title="Comparar">${inComp?'&#10003;':'+'} COMP</button>
             <button class="btn-card">VER</button>
           </div>
         </div>
@@ -2010,22 +2043,19 @@ function renderPag(pages){
 }
 function goPg(p){ currentPage2=p;renderGrid();window.scrollTo(0,380); }
 
-// ═══════════════════════════════════════════════════
+// ════════════════════════════════════════
 // MODAL DETALHES
-// ═══════════════════════════════════════════════════
+// ════════════════════════════════════════
 function openModal(id){
-  mCar=allCars.find(v=>v.id===id||v.id==id);
-  if(!mCar)return;
-  addView(id);
-  mGalIdx=0;
+  mCar=allCars.find(v=>v.id===id||v.id==id); if(!mCar)return;
+  addView(id); mGalIdx=0;
   const c=mCar;
   document.getElementById('m-yr').textContent=`${c.anofab}/${c.anomod} — ${c.cond}`;
   document.getElementById('m-nm').textContent=`${c.marca} ${c.modelo}`;
   document.getElementById('m-vr').textContent=`${c.versao||''} — ${c.cor||''}`;
   const specs=[
-    {l:'Km Rodados',v:(c.km||0).toLocaleString('pt-BR')+' km'},
-    {l:'Combustível',v:c.combustivel||'—'},{l:'Câmbio',v:c.cambio||'—'},
-    {l:'Motor',v:c.motor||'—'},{l:'Potência',v:c.potencia?c.potencia+'cv':'—'},
+    {l:'Km Rodados',v:(c.km||0).toLocaleString('pt-BR')+' km'},{l:'Combustível',v:c.combustivel||'—'},
+    {l:'Câmbio',v:c.cambio||'—'},{l:'Motor',v:c.motor||'—'},{l:'Potência',v:c.potencia?c.potencia+'cv':'—'},
     {l:'Portas',v:c.portas||'—'},{l:'Tração',v:c.tracao||'—'},{l:'Direção',v:c.direcao||'—'},
     {l:'Proprietários',v:c.donos||'—'},{l:'IPVA Pago',v:c.ipva||'—'},
     {l:'Revisão em dia',v:c.revisao||'—'},{l:'Finais de placa',v:c.placa||'—'},
@@ -2074,8 +2104,7 @@ function renderMGal(){
 function mNav(d){if(!mCar||!mCar.fotos||!mCar.fotos.length)return;mGalIdx=(mGalIdx+d+mCar.fotos.length)%mCar.fotos.length;renderMGal();}
 function setMGal(i){mGalIdx=i;renderMGal();}
 function renderSimilares(c){
-  const sg=document.getElementById('similares-grid');
-  if(!sg)return;
+  const sg=document.getElementById('similares-grid'); if(!sg)return;
   const similares=allCars.filter(v=>v.id!==c.id&&v.status==='Ativo'&&(v.tipo===c.tipo||v.marca===c.marca||(v.preco>=(c.preco*.8)&&v.preco<=(c.preco*1.2)))).slice(0,6);
   if(!similares.length){document.getElementById('modal-similares').style.display='none';return;}
   document.getElementById('modal-similares').style.display='';
@@ -2092,18 +2121,17 @@ function compartilharVeiculo(){
   if(st){st.classList.add('show');setTimeout(()=>st.classList.remove('show'),2500);}
 }
 
-// ═══════════════════════════════════════════════════
+// ════════════════════════════════════════
 // WHATSAPP
-// ═══════════════════════════════════════════════════
+// ════════════════════════════════════════
 function enviarContatoWhats(){
   const nome=(document.getElementById('ct-nome')?.value||'').trim();
   const fone=(document.getElementById('ct-fone')?.value||'').trim();
-  const assunto=(document.getElementById('ct-assunto')?.value||'interesse');
-  const msg=(document.getElementById('ct-msg')?.value||'').trim();
   if(!nome||!fone){toast('Preencha seu nome e WhatsApp.','err');return;}
+  const assunto=document.getElementById('ct-assunto')?.value||'interesse';
+  const msg=document.getElementById('ct-msg')?.value||'';
   const aMap={interesse:'Interesse em veiculo',proposta:'Proposta de compra',financiamento:'Duvida sobre financiamento',troca:'Troca de veiculo',outro:'Outro assunto'};
-  const txt='Ola! Meu nome e '+nome+', WhatsApp: '+fone+'\nAssunto: '+(aMap[assunto]||assunto)+(msg?'\nMensagem: '+msg:'')+'\n\nVi o site da Garage Veiculos.';
-  window.open(wppLink(txt),'_blank');
+  window.open(wppLink('Ola! Meu nome e '+nome+', WhatsApp: '+fone+'\nAssunto: '+(aMap[assunto]||assunto)+(msg?'\nMensagem: '+msg:'')+'\n\nVi o site da Garage Veiculos.'),'_blank');
 }
 function enviarContato(){enviarContatoWhats();}
 function enviarContatoModal(){
@@ -2111,7 +2139,7 @@ function enviarContatoModal(){
   const fone=(document.getElementById('mc-fone')?.value||'').trim();
   if(!nome||!fone){toast('Preencha nome e WhatsApp','err');return;}
   const vInfo=mCar?mCar.marca+' '+mCar.modelo+(mCar.versao?' '+mCar.versao:'')+' — R$ '+(mCar.preco||0).toLocaleString('pt-BR'):'';
-  window.open(wppLink('Ola! Sou '+nome+', WhatsApp: '+fone+'.\nTenho interesse no veiculo: '+vInfo+'\nGostaria de mais informacoes!'),'_blank');
+  window.open(wppLink('Ola! Sou '+nome+', WhatsApp: '+fone+'.\nTenho interesse: '+vInfo),'_blank');
   document.getElementById('mc-nome').value='';document.getElementById('mc-fone').value='';
 }
 function abrirWhats(){
@@ -2119,9 +2147,9 @@ function abrirWhats(){
   window.open(wppLink('Ola! Vi o '+mCar.marca+' '+mCar.modelo+(mCar.versao?' '+mCar.versao:'')+' ('+mCar.anofab+'/'+mCar.anomod+') por R$ '+(mCar.preco||0).toLocaleString('pt-BR')+' no site da Garage Veiculos. Tenho interesse!'),'_blank');
 }
 
-// ═══════════════════════════════════════════════════
+// ════════════════════════════════════════
 // FINANCIAMENTO
-// ═══════════════════════════════════════════════════
+// ════════════════════════════════════════
 function popularFinSelects(){
   const ativos=allCars.filter(v=>v.status==='Ativo');
   const el=document.getElementById('fin-veiculo-sel');if(!el)return;
@@ -2129,8 +2157,7 @@ function popularFinSelects(){
   ativos.forEach(v=>{const opt=document.createElement('option');opt.value=v.id;opt.textContent=v.marca+' '+v.modelo+(v.versao?' '+v.versao:'')+' — R$ '+(v.preco||0).toLocaleString('pt-BR');opt.dataset.preco=v.preco||0;el.appendChild(opt);});
 }
 function finSelecionarVeiculo(){
-  const sel=document.getElementById('fin-veiculo-sel');
-  const opt=sel&&sel.options[sel.selectedIndex];
+  const sel=document.getElementById('fin-veiculo-sel');const opt=sel&&sel.options[sel.selectedIndex];
   if(opt&&opt.dataset.preco){document.getElementById('fin-valor').value=opt.dataset.preco;calcFin();}
 }
 function calcFin(){
@@ -2140,50 +2167,39 @@ function calcFin(){
   if(val<=0){document.getElementById('fin-result').style.display='none';return;}
   const pv=Math.max(val-ent,0);const r=0.019;
   const par=Math.round(pv*(r*Math.pow(1+r,n))/(Math.pow(1+r,n)-1));
-  const totalPagar=Math.round(par*n);
   document.getElementById('fin-pv').textContent=par.toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
   const tf=document.getElementById('fin-total');const tp=document.getElementById('fin-total-pagar');
   if(tf)tf.textContent=pv.toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
-  if(tp)tp.textContent=totalPagar.toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+  if(tp)tp.textContent=Math.round(par*n).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
   document.getElementById('fin-result').style.display='block';
 }
-function finApenasSimular(){const val=parseFloat(document.getElementById('fin-valor')?.value)||0;if(!val){toast('Informe o valor do veículo.','err');return;}calcFin();document.getElementById('fin-result').scrollIntoView({behavior:'smooth',block:'center'});}
+function finApenasSimular(){const val=parseFloat(document.getElementById('fin-valor')?.value)||0;if(!val){toast('Informe o valor.','err');return;}calcFin();document.getElementById('fin-result').scrollIntoView({behavior:'smooth',block:'center'});}
 function finEnviarProposta(){
-  const nome=(document.getElementById('fin-nome')?.value||'').trim();
-  const cpf=(document.getElementById('fin-cpf')?.value||'').trim();
-  const nasc=document.getElementById('fin-nasc')?.value||'';
-  const fone=(document.getElementById('fin-fone')?.value||'').trim();
-  const cnh=document.getElementById('fin-cnh')?.value||'';
-  const renda=document.getElementById('fin-renda')?.value||'';
-  const val=parseFloat(document.getElementById('fin-valor')?.value)||0;
-  const ent=parseFloat(document.getElementById('fin-entrada')?.value)||0;
+  const nome=(document.getElementById('fin-nome')?.value||'').trim();const cpf=(document.getElementById('fin-cpf')?.value||'').trim();
+  const nasc=document.getElementById('fin-nasc')?.value||'';const fone=(document.getElementById('fin-fone')?.value||'').trim();
+  const cnh=document.getElementById('fin-cnh')?.value||'';const renda=document.getElementById('fin-renda')?.value||'';
+  const val=parseFloat(document.getElementById('fin-valor')?.value)||0;const ent=parseFloat(document.getElementById('fin-entrada')?.value)||0;
   const n=parseInt(document.getElementById('fin-prazo')?.value)||36;
-  const sel=document.getElementById('fin-veiculo-sel');
-  const veiculo=sel&&sel.selectedIndex>0?sel.options[sel.selectedIndex].textContent:'Nao especificado';
+  const sel=document.getElementById('fin-veiculo-sel');const veiculo=sel&&sel.selectedIndex>0?sel.options[sel.selectedIndex].textContent:'Nao especificado';
   if(!nome||!cpf||!fone||!cnh){toast('Preencha Nome, CPF, WhatsApp e CNH.','err');return;}
-  if(!val){toast('Informe o valor do veículo.','err');return;}
-  const pv=Math.max(val-ent,0);const r=0.019;
-  const par=Math.round(pv*(r*Math.pow(1+r,n))/(Math.pow(1+r,n)-1));
+  if(!val){toast('Informe o valor.','err');return;}
+  const pv=Math.max(val-ent,0);const r=0.019;const par=Math.round(pv*(r*Math.pow(1+r,n))/(Math.pow(1+r,n)-1));
   const nascFmt=nasc?new Date(nasc+'T12:00:00').toLocaleDateString('pt-BR'):'nao informado';
-  window.open(wppLink('*SIMULACAO DE FINANCIAMENTO — GARAGE VEICULOS*\n\n*DADOS PESSOAIS*\nNome: '+nome+'\nCPF: '+cpf+'\nNascimento: '+nascFmt+'\nWhatsApp: '+fone+'\nCNH: '+(cnh||'nao informado')+'\nRenda: '+(renda||'nao informado')+'\n\n*VEICULO E SIMULACAO*\nVeiculo: '+veiculo+'\nValor: R$ '+val.toLocaleString('pt-BR')+'\nEntrada: R$ '+ent.toLocaleString('pt-BR')+'\nPrazo: '+n+' meses\nParcela estimada: '+par.toLocaleString('pt-BR',{style:'currency',currency:'BRL'})+'\n\n_Simulacao apenas informativa._'),'_blank');
+  window.open(wppLink('*SIMULACAO DE FINANCIAMENTO — GARAGE VEICULOS*\n\nNome: '+nome+'\nCPF: '+cpf+'\nNascimento: '+nascFmt+'\nWhatsApp: '+fone+'\nCNH: '+cnh+'\nRenda: '+(renda||'nao informado')+'\n\nVeiculo: '+veiculo+'\nValor: R$ '+val.toLocaleString('pt-BR')+'\nEntrada: R$ '+ent.toLocaleString('pt-BR')+'\nPrazo: '+n+' meses\nParcela estimada: '+par.toLocaleString('pt-BR',{style:'currency',currency:'BRL'})+'\n\n_Simulacao apenas informativa._'),'_blank');
 }
 function finComEsteVeiculo(){
   if(!mCar)return;
   document.getElementById('overlay').classList.remove('open');document.body.style.overflow='';
   showPage('financiamento');
-  setTimeout(()=>{
-    popularFinSelects();
-    const sel=document.getElementById('fin-veiculo-sel');if(!sel)return;
-    for(let i=0;i<sel.options.length;i++){if(sel.options[i].value===mCar.id||sel.options[i].value==mCar.id){sel.selectedIndex=i;finSelecionarVeiculo();break;}}
-  },300);
+  setTimeout(()=>{popularFinSelects();const sel=document.getElementById('fin-veiculo-sel');if(!sel)return;for(let i=0;i<sel.options.length;i++){if(sel.options[i].value===mCar.id||sel.options[i].value==mCar.id){sel.selectedIndex=i;finSelecionarVeiculo();break;}}},300);
 }
 function finEnviarSimulacao(){finApenasSimular();}
 function propEnviarWhats(){finEnviarProposta();}
 function finTab(){}
 
-// ═══════════════════════════════════════════════════
-// ADMIN
-// ═══════════════════════════════════════════════════
+// ════════════════════════════════════════
+// ADMIN — VEÍCULOS + HISTÓRICO DE VENDIDOS
+// ════════════════════════════════════════
 function showSub(sub,btn){
   document.querySelectorAll('.asub').forEach(x=>x.classList.remove('active'));
   document.querySelectorAll('.atab').forEach(x=>x.classList.remove('active'));
@@ -2191,26 +2207,116 @@ function showSub(sub,btn){
   const tab=document.getElementById('atab-'+sub);if(tab)tab.classList.add('active');
   if(sub==='lista')loadCarsAdmin();
   if(sub==='entregas-admin')renderAdminEntregas();
+  if(sub==='vendidos')renderVendidos();
 }
 function renderAdminList(){
-  const wrap=document.getElementById('admin-list');
-  if(!allCars.length){wrap.innerHTML='<div class="empty"><div class="empty-ic">&#128663;</div><p>Nenhum veículo cadastrado.</p></div>';return;}
-  wrap.innerHTML=`<table class="at"><thead><tr><th>Foto</th><th>Veículo</th><th>Ano</th><th>Km</th><th>Preço</th><th>Status</th><th>&#10084;/&#128065;</th><th>Ações</th></tr></thead><tbody>${allCars.map(v=>`<tr>
+  const wrap=document.getElementById('admin-list'); if(!wrap)return;
+  const ativos=allCars.filter(v=>v.status!=='Vendido');
+  if(!ativos.length){wrap.innerHTML='<div class="empty"><div class="empty-ic">&#128663;</div><p>Nenhum veículo cadastrado.</p></div>';return;}
+  wrap.innerHTML=`<table class="at"><thead><tr>
+    <th>Foto</th><th>Veículo</th><th>Ano</th><th>Km</th><th>Preço</th><th>Status</th>
+    <th style="text-align:center">&#10084; / &#128065;</th><th>Ações</th>
+  </tr></thead><tbody>${ativos.map(v=>`<tr>
     <td>${v.fotos&&v.fotos.length?`<img class="at-thumb" src="${v.fotos[0]}" loading="lazy">`:`<div class="at-ph">&#128663;</div>`}</td>
     <td><strong>${v.marca} ${v.modelo}</strong><br><span style="font-size:.78rem;color:var(--muted)">${v.versao||'—'}</span></td>
     <td>${v.anofab||'—'}/${v.anomod||'—'}</td>
     <td>${(v.km||0).toLocaleString('pt-BR')} km</td>
     <td>R$ ${(v.preco||0).toLocaleString('pt-BR')}</td>
     <td><span class="sbadge s-${(v.status||'ativo').toLowerCase()}">${v.status||'Ativo'}</span></td>
-    <td style="font-size:.8rem;color:var(--muted)">&#10084; ${getLikes(v.id)} &nbsp;&#128065; ${getViews(v.id)}</td>
-    <td><button class="bsm" onclick="editarV('${v.id}')">Editar</button><button class="bsm danger" onclick="deletarV('${v.id}')">Excluir</button></td>
+    <td style="text-align:center;font-size:.85rem">
+      <span style="color:var(--red)">&#10084; ${getLikes(v.id)}</span>
+      &nbsp;
+      <span style="color:var(--muted)">&#128065; ${getViews(v.id)}</span>
+    </td>
+    <td>
+      <button class="btn-vender" onclick="marcarVendido('${v.id}')" title="Marcar como vendido">&#10003; VENDER</button>
+      <button class="bsm" onclick="editarV('${v.id}')">Editar</button>
+      <button class="bsm danger" onclick="deletarV('${v.id}')">Excluir</button>
+    </td>
   </tr>`).join('')}</tbody></table>`;
 }
+
+async function marcarVendido(id){
+  const v=allCars.find(x=>x.id===id||x.id==id); if(!v)return;
+  if(!confirm(`Marcar "${v.marca} ${v.modelo}" como VENDIDO?\n\nEle sairá do estoque público e irá para o histórico de vendidos.`))return;
+  try{
+    const r=await fetch(API+'/api/veiculos?id='+id,{method:'PUT',headers:authHeader(),body:JSON.stringify({...v,status:'Vendido',vendidoEm:Date.now()})});
+    if(!r.ok)throw new Error('Erro '+r.status);
+    // Atualizar local
+    const idx=allCars.findIndex(x=>x.id===id||x.id==id);
+    if(idx>=0){allCars[idx].status='Vendido';allCars[idx].vendidoEm=Date.now();}
+    toast('✓ '+v.marca+' '+v.modelo+' marcado como VENDIDO!');
+    renderAdminList();
+  }catch(e){toast('Erro: '+e.message,'err');}
+}
+
+function renderVendidos(){
+  const wrap=document.getElementById('vendidos-admin-list'); if(!wrap)return;
+  const vendidos=allCars.filter(v=>v.status==='Vendido').sort((a,b)=>(b.vendidoEm||0)-(a.vendidoEm||0));
+  if(!vendidos.length){
+    wrap.innerHTML='<div class="empty"><div class="empty-ic">&#127881;</div><p>Nenhuma venda registrada ainda.</p></div>';return;
+  }
+  wrap.innerHTML=`<table class="at"><thead><tr>
+    <th>Foto</th><th>Veículo</th><th>Ano</th><th>Km</th><th>Valor</th>
+    <th>&#10084;</th><th>&#128065;</th><th>Data venda</th><th>Ações</th>
+  </tr></thead><tbody>${vendidos.map(v=>{
+    const dataV=v.vendidoEm?new Date(v.vendidoEm).toLocaleDateString('pt-BR'):'—';
+    return `<tr class="vendido-row">
+      <td>${v.fotos&&v.fotos.length?`<img class="at-thumb" src="${v.fotos[0]}" loading="lazy">`:`<div class="at-ph">&#128663;</div>`}</td>
+      <td><strong>${v.marca} ${v.modelo}</strong><br><span style="font-size:.78rem;color:var(--muted)">${v.versao||'—'}</span></td>
+      <td>${v.anofab||'—'}/${v.anomod||'—'}</td>
+      <td>${(v.km||0).toLocaleString('pt-BR')} km</td>
+      <td style="color:var(--success);font-weight:700">R$ ${(v.preco||0).toLocaleString('pt-BR')}</td>
+      <td style="color:var(--red)">&#10084; ${getLikes(v.id)}</td>
+      <td style="color:var(--muted)">&#128065; ${getViews(v.id)}</td>
+      <td><span class="sold-badge">${dataV}</span></td>
+      <td>
+        <button class="bsm" onclick="reativarVeiculo('${v.id}')" title="Voltar para estoque">&#8617; REATIVAR</button>
+        <button class="bsm danger" onclick="deletarV('${v.id}')">Excluir</button>
+      </td>
+    </tr>`;
+  }).join('')}</tbody></table>
+  <div style="margin-top:1rem;padding:1rem;background:var(--navy3);border:1px solid var(--border);font-size:.82rem;color:var(--muted);font-family:'Barlow',sans-serif">
+    Total de vendas registradas: <strong style="color:var(--success)">${vendidos.length}</strong> veículos &nbsp;|&nbsp;
+    Valor total: <strong style="color:var(--success)">R$ ${vendidos.reduce((s,v)=>s+(v.preco||0),0).toLocaleString('pt-BR')}</strong>
+  </div>`;
+}
+
+async function reativarVeiculo(id){
+  const v=allCars.find(x=>x.id===id||x.id==id); if(!v)return;
+  if(!confirm(`Reativar "${v.marca} ${v.modelo}" no estoque?`))return;
+  try{
+    const r=await fetch(API+'/api/veiculos?id='+id,{method:'PUT',headers:authHeader(),body:JSON.stringify({...v,status:'Ativo',vendidoEm:null})});
+    if(!r.ok)throw new Error('Erro '+r.status);
+    const idx=allCars.findIndex(x=>x.id===id||x.id==id);
+    if(idx>=0){allCars[idx].status='Ativo';allCars[idx].vendidoEm=null;}
+    toast('Veículo reativado no estoque!');
+    renderVendidos();
+  }catch(e){toast('Erro: '+e.message,'err');}
+}
+
+function abrirVendidos(){
+  renderVendidos();
+  const ov=document.getElementById('vendidos-overlay');
+  if(ov){ov.style.display='flex';document.body.style.overflow='hidden';}
+}
+function fecharVendidos(){
+  const ov=document.getElementById('vendidos-overlay');
+  if(ov){ov.style.display='none';document.body.style.overflow='';}
+}
+document.getElementById('vendidos-overlay').addEventListener('click',function(e){if(e.target===this)fecharVendidos();});
+
 function editarV(id){
-  const v=allCars.find(x=>x.id===id||x.id==id);if(!v)return;
+  const v=allCars.find(x=>x.id===id||x.id==id); if(!v)return;
   document.getElementById('edit-id').value=v.id;
   const set=(i,val)=>{const el=document.getElementById(i);if(el)el.value=val||''};
-  set('f-marca',v.marca);set('f-modelo',v.modelo);set('f-versao',v.versao);set('f-anofab',v.anofab);set('f-anomod',v.anomod);set('f-tipo',v.tipo);set('f-cond',v.cond);set('f-cor',v.cor);set('f-km',v.km);set('f-combustivel',v.combustivel);set('f-cambio',v.cambio);set('f-motor',v.motor);set('f-potencia',v.potencia);set('f-portas',v.portas);set('f-tracao',v.tracao);set('f-direcao',v.direcao);set('f-placa',v.placa);set('f-donos',v.donos);set('f-ipva',v.ipva);set('f-revisao',v.revisao);set('f-preco',v.preco);set('f-preco-ant',v.precoAnt||'');set('f-troca',v.troca);set('f-financ',v.financ);set('f-destaque',v.destaque);set('f-status',v.status);set('f-desc',v.descricao);set('f-obs',v.obs||'');
+  set('f-marca',v.marca);set('f-modelo',v.modelo);set('f-versao',v.versao);set('f-anofab',v.anofab);
+  set('f-anomod',v.anomod);set('f-tipo',v.tipo);set('f-cond',v.cond);set('f-cor',v.cor);
+  set('f-km',v.km);set('f-combustivel',v.combustivel);set('f-cambio',v.cambio);set('f-motor',v.motor);
+  set('f-potencia',v.potencia);set('f-portas',v.portas);set('f-tracao',v.tracao);set('f-direcao',v.direcao);
+  set('f-placa',v.placa);set('f-donos',v.donos);set('f-ipva',v.ipva);set('f-revisao',v.revisao);
+  set('f-preco',v.preco);set('f-preco-ant',v.precoAnt||'');set('f-troca',v.troca);set('f-financ',v.financ);
+  set('f-destaque',v.destaque);set('f-status',v.status);set('f-desc',v.descricao);set('f-obs',v.obs||'');
   document.querySelectorAll('.opt-ck').forEach(c=>c.checked=false);
   (v.opcionais||[]).forEach(o=>document.querySelectorAll('.opt-ck').forEach(c=>{if(c.value===o)c.checked=true;}));
   adminPhotos=(v.fotos||[]).map(url=>({url,name:'existente'}));pendingFiles=[];renderPhPrev();
@@ -2219,11 +2325,11 @@ function editarV(id){
   window.scrollTo(0,300);
 }
 async function deletarV(id){
-  if(!confirm('Excluir este veículo?'))return;
+  if(!confirm('Excluir permanentemente este veículo? Esta ação não pode ser desfeita.'))return;
   try{
-    await fetch(`${API}/api/veiculos?id=${id}`,{method:'DELETE',headers:authHeader()});
+    await fetch(API+'/api/veiculos?id='+id,{method:'DELETE',headers:authHeader()});
     allCars=allCars.filter(v=>v.id!==id&&v.id!=id);
-    renderAdminList();toast('Veículo excluído.');
+    renderAdminList();toast('Veículo excluído permanentemente.');
   }catch(e){toast('Erro ao excluir.','err');}
 }
 async function salvarVeiculo(){
@@ -2233,56 +2339,63 @@ async function salvarVeiculo(){
   if(!preco){toast('Informe o preço.','err');return;}
   document.getElementById('btn-salvar').textContent='SALVANDO...';document.getElementById('btn-salvar').disabled=true;
   if(pendingFiles.length){
-    document.getElementById('upload-status').textContent=`Enviando ${pendingFiles.length} foto(s)...`;
+    document.getElementById('upload-status').textContent='Enviando '+pendingFiles.length+' foto(s)...';
     const erros=[];
     for(const f of pendingFiles){
-      try{const b64=await fileToBase64(f);const r=await fetch(`${API}/api/upload`,{method:'POST',headers:authHeader(),body:JSON.stringify({filename:f.name,data:b64})});const d=await r.json();if(d.url)adminPhotos.push({url:d.url,name:f.name});else erros.push(`${f.name}: ${d.error||'sem URL'}`);}catch(e){erros.push(`${f.name}: ${e.message}`);}
+      try{
+        const b64=await fileToBase64(f);
+        const r=await fetch(API+'/api/upload',{method:'POST',headers:authHeader(),body:JSON.stringify({filename:f.name,data:b64})});
+        const d=await r.json();
+        if(d.url)adminPhotos.push({url:d.url,name:f.name});else erros.push(f.name+': '+(d.error||'sem URL'));
+      }catch(e){erros.push(f.name+': '+e.message);}
     }
-    pendingFiles=[];document.getElementById('upload-status').textContent=erros.length?'⚠️ Erros: '+erros.join(' | '):'';
+    pendingFiles=[];
+    document.getElementById('upload-status').textContent=erros.length?'Erros: '+erros.join(' | '):'';
   }
   const opcs=Array.from(document.querySelectorAll('.opt-ck:checked')).map(c=>c.value);
   const payload={marca,modelo,versao:get('f-versao'),anofab:parseInt(get('f-anofab'))||2024,anomod:parseInt(get('f-anomod'))||2024,tipo:get('f-tipo'),cond:get('f-cond')||'Usado',cor:get('f-cor'),km:parseInt(get('f-km'))||0,combustivel:get('f-combustivel'),cambio:get('f-cambio'),motor:get('f-motor'),potencia:parseInt(get('f-potencia'))||null,portas:get('f-portas'),tracao:get('f-tracao'),direcao:get('f-direcao'),placa:get('f-placa'),donos:get('f-donos'),ipva:get('f-ipva'),revisao:get('f-revisao'),preco,precoAnt:parseFloat(get('f-preco-ant'))||null,troca:get('f-troca'),financ:get('f-financ'),destaque:get('f-destaque'),status:get('f-status')||'Ativo',opcionais:opcs,descricao:get('f-desc'),obs:get('f-obs'),fotos:adminPhotos.map(p=>p.url)};
   const editId=document.getElementById('edit-id').value;
   try{
     let r;
-    if(editId)r=await fetch(`${API}/api/veiculos?id=${editId}`,{method:'PUT',headers:authHeader(),body:JSON.stringify(payload)});
-    else r=await fetch(`${API}/api/veiculos`,{method:'POST',headers:authHeader(),body:JSON.stringify(payload)});
+    if(editId)r=await fetch(API+'/api/veiculos?id='+editId,{method:'PUT',headers:authHeader(),body:JSON.stringify(payload)});
+    else r=await fetch(API+'/api/veiculos',{method:'POST',headers:authHeader(),body:JSON.stringify(payload)});
     if(!r.ok){let e='Erro '+r.status;try{const d=await r.json();e=d.error||e;}catch{}throw new Error(e);}
     toast(editId?'Veículo atualizado!':'Veículo cadastrado!');
     resetForm();await loadCarsAdmin();showSub('lista',null);document.getElementById('atab-lista').classList.add('active');
   }catch(e){toast('Erro: '+e.message,'err');console.error(e);}
-  finally{document.getElementById('btn-salvar').textContent=document.getElementById('edit-id').value?'ATUALIZAR VEÍCULO':'SALVAR VEÍCULO';document.getElementById('btn-salvar').disabled=false;}
+  finally{
+    document.getElementById('btn-salvar').textContent=document.getElementById('edit-id').value?'ATUALIZAR VEÍCULO':'SALVAR VEÍCULO';
+    document.getElementById('btn-salvar').disabled=false;
+  }
 }
 function resetForm(){
   document.getElementById('edit-id').value='';
   ['f-marca','f-modelo','f-versao','f-anofab','f-anomod','f-tipo','f-cond','f-cor','f-km','f-combustivel','f-cambio','f-motor','f-potencia','f-portas','f-tracao','f-direcao','f-placa','f-donos','f-ipva','f-revisao','f-preco','f-preco-ant','f-desc','f-obs'].forEach(i=>{const el=document.getElementById(i);if(el)el.value='';});
   document.querySelectorAll('.opt-ck').forEach(c=>c.checked=false);
   adminPhotos=[];pendingFiles=[];renderPhPrev();
-  document.getElementById('upload-status').textContent='';document.getElementById('btn-salvar').textContent='SALVAR VEÍCULO';
+  document.getElementById('upload-status').textContent='';
+  document.getElementById('btn-salvar').textContent='SALVAR VEÍCULO';
 }
 
-// ═══════════════════════════════════════════════════
-// FOTOS — DRAG & DROP + BOTÕES ORDEM
-// ═══════════════════════════════════════════════════
+// ════════════════════════════════════════
+// FOTOS — DRAG & DROP + ORDEM
+// ════════════════════════════════════════
 function handlePhotos(e){const novos=Array.from(e.target.files).slice(0,10-adminPhotos.length-pendingFiles.length);pendingFiles.push(...novos);renderPhPrev();e.target.value='';}
 function renderPhPrev(){
   const all=[...adminPhotos.map(p=>({kind:'url',data:p})),...pendingFiles.map(f=>({kind:'file',data:f}))];
   const container=document.getElementById('ph-prev');if(!container)return;
   container.innerHTML=all.map((item,idx)=>{
     const src=item.kind==='url'?item.data.url:URL.createObjectURL(item.data);
-    const lbl=idx===0?'CAPA':`${idx+1}°`;
-    return `<div class="pt" draggable="true" data-idx="${idx}"
-      ondragstart="dragStart(event,${idx})" ondragover="dragOver(event)"
-      ondrop="dropPhoto(event,${idx})" ondragleave="this.classList.remove('drag-over')"
-      ondragend="document.querySelectorAll('.pt').forEach(x=>x.classList.remove('dragging','drag-over'))">
-      <img src="${src}">
-      <div class="pt-order-btns">
-        ${idx>0?`<button class="pt-up" onclick="movePhoto(${idx},-1)">&#9650;</button>`:''}
-        ${idx<all.length-1?`<button class="pt-dn" onclick="movePhoto(${idx},1)">&#9660;</button>`:''}
-      </div>
-      <button class="pt-rm" onclick="rmPhotoGlobal(${idx})">&#10005;</button>
-      <div class="pt-lbl">${lbl}</div>
-    </div>`;
+    const lbl=idx===0?'CAPA':(idx+1)+'°';
+    return '<div class="pt" draggable="true" data-idx="'+idx+'" ondragstart="dragStart(event,'+idx+')" ondragover="dragOver(event)" ondrop="dropPhoto(event,'+idx+')" ondragleave="this.classList.remove(\'drag-over\')" ondragend="document.querySelectorAll(\'.pt\').forEach(x=>x.classList.remove(\'dragging\',\'drag-over\'))">'+
+      '<img src="'+src+'">'+
+      '<div class="pt-order-btns">'+
+        (idx>0?'<button class="pt-up" onclick="movePhoto('+idx+',-1)">&#9650;</button>':'')+
+        (idx<all.length-1?'<button class="pt-dn" onclick="movePhoto('+idx+',1)">&#9660;</button>':'')+
+      '</div>'+
+      '<button class="pt-rm" onclick="rmPhotoGlobal('+idx+')">&#10005;</button>'+
+      '<div class="pt-lbl">'+lbl+'</div>'+
+    '</div>';
   }).join('');
 }
 let dragSrcIdx=null;
@@ -2292,31 +2405,26 @@ function dropPhoto(e,targetIdx){e.preventDefault();document.querySelectorAll('.p
 function movePhoto(idx,dir){movePhotoFromTo(idx,idx+dir);}
 function movePhotoFromTo(from,to){
   const all=[...adminPhotos.map(p=>({kind:'url',data:p})),...pendingFiles.map(f=>({kind:'file',data:f}))];
-  if(to<0||to>=all.length)return;
-  const tmp=all[from];all[from]=all[to];all[to]=tmp;
-  adminPhotos=[];pendingFiles=[];
-  all.forEach(item=>{if(item.kind==='url')adminPhotos.push(item.data);else pendingFiles.push(item.data);});
-  renderPhPrev();
+  if(to<0||to>=all.length)return;const tmp=all[from];all[from]=all[to];all[to]=tmp;
+  adminPhotos=[];pendingFiles=[];all.forEach(item=>{if(item.kind==='url')adminPhotos.push(item.data);else pendingFiles.push(item.data);});renderPhPrev();
 }
 function rmPhotoGlobal(idx){
   const all=[...adminPhotos.map(p=>({kind:'url',data:p})),...pendingFiles.map(f=>({kind:'file',data:f}))];
-  all.splice(idx,1);adminPhotos=[];pendingFiles=[];
-  all.forEach(item=>{if(item.kind==='url')adminPhotos.push(item.data);else pendingFiles.push(item.data);});
-  renderPhPrev();
+  all.splice(idx,1);adminPhotos=[];pendingFiles=[];all.forEach(item=>{if(item.kind==='url')adminPhotos.push(item.data);else pendingFiles.push(item.data);});renderPhPrev();
 }
 function rmPhoto(type,i){if(type==='url')adminPhotos.splice(i,1);else pendingFiles.splice(i,1);renderPhPrev();}
 function fileToBase64(file){return new Promise((res,rej)=>{const r=new FileReader();r.onload=e=>res(e.target.result);r.onerror=rej;r.readAsDataURL(file);});}
 
-// ═══════════════════════════════════════════════════
+// ════════════════════════════════════════
 // ENTREGAS — PÚBLICO
-// ═══════════════════════════════════════════════════
+// ════════════════════════════════════════
 let allEntregas=[];
 async function loadEntregas(){
-  try{const r=await fetch(`${API}/api/entregas`);if(!r.ok)throw new Error('HTTP '+r.status);allEntregas=await r.json();}
-  catch(e){console.warn('api/entregas indisponível. Adicione api/entregas.js ao projeto.');allEntregas=getDemoEntregas();}
+  try{const r=await fetch(API+'/api/entregas');if(!r.ok)throw new Error('HTTP '+r.status);allEntregas=await r.json();}
+  catch(e){console.warn('api/entregas indisponível');allEntregas=getDemoEntregas();}
   renderEntregas();
 }
-function getDemoEntregas(){return[{id:'e1',nome:'Carlos Mendes',veiculo:'Fiat Pulse 2023',data:'2025-03-15',msg:'Sonho realizado! Atendimento incrível, muito obrigado!',fotos:[]},{id:'e2',nome:'Ana Paula S.',veiculo:'VW T-Cross 2023',data:'2025-03-08',msg:'Melhor compra da minha vida. Super recomendo!',fotos:[]},{id:'e3',nome:'Roberto Lima',veiculo:'Chevrolet S10 2021',data:'2025-02-28',msg:'Processo rápido, saí com minha S10 no mesmo dia!',fotos:[]},];}
+function getDemoEntregas(){return[{id:'e1',nome:'Carlos Mendes',veiculo:'Fiat Pulse 2023',data:'2025-03-15',msg:'Sonho realizado! Atendimento incrível!',fotos:[]},{id:'e2',nome:'Ana Paula S.',veiculo:'VW T-Cross 2023',data:'2025-03-08',msg:'Melhor compra da minha vida!',fotos:[]},{id:'e3',nome:'Roberto Lima',veiculo:'Chevrolet S10 2021',data:'2025-02-28',msg:'Saí com minha S10 no mesmo dia!',fotos:[]},];}
 function renderEntregas(){
   const grid=document.getElementById('entregas-grid');const empty=document.getElementById('entregas-empty');
   const cnt=document.getElementById('entregas-count');const total=document.getElementById('total-entregas');
@@ -2327,18 +2435,7 @@ function renderEntregas(){
   if(grid)grid.innerHTML=allEntregas.map((e,idx)=>{
     const imgSrc=e.fotos&&e.fotos.length?e.fotos[0]:'';
     const dataFmt=e.data?new Date(e.data+'T12:00:00').toLocaleDateString('pt-BR',{day:'numeric',month:'long',year:'numeric'}):'';
-    return `<div class="entrega-card" onclick="abrirLB(${idx})">
-      <div class="entrega-img">${imgSrc?`<img src="${imgSrc}" alt="${e.nome}" loading="lazy">`:`<div class="entrega-img-ph">&#127881;</div>`}
-        <div class="entrega-badge">ENTREGUE &#10003;</div>
-        ${e.fotos&&e.fotos.length>1?`<div class="gal-count" style="position:absolute;bottom:8px;right:8px">&#128247; ${e.fotos.length}</div>`:''}
-      </div>
-      <div class="entrega-info">
-        <div class="entrega-nome">${e.nome}</div>
-        ${e.veiculo?`<div class="entrega-veiculo">${e.veiculo}</div>`:''}
-        ${e.msg?`<div class="entrega-msg">"${e.msg}"</div>`:''}
-        ${dataFmt?`<div class="entrega-data">${dataFmt}</div>`:''}
-      </div>
-    </div>`;
+    return '<div class="entrega-card" onclick="abrirLB('+idx+')"><div class="entrega-img">'+(imgSrc?'<img src="'+imgSrc+'" alt="'+e.nome+'" loading="lazy">':'<div class="entrega-img-ph">&#127881;</div>')+'<div class="entrega-badge">ENTREGUE &#10003;</div>'+(e.fotos&&e.fotos.length>1?'<div class="gal-count" style="position:absolute;bottom:8px;right:8px">&#128247; '+e.fotos.length+'</div>':'')+'</div><div class="entrega-info"><div class="entrega-nome">'+e.nome+'</div>'+(e.veiculo?'<div class="entrega-veiculo">'+e.veiculo+'</div>':'')+(e.msg?'<div class="entrega-msg">"'+e.msg+'"</div>':'')+(dataFmt?'<div class="entrega-data">'+dataFmt+'</div>':'')+'</div></div>';
   }).join('');
 }
 function abrirLB(idx){
@@ -2347,15 +2444,15 @@ function abrirLB(idx){
   const img=document.getElementById('lb-img');if(img)img.src=imgSrc;
   const nEl=document.getElementById('lb-nome');if(nEl)nEl.textContent=e.nome;
   const vEl=document.getElementById('lb-veiculo');if(vEl)vEl.textContent=e.veiculo||'';
-  const mEl=document.getElementById('lb-msg');if(mEl)mEl.textContent=e.msg?`"${e.msg}"`:'';
+  const mEl=document.getElementById('lb-msg');if(mEl)mEl.textContent=e.msg?'"'+e.msg+'"':'';
   document.getElementById('lb-overlay').classList.add('open');document.body.style.overflow='hidden';
 }
 function fecharLB(){document.getElementById('lb-overlay').classList.remove('open');document.body.style.overflow='';}
 document.getElementById('lb-overlay').addEventListener('click',function(e){if(e.target===this)fecharLB();});
 
-// ═══════════════════════════════════════════════════
+// ════════════════════════════════════════
 // ENTREGAS — ADMIN
-// ═══════════════════════════════════════════════════
+// ════════════════════════════════════════
 function mostrarFormEntrega(){
   document.getElementById('form-entrega').style.display='block';
   document.getElementById('ent-edit-id').value='';
@@ -2368,7 +2465,7 @@ function handleEntregaPhotos(e){const novos=Array.from(e.target.files).slice(0,5
 function renderEntregaThumbsPrev(){
   const all=[...entregaPhotos,...entregaPendingFiles.map(f=>URL.createObjectURL(f))];
   const c=document.getElementById('ent-thumbs-prev');if(!c)return;
-  c.innerHTML=all.map((src,i)=>`<div class="et"><img src="${src}" loading="lazy"><button class="et-rm" onclick="rmEntregaPhoto(${i})">&#10005;</button></div>`).join('');
+  c.innerHTML=all.map((src,i)=>'<div class="et"><img src="'+src+'" loading="lazy"><button class="et-rm" onclick="rmEntregaPhoto('+i+')">&#10005;</button></div>').join('');
 }
 function rmEntregaPhoto(i){const uc=entregaPhotos.length;if(i<uc)entregaPhotos.splice(i,1);else entregaPendingFiles.splice(i-uc,1);renderEntregaThumbsPrev();}
 async function salvarEntrega(){
@@ -2382,49 +2479,44 @@ async function salvarEntrega(){
   if(entregaPendingFiles.length){
     const stEl=document.getElementById('ent-upload-status');if(stEl)stEl.textContent='Enviando fotos...';
     for(const f of entregaPendingFiles){
-      try{const b64=await fileToBase64(f);const r=await fetch(`${API}/api/upload`,{method:'POST',headers:authHeader(),body:JSON.stringify({filename:f.name,data:b64})});if(!r.ok)throw new Error('Upload falhou: HTTP '+r.status);const d=await r.json();if(d.url)entregaPhotos.push(d.url);else throw new Error(d.error||'Sem URL');}
+      try{const b64=await fileToBase64(f);const r=await fetch(API+'/api/upload',{method:'POST',headers:authHeader(),body:JSON.stringify({filename:f.name,data:b64})});if(!r.ok)throw new Error('HTTP '+r.status);const d=await r.json();if(d.url)entregaPhotos.push(d.url);}
       catch(e){toast('Erro no upload: '+e.message,'err');}
     }
     entregaPendingFiles=[];const stEl2=document.getElementById('ent-upload-status');if(stEl2)stEl2.textContent='';
   }
   const editId=document.getElementById('ent-edit-id')?.value||'';
   try{
-    let r;
     const payload={nome,veiculo,data,msg,fotos:entregaPhotos,criadoEm:Date.now()};
-    if(editId)r=await fetch(`${API}/api/entregas?id=${editId}`,{method:'PUT',headers:authHeader(),body:JSON.stringify(payload)});
-    else r=await fetch(`${API}/api/entregas`,{method:'POST',headers:authHeader(),body:JSON.stringify(payload)});
+    let r;
+    if(editId)r=await fetch(API+'/api/entregas?id='+editId,{method:'PUT',headers:authHeader(),body:JSON.stringify(payload)});
+    else r=await fetch(API+'/api/entregas',{method:'POST',headers:authHeader(),body:JSON.stringify(payload)});
     if(!r.ok){
       let errMsg='Erro HTTP '+r.status;
-      if(r.status===404)errMsg='Rota /api/entregas não encontrada (404). Verifique se o arquivo api/entregas.js foi adicionado ao repositório e o deploy foi feito.';
+      if(r.status===404)errMsg='Rota /api/entregas não encontrada. Verifique se api/entregas.js está no repositório e o deploy foi feito.';
       else if(r.status===401)errMsg='Sessão expirada. Faça login novamente.';
       else{try{const d=await r.json();errMsg=d.error||errMsg;}catch{}}
       throw new Error(errMsg);
     }
-    toast('Entrega publicada com sucesso!');cancelarFormEntrega();renderAdminEntregas();
-  }catch(e){toast(e.message,'err');console.error('salvarEntrega:',e);}
+    toast('Entrega publicada!');cancelarFormEntrega();renderAdminEntregas();
+  }catch(e){toast(e.message,'err');}
   finally{if(btn){btn.textContent='PUBLICAR';btn.disabled=false;}}
 }
 async function renderAdminEntregas(){
-  try{const r=await fetch(`${API}/api/entregas`,{headers:authHeader()});if(!r.ok)throw new Error();allEntregas=await r.json();}
+  try{const r=await fetch(API+'/api/entregas',{headers:authHeader()});if(!r.ok)throw new Error();allEntregas=await r.json();}
   catch(e){allEntregas=getDemoEntregas();}
   const wrap=document.getElementById('admin-entregas-list');if(!wrap)return;
-  if(!allEntregas.length){wrap.innerHTML='<div class="empty"><div class="empty-ic">&#127881;</div><p>Nenhuma entrega publicada ainda.</p></div>';return;}
-  wrap.innerHTML=`<table class="at"><thead><tr><th>Foto</th><th>Cliente</th><th>Veículo</th><th>Data</th><th>Ações</th></tr></thead><tbody>${allEntregas.map(e=>`<tr>
-    <td>${e.fotos&&e.fotos.length?`<img class="at-thumb" src="${e.fotos[0]}" loading="lazy">`:`<div class="at-ph">&#127881;</div>`}</td>
-    <td><strong>${e.nome}</strong></td><td>${e.veiculo||'—'}</td>
-    <td>${e.data?new Date(e.data+'T12:00:00').toLocaleDateString('pt-BR'):'—'}</td>
-    <td><button class="bsm danger" onclick="deletarEntrega('${e.id}')">Excluir</button></td>
-  </tr>`).join('')}</tbody></table>`;
+  if(!allEntregas.length){wrap.innerHTML='<div class="empty"><div class="empty-ic">&#127881;</div><p>Nenhuma entrega publicada.</p></div>';return;}
+  wrap.innerHTML='<table class="at"><thead><tr><th>Foto</th><th>Cliente</th><th>Veículo</th><th>Data</th><th>Ações</th></tr></thead><tbody>'+allEntregas.map(e=>'<tr><td>'+(e.fotos&&e.fotos.length?'<img class="at-thumb" src="'+e.fotos[0]+'" loading="lazy">':'<div class="at-ph">&#127881;</div>')+'</td><td><strong>'+e.nome+'</strong></td><td>'+(e.veiculo||'—')+'</td><td>'+(e.data?new Date(e.data+'T12:00:00').toLocaleDateString('pt-BR'):'—')+'</td><td><button class="bsm danger" onclick="deletarEntrega(\''+e.id+'\')">Excluir</button></td></tr>').join('')+'</tbody></table>';
 }
 async function deletarEntrega(id){
   if(!confirm('Excluir esta entrega?'))return;
-  try{await fetch(`${API}/api/entregas?id=${id}`,{method:'DELETE',headers:authHeader()});allEntregas=allEntregas.filter(e=>e.id!==id&&e.id!=id);renderAdminEntregas();toast('Entrega excluída.');}
+  try{await fetch(API+'/api/entregas?id='+id,{method:'DELETE',headers:authHeader()});allEntregas=allEntregas.filter(e=>e.id!==id&&e.id!=id);renderAdminEntregas();toast('Entrega excluída.');}
   catch(e){toast('Erro ao excluir.','err');}
 }
 
-// ═══════════════════════════════════════════════════
+// ════════════════════════════════════════
 // TOAST
-// ═══════════════════════════════════════════════════
+// ════════════════════════════════════════
 let toastTimer;
 function toast(msg,type='ok'){
   const el=document.getElementById('toast-el');
@@ -2433,9 +2525,9 @@ function toast(msg,type='ok'){
   toastTimer=setTimeout(()=>el.classList.remove('show'),type==='err'?9000:3200);
 }
 
-// ═══════════════════════════════════════════════════
+// ════════════════════════════════════════
 // INIT
-// ═══════════════════════════════════════════════════
+// ════════════════════════════════════════
 loadCars();
 </script>
 </body>
