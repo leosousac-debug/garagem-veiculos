@@ -876,6 +876,33 @@ footer{
 .btn-vender{background:rgba(29,185,84,.15);border:1px solid var(--success);color:var(--success);padding:3px 8px;font-size:.75rem;font-family:'Rajdhani',sans-serif;cursor:pointer;transition:all .15s;margin-right:4px}
 .btn-vender:hover{background:var(--success);color:#000}
 </style>
+<meta name="robots" content="index, follow">
+<meta name="keywords" content="veículos usados Araguari, carros usados Araguari MG, seminovos Araguari, financiamento veículos Araguari, Garage Veículos Araguari">
+<meta property="og:title" content="Garage Veículos — Araguari MG">
+<meta property="og:description" content="Veículos usados e seminovos selecionados em Araguari MG. Procedência garantida, financiamento e mais de 80 veículos vendidos.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://garageveiculos.vercel.app">
+<meta property="og:image" content="https://garageveiculos.vercel.app/logo.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://garageveiculos.vercel.app">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "AutoDealer",
+  "name": "Garage Veículos",
+  "description": "Loja especializada em veículos usados e seminovos em Araguari MG",
+  "url": "https://garageveiculos.vercel.app",
+  "telephone": "+55-34-98440-8003",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Araguari",
+    "addressRegion": "MG",
+    "addressCountry": "BR"
+  },
+  "openingHours": ["Mo-Fr 08:00-18:00","Sa 08:00-12:00"],
+  "sameAs": ["https://www.instagram.com/garageveiculosaraguari/"]
+}
+</script>
 </head>
 <body>
 
@@ -890,6 +917,7 @@ footer{
     <a onclick="showPage('financiamento')" id="nav-financiamento">Financiamento</a>
     <a onclick="showPage('sobre')" id="nav-sobre">Sobre</a>
     <a onclick="showPage('entregas')" id="nav-entregas">Entregas</a>
+    <a onclick="showPage('troca')" id="nav-troca">Avalie sua Troca</a>
     <a onclick="showPage('contato')" id="nav-contato">Contato</a>
   </div>
   <div class="nav-right">
@@ -986,6 +1014,66 @@ footer{
       <p>Nenhum veículo encontrado com os filtros selecionados.</p>
     </div>
     <div class="pagination" id="pagination"></div>
+  </div>
+
+
+  <!-- AVISE-ME QUANDO CHEGAR -->
+  <div class="avise-section">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:1rem">
+      <div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:.08em;color:var(--red);margin-bottom:.25rem">&#128276; AVISE-ME QUANDO CHEGAR</div>
+        <p style="font-size:.85rem;color:var(--muted);font-family:'Barlow',sans-serif;line-height:1.5">Não encontrou o veículo ideal? Cadastre seu interesse e te avisamos no WhatsApp quando chegar.</p>
+      </div>
+      <button class="filter-btn active" style="flex-shrink:0;padding:.5rem 1.25rem;font-size:.85rem" onclick="document.getElementById('avise-form').classList.toggle('hidden')">QUERO SER AVISADO</button>
+    </div>
+    <div id="avise-form" class="hidden" style="margin-top:1.25rem">
+      <div class="avise-grid">
+        <div class="fg"><label class="fl2">Seu nome <span class="req">*</span></label><input type="text" class="fi" id="avise-nome" placeholder="Ex: João Silva"></div>
+        <div class="fg"><label class="fl2">WhatsApp <span class="req">*</span></label><input type="tel" class="fi" id="avise-fone" placeholder="(34) 99999-9999"></div>
+        <div class="fg"><label class="fl2">Tipo de veículo</label>
+          <select class="fs" id="avise-tipo">
+            <option value="">Qualquer</option><option>Hatch</option><option>Sedan</option>
+            <option>SUV</option><option>Pickup</option><option>Moto</option>
+          </select>
+        </div>
+        <div class="fg"><label class="fl2">Orçamento máximo (R$)</label><input type="number" class="fi" id="avise-preco" placeholder="Ex: 80000"></div>
+        <div class="fg"><label class="fl2">Marca preferida</label><input type="text" class="fi" id="avise-marca" placeholder="Ex: Fiat, VW, Chevrolet..."></div>
+      </div>
+      <button class="btn-save2" style="background:#25d366;border-color:#25d366;display:flex;align-items:center;gap:8px;margin-top:.5rem" onclick="enviarAviseMe()">
+        <svg style="width:17px;height:17px;fill:#fff;flex-shrink:0" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        ENVIAR INTERESSE VIA WHATSAPP
+      </button>
+    </div>
+  </div>
+
+  <!-- FEED INSTAGRAM -->
+  <div class="ig-feed-section">
+    <div style="max-width:1400px;margin:0 auto">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:1.25rem">
+        <div>
+          <div class="section-title">Siga no Instagram</div>
+          <p style="font-size:.82rem;color:var(--muted);font-family:'Barlow',sans-serif;margin-top:.35rem">@garageveiculosaraguari — novidades, entregas e bastidores</p>
+        </div>
+        <a href="https://www.instagram.com/garageveiculosaraguari/" target="_blank" rel="noopener"
+           style="display:flex;align-items:center;gap:7px;background:linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);color:#fff;padding:.55rem 1.1rem;text-decoration:none;font-family:'Bebas Neue',sans-serif;font-size:.95rem;letter-spacing:.08em;transition:opacity .15s"
+           onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+          <svg style="width:16px;height:16px;fill:#fff" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+          VER INSTAGRAM
+        </a>
+      </div>
+      <div class="ig-feed-grid" id="ig-feed-grid">
+        <!-- Preenchido dinamicamente ou com placeholders -->
+        <div class="ig-post" onclick="window.open('https://www.instagram.com/garageveiculosaraguari/','_blank')"><div class="ig-post-ph">&#128247;</div><div class="ig-post-overlay"><svg style="width:22px;fill:#fff" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg><span style="color:#fff;font-size:.75rem;font-weight:600">@garageveiculosaraguari</span></div></div>
+        <div class="ig-post" onclick="window.open('https://www.instagram.com/garageveiculosaraguari/','_blank')"><div class="ig-post-ph">🚗</div><div class="ig-post-overlay"><svg style="width:22px;fill:#fff" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></div></div>
+        <div class="ig-post" onclick="window.open('https://www.instagram.com/garageveiculosaraguari/','_blank')"><div class="ig-post-ph">🎉</div><div class="ig-post-overlay"><svg style="width:22px;fill:#fff" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></div></div>
+        <div class="ig-post" onclick="window.open('https://www.instagram.com/garageveiculosaraguari/','_blank')"><div class="ig-post-ph">🏆</div><div class="ig-post-overlay"><svg style="width:22px;fill:#fff" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></div></div>
+        <div class="ig-post" onclick="window.open('https://www.instagram.com/garageveiculosaraguari/','_blank')"><div class="ig-post-ph">⭐</div><div class="ig-post-overlay"><svg style="width:22px;fill:#fff" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></div></div>
+        <div class="ig-post" onclick="window.open('https://www.instagram.com/garageveiculosaraguari/','_blank')"><div class="ig-post-ph">🚘</div><div class="ig-post-overlay"><svg style="width:22px;fill:#fff" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></div></div>
+      </div>
+      <p style="text-align:center;margin-top:1rem;font-size:.78rem;color:var(--muted);font-family:'Barlow',sans-serif">
+        Para adicionar fotos reais do Instagram, consulte o Guia de Implantação — seção "Instagram Feed"
+      </p>
+    </div>
   </div>
 
   <footer>
@@ -1102,7 +1190,7 @@ footer{
             <div style="font-family:'Bebas Neue',sans-serif;font-size:1.8rem;color:var(--muted)" id="fin-total-pagar">—</div>
           </div>
         </div>
-        <div style="font-size:.72rem;color:var(--muted);font-family:'Barlow',sans-serif;font-style:italic">★ Taxa referencial de 1,90% a.m. Valores reais dependem de análise de crédito da instituição financeira.</div>
+        <div id="fin-bancos-wrap" style="margin-bottom:1rem;display:none"><div style="font-family:'Bebas Neue',sans-serif;font-size:.75rem;letter-spacing:.1em;color:var(--muted);margin-bottom:.6rem">COMPARATIVO DE FINANCEIRAS</div><div class="fin-bancos" id="fin-bancos"></div></div><div style="font-size:.72rem;color:var(--muted);font-family:'Barlow',sans-serif;font-style:italic">★ Taxa referencial de 1,90% a.m. Valores reais dependem de análise de crédito da instituição financeira.</div>
       </div>
 
       <div style="margin-bottom:1.75rem">
@@ -1283,6 +1371,76 @@ footer{
       <div class="lb-nome" id="lb-nome"></div>
       <div class="lb-veiculo" id="lb-veiculo"></div>
       <div class="lb-msg" id="lb-msg"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ TROCA ═══ -->
+<div class="page page-troca" id="page-troca">
+  <div style="max-width:860px;margin:0 auto;padding:2.5rem 2rem">
+    <div class="page-tag">Trade-in</div>
+    <h2 class="page-h2">AVALIE SEU VEÍCULO PARA TROCA</h2>
+    <p class="page-p">Preencha os dados do seu veículo e receba uma estimativa de valor. Sem compromisso — é gratuito e leva menos de 2 minutos.</p>
+
+    <div class="troca-steps">
+      <div class="troca-step"><div class="troca-step-n">1</div><div class="troca-step-l">Informe os dados</div></div>
+      <div class="troca-step"><div class="troca-step-n">2</div><div class="troca-step-l">Receba a estimativa</div></div>
+      <div class="troca-step"><div class="troca-step-n">3</div><div class="troca-step-l">Converse pelo WhatsApp</div></div>
+    </div>
+
+    <div style="background:var(--navy3);border:1px solid var(--border);padding:1.75rem 2rem">
+      <div class="fsec-t" style="margin-bottom:1.25rem">&#128663; DADOS DO SEU VEÍCULO</div>
+      <div class="fgrid">
+        <div class="fg"><label class="fl2">Marca <span class="req">*</span></label><input type="text" class="fi" id="t-marca" placeholder="Ex: Fiat, VW, Chevrolet"></div>
+        <div class="fg"><label class="fl2">Modelo <span class="req">*</span></label><input type="text" class="fi" id="t-modelo" placeholder="Ex: Pulse, Gol, Onix"></div>
+        <div class="fg"><label class="fl2">Versão</label><input type="text" class="fi" id="t-versao" placeholder="Ex: Comfort, LTZ, Highline"></div>
+        <div class="fg"><label class="fl2">Ano fabricação <span class="req">*</span></label><input type="number" class="fi" id="t-ano" placeholder="Ex: 2020" min="2000" max="2025"></div>
+        <div class="fg"><label class="fl2">Km rodados <span class="req">*</span></label><input type="number" class="fi" id="t-km" placeholder="Ex: 65000"></div>
+        <div class="fg"><label class="fl2">Combustível</label>
+          <select class="fs" id="t-comb"><option value="">Selecione</option><option>Flex</option><option>Gasolina</option><option>Diesel</option><option>Elétrico</option><option>Híbrido</option></select>
+        </div>
+        <div class="fg"><label class="fl2">Câmbio</label>
+          <select class="fs" id="t-cambio"><option value="">Selecione</option><option>Manual</option><option>Automático</option><option>CVT</option><option>Automatizado</option></select>
+        </div>
+        <div class="fg"><label class="fl2">Estado geral</label>
+          <select class="fs" id="t-estado">
+            <option value="">Selecione</option>
+            <option value="excelente">Excelente — sem marcas, revisões em dia</option>
+            <option value="bom">Bom — pequenos detalhes, bem conservado</option>
+            <option value="regular">Regular — alguns defeitos visíveis</option>
+            <option value="ruim">Necessita reparos</option>
+          </select>
+        </div>
+        <div class="fg ffull"><label class="fl2">Observações (batidas, reparos, histórico)</label>
+          <textarea class="ft" id="t-obs" style="min-height:80px" placeholder="Descreva o estado do veículo, histórico de manutenção, reparos feitos..."></textarea>
+        </div>
+      </div>
+
+      <div class="fsec-t" style="margin:1.5rem 0 1rem">&#128100; SEUS DADOS</div>
+      <div class="fgrid">
+        <div class="fg"><label class="fl2">Nome <span class="req">*</span></label><input type="text" class="fi" id="t-nome" placeholder="Seu nome completo"></div>
+        <div class="fg"><label class="fl2">WhatsApp <span class="req">*</span></label><input type="tel" class="fi" id="t-fone" placeholder="(34) 99999-9999"></div>
+        <div class="fg ffull"><label class="fl2">Veículo de interesse (opcional)</label>
+          <input type="text" class="fi" id="t-interesse" placeholder="Ex: Quero um SUV até R$ 120.000, ou especifique um veículo do nosso estoque">
+        </div>
+      </div>
+
+      <div id="troca-result" class="troca-result">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:.8rem;letter-spacing:.1em;color:var(--success);margin-bottom:.5rem">ESTIMATIVA DE VALOR (referência FIPE)</div>
+        <div class="troca-range" id="troca-range-val"></div>
+        <p style="font-size:.8rem;color:var(--muted);font-family:'Barlow',sans-serif;margin-top:.5rem;line-height:1.5" id="troca-obs-txt"></p>
+      </div>
+
+      <div style="display:flex;gap:.75rem;flex-wrap:wrap;margin-top:1.5rem">
+        <button class="btn-save2" style="background:var(--navy2);border:1px solid var(--border);color:var(--silver)" onclick="calcularTradeIn()">CALCULAR ESTIMATIVA</button>
+        <button class="btn-save2" style="background:#25d366;border-color:#25d366;display:flex;align-items:center;gap:8px" onclick="enviarTradeIn()">
+          <svg style="width:17px;height:17px;fill:#fff;flex-shrink:0" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          ENVIAR PARA AVALIAÇÃO
+        </button>
+      </div>
+      <p style="font-size:.72rem;color:var(--muted);font-family:'Barlow',sans-serif;margin-top:.75rem;line-height:1.5">
+        A estimativa é baseada na tabela FIPE e condições do mercado local. O valor real pode variar após vistoria presencial. Nenhum dado é armazenado neste site.
+      </p>
     </div>
   </div>
 </div>
@@ -1582,6 +1740,8 @@ footer{
           <button class="btn-wpp" onclick="abrirWhats()" style="margin-bottom:.5rem">📱 CHAMAR NO WHATSAPP</button>
           <button class="btn-prop" onclick="enviarContatoModal()">ENVIAR PROPOSTA POR MENSAGEM</button>
           <button style="width:100%;background:transparent;border:1px solid var(--border);color:var(--muted);padding:.6rem;font-family:'Bebas Neue',sans-serif;font-size:.9rem;letter-spacing:.08em;cursor:pointer;margin-top:.5rem;transition:all .15s" onmouseover="this.style.borderColor='var(--red)';this.style.color='var(--red)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--muted)'" onclick="finComEsteVeiculo()">SIMULAR FINANCIAMENTO</button>
+          <button class="reserva-btn" onclick="abrirReserva(event)">&#128274; RESERVAR POR 24H</button>
+          <div id="reserva-timer-modal" class="reserva-timer" style="text-align:center"></div>
         </div>
       </div>
     </div>
@@ -1605,16 +1765,7 @@ footer{
   </div>
 </div>
 
-<!-- ═══ COMPARAÇÃO ═══ -->
-<div class="comp-overlay" id="comp-overlay">
-  <div class="comp-modal">
-    <div class="comp-hd">
-      <h3>&#9878; COMPARAR VEÍCULOS</h3>
-      <button class="comp-close" onclick="fecharComp()">&#10005;</button>
-    </div>
-    <div class="comp-grid" id="comp-grid"></div>
-  </div>
-</div>
+
 
 <!-- ═══ HISTÓRICO DE VENDIDOS ═══ -->
 <div class="overlay" id="vendidos-overlay" style="display:none">
@@ -1661,116 +1812,109 @@ footer{
 <div class="share-toast" id="share-toast">Link copiado! 🔗</div>
 
 <script>
-// ════════════════════════════════════════
+// ═══════════════════════════════════════════════════
 // CONFIG
-// ════════════════════════════════════════
-const API = '';
-const WPP = '5534984408003';
-let adminToken = sessionStorage.getItem('gv_token') || null;
-let allCars = [];
-let filteredCars = [];
-let currentPage2 = 1;
-const PER = 9;
-let filters2 = { tipo:'todos', cond:'todos' };
-let sortMode2 = 'recente';
-let mGalIdx = 0;
-let mCar = null;
-let adminPhotos = [];
-let pendingFiles = [];
-let entregaPhotos = [];
-let entregaPendingFiles = [];
-let compCars = [null, null];
-let likesCache = {};
-let viewsCache = {};
+// ═══════════════════════════════════════════════════
+const API='';
+const WPP='5534984408003';
+let adminToken=sessionStorage.getItem('gv_token')||null;
+let allCars=[];
+let filteredCars=[];
+let currentPage2=1;
+const PER=9;
+let filters2={tipo:'todos',cond:'todos'};
+let sortMode2='recente';
+let mGalIdx=0;
+let mCar=null;
+let adminPhotos=[];
+let pendingFiles=[];
+let entregaPhotos=[];
+let entregaPendingFiles=[];
+let compCars=[null,null];
+let likesCache={};
+let viewsCache={};
+let reservasAtivas={};
 
-function wppLink(msg){ return 'https://wa.me/'+WPP+'?text='+encodeURIComponent(msg); }
+function wppLink(msg){return 'https://wa.me/'+WPP+'?text='+encodeURIComponent(msg);}
 
-// ════════════════════════════════════════
+// ═══════════════════════════════════════════════════
 // LIKES & VIEWS — Redis (1 like por IP) + fallback localStorage
-// ════════════════════════════════════════
+// ═══════════════════════════════════════════════════
 async function fetchStats(){
   try{
-    const r = await fetch(API+'/api/stats');
-    if(!r.ok) throw new Error();
-    const d = await r.json();
-    likesCache = d.likes || {};
-    viewsCache = d.views || {};
+    const r=await fetch(API+'/api/stats');
+    if(!r.ok)throw new Error();
+    const d=await r.json();
+    likesCache=d.likes||{};
+    viewsCache=d.views||{};
   }catch(e){
-    try{ const raw=localStorage.getItem('gv_likes_v2'); if(raw) likesCache=JSON.parse(raw); }catch{}
-    try{ const raw=localStorage.getItem('gv_views_v2'); if(raw) viewsCache=JSON.parse(raw); }catch{}
+    try{const raw=localStorage.getItem('gv_likes_v2');if(raw)likesCache=JSON.parse(raw);}catch{}
+    try{const raw=localStorage.getItem('gv_views_v2');if(raw)viewsCache=JSON.parse(raw);}catch{}
   }
 }
-function getLikes(id){ return (likesCache[id] && likesCache[id].total) || 0; }
-function hasLiked(id){
-  try{ return !!(JSON.parse(localStorage.getItem('gv_my_likes')||'{}')[id]); }catch{ return false; }
-}
-function getViews(id){ return viewsCache[id] || 0; }
+function getLikes(id){return(likesCache[id]&&likesCache[id].total)||0;}
+function hasLiked(id){try{return!!(JSON.parse(localStorage.getItem('gv_my_likes')||'{}')[id]);}catch{return false;}}
+function getViews(id){return viewsCache[id]||0;}
 
-async function addLike(id, e){
+async function addLike(id,e){
   e.stopPropagation();
-  const btn = document.getElementById('like-btn-'+id);
-  if(!btn || btn.classList.contains('loading')) return;
+  const btn=document.getElementById('like-btn-'+id);
+  if(!btn||btn.classList.contains('loading'))return;
   btn.classList.add('loading');
-  const already = hasLiked(id);
-  const action = already ? 'unlike' : 'like';
+  const already=hasLiked(id);
+  const action=already?'unlike':'like';
   try{
-    const r = await fetch(API+'/api/stats',{
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({action, id})
-    });
+    const r=await fetch(API+'/api/stats',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action,id})});
     if(r.ok){
-      const d = await r.json();
-      if(d.alreadyLiked){ btn.classList.remove('loading'); toast('Você já curtiu este veículo! 😊'); return; }
-      if(!likesCache[id]) likesCache[id]={total:0};
-      likesCache[id].total = d.total;
-    } else throw new Error();
+      const d=await r.json();
+      if(d.alreadyLiked){btn.classList.remove('loading');toast('Você já curtiu este veículo! 😊');return;}
+      if(!likesCache[id])likesCache[id]={total:0};
+      likesCache[id].total=d.total;
+    }else throw new Error();
   }catch(e){
-    if(!likesCache[id]) likesCache[id]={total:0};
-    likesCache[id].total = Math.max(0,(likesCache[id].total||0)+(already?-1:1));
-    try{ const lc=JSON.parse(localStorage.getItem('gv_likes_v2')||'{}'); lc[id]=likesCache[id].total; localStorage.setItem('gv_likes_v2',JSON.stringify(lc)); }catch{}
+    if(!likesCache[id])likesCache[id]={total:0};
+    likesCache[id].total=Math.max(0,(likesCache[id].total||0)+(already?-1:1));
+    try{const lc=JSON.parse(localStorage.getItem('gv_likes_v2')||'{}');lc[id]=likesCache[id].total;localStorage.setItem('gv_likes_v2',JSON.stringify(lc));}catch{}
   }
-  try{ const ml=JSON.parse(localStorage.getItem('gv_my_likes')||'{}'); if(already) delete ml[id]; else ml[id]=1; localStorage.setItem('gv_my_likes',JSON.stringify(ml)); }catch{}
-  const cnt = btn.querySelector('.like-count');
-  const heart = btn.querySelector('.like-heart');
-  if(cnt) cnt.textContent = getLikes(id);
-  if(!already){ btn.classList.add('liked'); if(heart){heart.style.animation='none';void heart.offsetWidth;heart.style.animation='heartPop .3s ease';} }
+  try{const ml=JSON.parse(localStorage.getItem('gv_my_likes')||'{}');if(already)delete ml[id];else ml[id]=1;localStorage.setItem('gv_my_likes',JSON.stringify(ml));}catch{}
+  const cnt=btn.querySelector('.like-count');
+  const heart=btn.querySelector('.like-heart');
+  if(cnt)cnt.textContent=getLikes(id);
+  if(!already){btn.classList.add('liked');if(heart){heart.style.animation='none';void heart.offsetWidth;heart.style.animation='heartPop .3s ease';}}
   else btn.classList.remove('liked');
   btn.classList.remove('loading');
 }
 
 async function addView(id){
-  try{ const seen=JSON.parse(sessionStorage.getItem('gv_seen')||'{}'); if(seen[id])return; seen[id]=1; sessionStorage.setItem('gv_seen',JSON.stringify(seen)); }catch{}
-  if(!viewsCache[id]) viewsCache[id]=0;
+  try{const seen=JSON.parse(sessionStorage.getItem('gv_seen')||'{}');if(seen[id])return;seen[id]=1;sessionStorage.setItem('gv_seen',JSON.stringify(seen));}catch{}
+  if(!viewsCache[id])viewsCache[id]=0;
   viewsCache[id]++;
-  try{
-    await fetch(API+'/api/stats',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'view',id})});
-  }catch(e){
-    try{ const vc=JSON.parse(localStorage.getItem('gv_views_v2')||'{}'); vc[id]=viewsCache[id]; localStorage.setItem('gv_views_v2',JSON.stringify(vc)); }catch{}
-  }
+  try{await fetch(API+'/api/stats',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'view',id})});}
+  catch(e){try{const vc=JSON.parse(localStorage.getItem('gv_views_v2')||'{}');vc[id]=viewsCache[id];localStorage.setItem('gv_views_v2',JSON.stringify(vc));}catch{}}
 }
 
-// ════════════════════════════════════════
+// ═══════════════════════════════════════════════════
 // NAVEGAÇÃO
-// ════════════════════════════════════════
+// ═══════════════════════════════════════════════════
 function showPage(p){
   document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
   document.querySelectorAll('.nav-links a').forEach(x=>x.classList.remove('active'));
   document.getElementById('page-'+p).classList.add('active');
-  const n=document.getElementById('nav-'+p); if(n) n.classList.add('active');
-  if(p==='estoque') loadCars();
-  if(p==='financiamento') setTimeout(popularFinSelects,400);
-  if(p==='entregas') loadEntregas();
-  if(p==='admin'){ if(!adminToken){openLogin();return;} renderAdminList(); }
+  const n=document.getElementById('nav-'+p);if(n)n.classList.add('active');
+  if(p==='estoque')loadCars();
+  if(p==='financiamento')setTimeout(popularFinSelects,400);
+  if(p==='entregas')loadEntregas();
+  if(p==='admin'){if(!adminToken){openLogin();return;}renderAdminList();}
   window.scrollTo(0,0);
 }
 
-// ════════════════════════════════════════
+// ═══════════════════════════════════════════════════
 // AUTH
-// ════════════════════════════════════════
-function openLogin(){ document.getElementById('login-overlay').classList.add('open'); setTimeout(()=>document.getElementById('login-pwd').focus(),100); }
-function closeLogin(){ document.getElementById('login-overlay').classList.remove('open'); document.getElementById('login-pwd').value=''; document.getElementById('login-err').style.display='none'; }
+// ═══════════════════════════════════════════════════
+function openLogin(){document.getElementById('login-overlay').classList.add('open');setTimeout(()=>document.getElementById('login-pwd').focus(),100);}
+function closeLogin(){document.getElementById('login-overlay').classList.remove('open');document.getElementById('login-pwd').value='';document.getElementById('login-err').style.display='none';}
 async function doLogin(){
-  const pwd=document.getElementById('login-pwd').value; if(!pwd)return;
+  const pwd=document.getElementById('login-pwd').value;if(!pwd)return;
   try{
     const r=await fetch(API+'/api/auth',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:pwd})});
     const d=await r.json();
@@ -1778,29 +1922,24 @@ async function doLogin(){
     else{document.getElementById('login-err').style.display='block';document.getElementById('login-pwd').value='';}
   }catch(e){toast('Erro ao conectar.','err');closeLogin();}
 }
-function adminLogout(){ adminToken=null;sessionStorage.removeItem('gv_token');showPage('estoque');toast('Sessão encerrada.'); }
-function authHeader(){ return{'Content-Type':'application/json','Authorization':'Bearer '+adminToken}; }
+function adminLogout(){adminToken=null;sessionStorage.removeItem('gv_token');showPage('estoque');toast('Sessão encerrada.');}
+function authHeader(){return{'Content-Type':'application/json','Authorization':'Bearer '+adminToken};}
 
-// ════════════════════════════════════════
+// ═══════════════════════════════════════════════════
 // CARREGAR VEÍCULOS
-// ════════════════════════════════════════
+// ═══════════════════════════════════════════════════
 async function loadCars(){
-  try{
-    const r=await fetch(API+'/api/veiculos');
-    if(!r.ok) throw new Error('Erro '+r.status);
-    allCars=await r.json();
-  }catch(e){ allCars=getDemoCars(); }
+  try{const r=await fetch(API+'/api/veiculos');if(!r.ok)throw new Error();allCars=await r.json();}
+  catch(e){allCars=getDemoCars();}
   await fetchStats();
   applyFilterSort();
   updateCompUI();
+  atualizarReservasAtivas();
 }
 async function loadCarsAdmin(){
-  try{
-    const r=await fetch(API+'/api/veiculos?admin=1',{headers:authHeader()});
-    if(!r.ok) throw new Error();
-    allCars=await r.json();
-  }catch(e){ allCars=getDemoCars(); }
-  await fetchStats();  // carrega likes/views para exibir na tabela admin
+  try{const r=await fetch(API+'/api/veiculos?admin=1',{headers:authHeader()});if(!r.ok)throw new Error();allCars=await r.json();}
+  catch(e){allCars=getDemoCars();}
+  await fetchStats();
   renderAdminList();
 }
 function getDemoCars(){
@@ -1808,132 +1947,160 @@ function getDemoCars(){
     {id:'demo1',marca:'Toyota',modelo:'Corolla',versao:'XEi 2.0 Flex',anofab:2021,anomod:2022,tipo:'Sedan',cond:'Usado',cor:'Branco',km:38000,combustivel:'Flex',cambio:'Automático',motor:'2.0 Flex 170cv',potencia:170,portas:'4 portas',tracao:'FWD',direcao:'Elétrica',placa:'3 e 4',donos:'1 dono',ipva:'Sim',revisao:'Sim',preco:120000,precoAnt:129900,troca:'Sim',financ:'Sim',destaque:'Sim',status:'Ativo',opcionais:['Ar-condicionado','Central multimídia','Câmera de ré','Freios ABS'],descricao:'Único dono, revisões na concessionária.',fotos:[]},
     {id:'demo2',marca:'Volkswagen',modelo:'T-Cross',versao:'Highline 1.4 TSI',anofab:2022,anomod:2023,tipo:'SUV',cond:'Seminovo',cor:'Prata/Cinza',km:18500,combustivel:'Flex',cambio:'Automático',motor:'1.4 TSI 150cv',potencia:150,portas:'5 portas',tracao:'FWD',direcao:'Elétrica',placa:'5 e 6',donos:'1 dono',ipva:'Sim',revisao:'Sim',preco:145000,precoAnt:null,troca:'Consultar',financ:'Sim',destaque:'Não',status:'Ativo',opcionais:['Teto solar','Bancos de couro'],descricao:'SUV com baixa quilometragem.',fotos:[]},
     {id:'demo3',marca:'Fiat',modelo:'Pulse',versao:'Audace 1.3 Turbo',anofab:2023,anomod:2023,tipo:'SUV',cond:'Seminovo',cor:'Vermelho',km:8000,combustivel:'Flex',cambio:'CVT',motor:'1.3 Turbo 107cv',potencia:107,portas:'5 portas',tracao:'FWD',direcao:'Elétrica',placa:'1 e 2',donos:'1 dono',ipva:'Sim',revisao:'Sim',preco:98000,precoAnt:null,troca:'Não',financ:'Sim',destaque:'Sim',status:'Ativo',opcionais:['Ar-condicionado','Central multimídia'],descricao:'Apenas 8 mil km.',fotos:[]},
-    {id:'demo4',marca:'Chevrolet',modelo:'S10',versao:'High Country 2.8 4x4',anofab:2020,anomod:2021,tipo:'Pickup',cond:'Usado',cor:'Preto',km:65000,combustivel:'Diesel',cambio:'Automático',motor:'2.8 Diesel 200cv',potencia:200,portas:'4 portas',tracao:'AWD',direcao:'Hidráulica',placa:'7 e 8',donos:'2 donos',ipva:'Sim',revisao:'Sim',preco:185000,precoAnt:199000,troca:'Sim',financ:'Sim',destaque:'Não',status:'Ativo',opcionais:['Bancos de couro','4x4'],descricao:'Pickup 4x4.',fotos:[]},
+    {id:'demo4',marca:'Chevrolet',modelo:'S10',versao:'High Country 2.8 4x4',anofab:2020,anomod:2021,tipo:'Pickup',cond:'Usado',cor:'Preto',km:65000,combustivel:'Diesel',cambio:'Automático',motor:'2.8 Diesel 200cv',potencia:200,portas:'4 portas',tracao:'AWD',direcao:'Hidráulica',placa:'7 e 8',donos:'2 donos',ipva:'Sim',revisao:'Sim',preco:185000,precoAnt:199000,troca:'Sim',financ:'Sim',destaque:'Não',status:'Ativo',opcionais:['Bancos de couro','4x4'],descricao:'Pickup topo de linha.',fotos:[]},
     {id:'demo5',marca:'Honda',modelo:'Civic',versao:'EXL 1.5 Turbo',anofab:2019,anomod:2020,tipo:'Sedan',cond:'Usado',cor:'Azul',km:72000,combustivel:'Flex',cambio:'CVT',motor:'1.5 Turbo 173cv',potencia:173,portas:'4 portas',tracao:'FWD',direcao:'Elétrica',placa:'9 e 0',donos:'2 donos',ipva:'Sim',revisao:'Não',preco:89000,precoAnt:95000,troca:'Sim',financ:'Sim',destaque:'Não',status:'Ativo',opcionais:['Teto solar','Bancos de couro'],descricao:'Civic EXL completo.',fotos:[]},
     {id:'demo6',marca:'Jeep',modelo:'Compass',versao:'Longitude 1.3 T270',anofab:2022,anomod:2023,tipo:'SUV',cond:'Seminovo',cor:'Branco',km:22000,combustivel:'Flex',cambio:'Automático',motor:'1.3 Turbo 185cv',potencia:185,portas:'5 portas',tracao:'FWD',direcao:'Elétrica',placa:'3 e 4',donos:'1 dono',ipva:'Sim',revisao:'Sim',preco:162000,precoAnt:null,troca:'Consultar',financ:'Sim',destaque:'Não',status:'Ativo',opcionais:['Câmera de ré'],descricao:'Compass bem conservado.',fotos:[]},
   ];
 }
 
-// ════════════════════════════════════════
-// COMPARAÇÃO DE VEÍCULOS
-// ════════════════════════════════════════
-function toggleComp(id, e){
-  e.stopPropagation();
-  const car=allCars.find(v=>v.id===id||v.id==id);
-  if(!car) return;
-  const existIdx=compCars.findIndex(c=>c&&(c.id===id||c.id==id));
-  if(existIdx>=0){
-    compCars[existIdx]=null;
-    updateCompUI();
-    toast('Removido da comparação.');
+// ═══════════════════════════════════════════════════
+// RESERVA DE VEÍCULO (24h — localStorage)
+// ═══════════════════════════════════════════════════
+function atualizarReservasAtivas(){
+  try{reservasAtivas=JSON.parse(localStorage.getItem('gv_reservas')||'{}');}catch{reservasAtivas={};}
+  const agora=Date.now();
+  // Limpar reservas expiradas
+  let changed=false;
+  Object.keys(reservasAtivas).forEach(id=>{
+    if(reservasAtivas[id].expira<agora){delete reservasAtivas[id];changed=true;}
+  });
+  if(changed){try{localStorage.setItem('gv_reservas',JSON.stringify(reservasAtivas));}catch{}}
+}
+function estaReservado(id){
+  atualizarReservasAtivas();
+  return !!(reservasAtivas[id]&&reservasAtivas[id].expira>Date.now());
+}
+function abrirReserva(e){
+  if(e)e.stopPropagation();
+  if(!mCar)return;
+  if(estaReservado(mCar.id)){
+    const r=reservasAtivas[mCar.id];
+    const restante=Math.ceil((r.expira-Date.now())/3600000);
+    toast('Você já reservou este veículo! Faltam ~'+restante+'h para expirar.');
     return;
   }
+  const nome=document.getElementById('mc-nome')?.value.trim()||'';
+  const fone=document.getElementById('mc-fone')?.value.trim()||'';
+  if(!nome||!fone){toast('Preencha seu nome e WhatsApp antes de reservar.','err');return;}
+  const expira=Date.now()+(24*3600000);
+  if(!reservasAtivas)reservasAtivas={};
+  reservasAtivas[mCar.id]={nome,fone,expira,veiculo:mCar.marca+' '+mCar.modelo};
+  try{localStorage.setItem('gv_reservas',JSON.stringify(reservasAtivas));}catch{}
+  // Exibir timer no modal
+  const timerEl=document.getElementById('reserva-timer-modal');
+  if(timerEl)timerEl.textContent='Reservado por você até '+new Date(expira).toLocaleString('pt-BR');
+  const btn=document.querySelector('.reserva-btn');
+  if(btn){btn.style.background='#2d6a4f';btn.textContent='✓ RESERVADO — 24H';}
+  // Notificar via WhatsApp
+  const vInfo=mCar.marca+' '+mCar.modelo+(mCar.versao?' '+mCar.versao:'')+' — R$ '+(mCar.preco||0).toLocaleString('pt-BR');
+  window.open(wppLink('Olá! Me chamo '+nome+', WhatsApp: '+fone+'.\nGostaria de RESERVAR o veículo: '+vInfo+'\nPor favor, confirme minha reserva por 24h. Obrigado!'),'_blank');
+  toast('Veículo reservado! Notificamos a equipe pelo WhatsApp.');
+}
+let reservaInterval=null;
+function mostrarTimerReserva(id){
+  if(reservaInterval)clearInterval(reservaInterval);
+  const timerEl=document.getElementById('reserva-timer-modal');
+  const btn=document.querySelector('.reserva-btn');
+  function atualizar(){
+    if(!estaReservado(id)){
+      if(timerEl)timerEl.textContent='';
+      if(btn){btn.style.background='';btn.textContent='🔒 RESERVAR POR 24H';}
+      clearInterval(reservaInterval);return;
+    }
+    const restante=reservasAtivas[id].expira-Date.now();
+    const horas=Math.floor(restante/3600000);
+    const minutos=Math.floor((restante%3600000)/60000);
+    if(timerEl)timerEl.textContent='Reservado por você — '+horas+'h'+minutos+'min restantes';
+    if(btn){btn.style.background='#2d6a4f';btn.textContent='✓ JÁ RESERVADO';}
+  }
+  atualizar();
+  reservaInterval=setInterval(atualizar,60000);
+}
+
+// ═══════════════════════════════════════════════════
+// COMPARAÇÃO
+// ═══════════════════════════════════════════════════
+function toggleComp(id,e){
+  e.stopPropagation();
+  const car=allCars.find(v=>v.id===id||v.id==id);if(!car)return;
+  const existIdx=compCars.findIndex(c=>c&&(c.id===id||c.id==id));
+  if(existIdx>=0){compCars[existIdx]=null;updateCompUI();toast('Removido da comparação.');return;}
   const freeIdx=compCars.findIndex(c=>c===null);
-  if(freeIdx<0){ toast('Máximo 2 veículos. Remova um primeiro.','err'); return; }
-  compCars[freeIdx]=car;
-  updateCompUI();
+  if(freeIdx<0){toast('Máximo 2 veículos. Remova um primeiro.','err');return;}
+  compCars[freeIdx]=car;updateCompUI();
   const count=compCars.filter(Boolean).length;
-  if(count===2) toast('✓ 2 veículos prontos! Clique em "COMPARAR" para ver.');
+  if(count===2)toast('2 veículos prontos! Clique em "COMPARAR" para ver.');
   else toast('Selecione mais 1 veículo para comparar.');
 }
 function updateCompUI(){
   const count=compCars.filter(Boolean).length;
-  // Badge no nav
   let badge=document.getElementById('comp-nav-badge');
   if(count>0){
-    if(!badge){
-      badge=document.createElement('span'); badge.id='comp-nav-badge'; badge.className='comp-badge';
-      const navLink=document.getElementById('nav-estoque');
-      if(navLink) navLink.appendChild(badge);
-    }
+    if(!badge){badge=document.createElement('span');badge.id='comp-nav-badge';badge.className='comp-badge';const nl=document.getElementById('nav-estoque');if(nl)nl.appendChild(badge);}
     badge.textContent=count;
-  }else{ if(badge) badge.remove(); }
-  // Botão flutuante — aparece quando há 2 selecionados
-  const floatBtn=document.getElementById('comp-float-btn');
-  const floatCount=document.getElementById('comp-float-count');
-  if(floatBtn){
-    if(count===2){ floatBtn.classList.add('visible'); }
-    else{ floatBtn.classList.remove('visible'); }
-  }
-  if(floatCount) floatCount.textContent=count;
-  // Atualizar botões nos cards
+  }else{if(badge)badge.remove();}
+  const fb=document.getElementById('comp-float-btn');const fc=document.getElementById('comp-float-count');
+  if(fb)fb.classList.toggle('visible',count===2);
+  if(fc)fc.textContent=count;
   document.querySelectorAll('[id^="comp-btn-"]').forEach(btn=>{
-    const cardId=btn.id.replace('comp-btn-','');
-    const inComp=compCars.some(c=>c&&(c.id===cardId||c.id==cardId));
-    btn.textContent=inComp?'✓ COMP':'COMP';
-    btn.classList.toggle('selected',inComp);
+    const cid=btn.id.replace('comp-btn-','');
+    const inC=compCars.some(c=>c&&(c.id===cid||c.id==cid));
+    btn.textContent=inC?'✓ COMP':'+ COMP';
+    btn.classList.toggle('selected',inC);
   });
 }
 function abrirComp(){
-  if(compCars.filter(Boolean).length<2){ toast('Selecione 2 veículos para comparar.','err'); return; }
+  if(compCars.filter(Boolean).length<2){toast('Selecione 2 veículos para comparar.','err');return;}
   renderComp();
   document.getElementById('comp-overlay').classList.add('open');
   document.body.style.overflow='hidden';
 }
-function fecharComp(){
-  document.getElementById('comp-overlay').classList.remove('open');
-  document.body.style.overflow='';
-}
-document.getElementById('comp-overlay').addEventListener('click',function(e){ if(e.target===this) fecharComp(); });
-
+function fecharComp(){document.getElementById('comp-overlay').classList.remove('open');document.body.style.overflow='';}
+document.getElementById('comp-overlay').addEventListener('click',function(e){if(e.target===this)fecharComp();});
 function renderComp(){
-  const [a,b]=compCars; if(!a||!b) return;
+  const[a,b]=compCars;if(!a||!b)return;
   const fields=[
-    {l:'Preço',     fmt:(v)=>`<span class="comp-price">R$ ${(v.preco||0).toLocaleString('pt-BR')}</span>`, cmp:(a,b)=>a.preco<b.preco?'a':'b'},
-    {l:'Km',        fmt:(v)=>`${(v.km||0).toLocaleString('pt-BR')} km`, cmp:(a,b)=>a.km<b.km?'a':'b'},
-    {l:'Ano',       fmt:(v)=>`${v.anofab}/${v.anomod}`, cmp:(a,b)=>a.anomod>b.anomod?'a':'b'},
-    {l:'Motor',     fmt:(v)=>v.motor||'—', cmp:()=>'eq'},
-    {l:'Potência',  fmt:(v)=>v.potencia?v.potencia+'cv':'—', cmp:(a,b)=>a.potencia>b.potencia?'a':'b'},
-    {l:'Câmbio',    fmt:(v)=>v.cambio||'—', cmp:()=>'eq'},
-    {l:'Combustível',fmt:(v)=>v.combustivel||'—', cmp:()=>'eq'},
-    {l:'Portas',    fmt:(v)=>v.portas||'—', cmp:()=>'eq'},
-    {l:'Tração',    fmt:(v)=>v.tracao||'—', cmp:()=>'eq'},
-    {l:'Condição',  fmt:(v)=>v.cond||'—', cmp:()=>'eq'},
-    {l:'IPVA pago', fmt:(v)=>v.ipva||'—', cmp:(a,b)=>a.ipva==='Sim'&&b.ipva!=='Sim'?'a':b.ipva==='Sim'?'b':'eq'},
-    {l:'Revisão ok',fmt:(v)=>v.revisao||'—', cmp:(a,b)=>a.revisao==='Sim'&&b.revisao!=='Sim'?'a':b.revisao==='Sim'?'b':'eq'},
-    {l:'Aceita troca',fmt:(v)=>v.troca||'—', cmp:()=>'eq'},
-    {l:'❤ Curtidas',fmt:(v)=>String(getLikes(v.id)), cmp:(a,b)=>getLikes(a.id)>getLikes(b.id)?'a':'b'},
-    {l:'👁 Visitas', fmt:(v)=>String(getViews(v.id)), cmp:(a,b)=>getViews(a.id)>getViews(b.id)?'a':'b'},
+    {l:'Preço',fmt:(v)=>'<span class="comp-price">R$ '+(v.preco||0).toLocaleString('pt-BR')+'</span>',cmp:(a,b)=>a.preco<b.preco?'a':'b'},
+    {l:'Km',fmt:(v)=>(v.km||0).toLocaleString('pt-BR')+' km',cmp:(a,b)=>a.km<b.km?'a':'b'},
+    {l:'Ano',fmt:(v)=>v.anofab+'/'+v.anomod,cmp:(a,b)=>a.anomod>b.anomod?'a':'b'},
+    {l:'Motor',fmt:(v)=>v.motor||'—',cmp:()=>'eq'},
+    {l:'Potência',fmt:(v)=>v.potencia?v.potencia+'cv':'—',cmp:(a,b)=>a.potencia>b.potencia?'a':'b'},
+    {l:'Câmbio',fmt:(v)=>v.cambio||'—',cmp:()=>'eq'},
+    {l:'Combustível',fmt:(v)=>v.combustivel||'—',cmp:()=>'eq'},
+    {l:'Tração',fmt:(v)=>v.tracao||'—',cmp:()=>'eq'},
+    {l:'Condição',fmt:(v)=>v.cond||'—',cmp:()=>'eq'},
+    {l:'IPVA',fmt:(v)=>v.ipva||'—',cmp:(a,b)=>a.ipva==='Sim'&&b.ipva!=='Sim'?'a':b.ipva==='Sim'?'b':'eq'},
+    {l:'Revisão',fmt:(v)=>v.revisao||'—',cmp:(a,b)=>a.revisao==='Sim'&&b.revisao!=='Sim'?'a':b.revisao==='Sim'?'b':'eq'},
+    {l:'❤ Curtidas',fmt:(v)=>String(getLikes(v.id)),cmp:(a,b)=>getLikes(a.id)>getLikes(b.id)?'a':'b'},
+    {l:'👁 Visitas',fmt:(v)=>String(getViews(v.id)),cmp:(a,b)=>getViews(a.id)>getViews(b.id)?'a':'b'},
   ];
-  const col=(car,side)=>`
-    <div class="comp-col">
-      <div class="comp-car-img">${car.fotos&&car.fotos.length?`<img src="${car.fotos[0]}" loading="lazy">`:`<div class="comp-car-img-ph">&#128663;</div>`}</div>
-      <div class="comp-car-hd">
-        <div class="comp-car-nm">${car.marca} ${car.modelo}</div>
-        <div class="comp-car-vr">${car.versao||''} &mdash; ${car.cor||''}</div>
-      </div>
-      ${fields.map(f=>{
-        const winner=f.cmp(a,b);
-        const isWin=(side==='a'&&winner==='a')||(side==='b'&&winner==='b');
-        const isLose=(side==='a'&&winner==='b')||(side==='b'&&winner==='a');
-        return `<div class="comp-row">
-          <div class="comp-label">${f.l}</div>
-          <div class="comp-val${isWin?' win':isLose?' lose':''}">${f.fmt(car)}</div>
-        </div>`;
-      }).join('')}
-      <div style="padding:.875rem 1rem;display:flex;gap:.5rem">
-        <button class="btn-wpp" style="flex:1;padding:.6rem" onclick="fecharComp();openModal('${car.id}')">VER DETALHES</button>
-        <button class="like-btn${hasLiked(car.id)?' liked':''}" onclick="addLike('${car.id}',event)" style="flex-shrink:0">
-          <span class="like-heart">&#10084;</span> <span>${getLikes(car.id)}</span>
-        </button>
-      </div>
-    </div>`;
-  document.getElementById('comp-grid').innerHTML = col(a,'a') + col(b,'b');
+  const col=(car,side)=>
+    '<div class="comp-col">'+
+    '<div class="comp-car-img">'+(car.fotos&&car.fotos.length?'<img src="'+car.fotos[0]+'" loading="lazy">':'<div class="comp-car-img-ph">&#128663;</div>')+'</div>'+
+    '<div class="comp-car-hd"><div class="comp-car-nm">'+car.marca+' '+car.modelo+'</div><div class="comp-car-vr">'+(car.versao||'')+'</div></div>'+
+    fields.map(f=>{
+      const w=f.cmp(a,b);
+      const win=(side==='a'&&w==='a')||(side==='b'&&w==='b');
+      const lose=(side==='a'&&w==='b')||(side==='b'&&w==='a');
+      return '<div class="comp-row"><div class="comp-label">'+f.l+'</div><div class="comp-val'+(win?' win':lose?' lose':'')+'">'+ f.fmt(car)+'</div></div>';
+    }).join('')+
+    '<div style="padding:.875rem 1rem"><button class="btn-wpp" style="width:100%;padding:.6rem" onclick="fecharComp();openModal(\''+car.id+'\')">VER DETALHES</button></div>'+
+    '</div>';
+  document.getElementById('comp-grid').innerHTML=col(a,'a')+col(b,'b');
 }
 
-// ════════════════════════════════════════
+// ═══════════════════════════════════════════════════
 // FILTROS
-// ════════════════════════════════════════
+// ═══════════════════════════════════════════════════
 function setF(key,val,btn){
   filters2[key]=val;
   btn.closest('.filter-group').querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  currentPage2=1; applyFilterSort();
+  btn.classList.add('active');currentPage2=1;applyFilterSort();
 }
-function filterCars(){ currentPage2=1; applyFilterSort(); }
-function sortCars(v){ sortMode2=v; applyFilterSort(); }
+function filterCars(){currentPage2=1;applyFilterSort();}
+function sortCars(v){sortMode2=v;applyFilterSort();}
 function limparFiltrosAdv(){
-  ['adv-preco-min','adv-preco-max','adv-km-max'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
+  ['adv-preco-min','adv-preco-max','adv-km-max'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
   applyFilterSort();
 }
 function applyFilterSort(){
@@ -1946,25 +2113,25 @@ function applyFilterSort(){
     const map={carros:['Hatch','Sedan','Conversível'],suvs:['SUV','Minivan'],pickups:['Pickup','Caminhão'],motos:['Moto']};
     list=list.filter(v=>(map[filters2.tipo]||[]).includes(v.tipo));
   }
-  if(filters2.cond==='novo') list=list.filter(v=>v.cond==='Novo');
-  else if(filters2.cond==='usado') list=list.filter(v=>v.cond!=='Novo');
-  if(q) list=list.filter(v=>`${v.marca} ${v.modelo} ${v.versao||''} ${v.cor||''}`.toLowerCase().includes(q));
-  if(precoMin>0) list=list.filter(v=>(v.preco||0)>=precoMin);
-  if(precoMax<Infinity) list=list.filter(v=>(v.preco||0)<=precoMax);
-  if(kmMax<Infinity) list=list.filter(v=>(v.km||0)<=kmMax);
-  if(sortMode2==='menor') list.sort((a,b)=>a.preco-b.preco);
-  else if(sortMode2==='maior') list.sort((a,b)=>b.preco-a.preco);
-  else if(sortMode2==='km') list.sort((a,b)=>a.km-b.km);
+  if(filters2.cond==='novo')list=list.filter(v=>v.cond==='Novo');
+  else if(filters2.cond==='usado')list=list.filter(v=>v.cond!=='Novo');
+  if(q)list=list.filter(v=>(v.marca+' '+v.modelo+' '+(v.versao||'')+' '+(v.cor||'')).toLowerCase().includes(q));
+  if(precoMin>0)list=list.filter(v=>(v.preco||0)>=precoMin);
+  if(precoMax<Infinity)list=list.filter(v=>(v.preco||0)<=precoMax);
+  if(kmMax<Infinity)list=list.filter(v=>(v.km||0)<=kmMax);
+  if(sortMode2==='menor')list.sort((a,b)=>a.preco-b.preco);
+  else if(sortMode2==='maior')list.sort((a,b)=>b.preco-a.preco);
+  else if(sortMode2==='km')list.sort((a,b)=>a.km-b.km);
   else list.sort((a,b)=>(b.criadoEm||0)-(a.criadoEm||0));
   filteredCars=list;
-  const hc=document.getElementById('hero-count'); if(hc) hc.textContent=allCars.filter(v=>v.status==='Ativo').length;
-  const rc=document.getElementById('result-count'); if(rc) rc.textContent=list.length+' resultado'+(list.length!==1?'s':'');
+  const hc=document.getElementById('hero-count');if(hc)hc.textContent=allCars.filter(v=>v.status==='Ativo').length;
+  const rc=document.getElementById('result-count');if(rc)rc.textContent=list.length+' resultado'+(list.length!==1?'s':'');
   renderGrid();
 }
 
-// ════════════════════════════════════════
+// ═══════════════════════════════════════════════════
 // RENDER GRID
-// ════════════════════════════════════════
+// ═══════════════════════════════════════════════════
 function renderGrid(){
   const pages=Math.ceil(filteredCars.length/PER);
   const slice=filteredCars.slice((currentPage2-1)*PER,currentPage2*PER);
@@ -1978,81 +2145,76 @@ function renderGrid(){
 }
 function cardHTML(v){
   const imgs=v.fotos&&v.fotos.length?v.fotos:[];
-  const slides=imgs.length?imgs.map(f=>`<div class="slide"><img src="${f}" alt="${v.marca} ${v.modelo}" loading="lazy"></div>`).join(''):`<div class="slide"><div class="slide-placeholder">&#128663;</div></div>`;
-  const dots=imgs.length>1?imgs.map((_,i)=>`<button class="gal-dot${i===0?' active':''}" onclick="setCardGal('${v.id}',${i},event)"></button>`).join(''):'';
+  const slides=imgs.length?imgs.map(f=>'<div class="slide"><img src="'+f+'" alt="'+v.marca+' '+v.modelo+'" loading="lazy"></div>').join(''):'<div class="slide"><div class="slide-placeholder">&#128663;</div></div>';
+  const dots=imgs.length>1?imgs.map((_,i)=>'<button class="gal-dot'+(i===0?' active':'')+'" onclick="setCardGal(\''+v.id+'\','+i+',event)"></button>').join(''):'';
   const bCls=v.destaque==='Sim'?'badge-dest':v.cond==='Novo'?'badge-novo':v.cond==='Seminovo'?'badge-semi':'badge-usado';
   const bTxt=v.destaque==='Sim'?'DESTAQUE':v.cond.toUpperCase();
-  const likes=getLikes(v.id);
-  const liked=hasLiked(v.id);
-  const views=getViews(v.id);
+  const likes=getLikes(v.id);const liked=hasLiked(v.id);const views=getViews(v.id);
   const inComp=compCars.some(c=>c&&(c.id===v.id||c.id==v.id));
-  return `<div class="car-card" id="card-${v.id}" onclick="openModal('${v.id}')">
-    <div class="car-gallery">
-      <div class="slides" id="slides-${v.id}">${slides}</div>
-      ${imgs.length>1?`<button class="gal-nav gal-prev" onclick="cardGalNav('${v.id}',-1,event)">&#8592;</button><button class="gal-nav gal-next" onclick="cardGalNav('${v.id}',1,event)">&#8594;</button>`:''}
-      <span class="car-badge2 ${bCls}">${bTxt}</span>
-      ${imgs.length>1?`<span class="gal-count" id="gcnt-${v.id}">1/${imgs.length}</span>`:''}
-      ${dots?`<div class="gal-dots" id="gdots-${v.id}">${dots}</div>`:''}
-      ${views>0?`<div class="views-badge">&#128065; ${views}</div>`:''}
-    </div>
-    <div class="car-body">
-      <div class="car-yr">${v.anofab}/${v.anomod}</div>
-      <div class="car-nm">${v.marca} ${v.modelo}</div>
-      <div class="car-vr">${v.versao||'&mdash;'}</div>
-      <div class="car-chips">
-        <span class="chip">${(v.combustivel||'').split(' ')[0]}</span>
-        <span class="chip">${v.cambio||'&mdash;'}</span>
-        <span class="chip">${v.cor||'&mdash;'}</span>
-        ${v.troca==='Sim'?'<span class="chip" style="border-color:var(--warning);color:var(--warning)">Aceita troca</span>':''}
-      </div>
-      <div class="car-bottom">
-        <div>
-          ${v.precoAnt?`<div class="price-old">R$ ${v.precoAnt.toLocaleString('pt-BR')}</div>`:''}
-          <div class="price-main">R$ ${(v.preco||0).toLocaleString('pt-BR')}</div>
-        </div>
-        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px">
-          <div class="km-badge">${(v.km||0).toLocaleString('pt-BR')} km</div>
-          <div style="display:flex;align-items:center;gap:5px">
-            <button class="like-btn${liked?' liked':''}" id="like-btn-${v.id}" onclick="addLike('${v.id}',event)">
-              <span class="like-heart">&#10084;</span><span class="like-count">${likes}</span>
-            </button>
-            <button class="comp-add-btn${inComp?' selected':''}" id="comp-btn-${v.id}" onclick="toggleComp('${v.id}',event)" title="Comparar">${inComp?'&#10003;':'+'} COMP</button>
-            <button class="btn-card">VER</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>`;
+  const reservado=estaReservado(v.id);
+  return '<div class="car-card" id="card-'+v.id+'" onclick="openModal(\''+v.id+'\')">'+
+    '<div class="car-gallery">'+
+    '<div class="slides" id="slides-'+v.id+'">'+slides+'</div>'+
+    (imgs.length>1?'<button class="gal-nav gal-prev" onclick="cardGalNav(\''+v.id+'\',-1,event)">&#8592;</button><button class="gal-nav gal-next" onclick="cardGalNav(\''+v.id+'\',1,event)">&#8594;</button>':'')+
+    '<span class="car-badge2 '+bCls+'">'+bTxt+'</span>'+
+    (imgs.length>1?'<span class="gal-count" id="gcnt-'+v.id+'">1/'+imgs.length+'</span>':'')+
+    (dots?'<div class="gal-dots" id="gdots-'+v.id+'">'+dots+'</div>':'')+
+    (views>0?'<div class="views-badge">&#128065; '+views+'</div>':'')+
+    (reservado?'<div class="reserva-badge">&#128274; RESERVADO</div>':'')+
+    '</div>'+
+    '<div class="car-body">'+
+    '<div class="car-yr">'+v.anofab+'/'+v.anomod+'</div>'+
+    '<div class="car-nm">'+v.marca+' '+v.modelo+'</div>'+
+    '<div class="car-vr">'+(v.versao||'&mdash;')+'</div>'+
+    '<div class="car-chips">'+
+    '<span class="chip">'+(v.combustivel||'').split(' ')[0]+'</span>'+
+    '<span class="chip">'+(v.cambio||'&mdash;')+'</span>'+
+    '<span class="chip">'+(v.cor||'&mdash;')+'</span>'+
+    (v.troca==='Sim'?'<span class="chip" style="border-color:var(--warning);color:var(--warning)">Aceita troca</span>':'')+
+    '</div>'+
+    '<div class="car-bottom">'+
+    '<div>'+
+    (v.precoAnt?'<div class="price-old">R$ '+v.precoAnt.toLocaleString('pt-BR')+'</div>':'')+
+    '<div class="price-main">R$ '+(v.preco||0).toLocaleString('pt-BR')+'</div>'+
+    '</div>'+
+    '<div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px">'+
+    '<div class="km-badge">'+(v.km||0).toLocaleString('pt-BR')+' km</div>'+
+    '<div style="display:flex;align-items:center;gap:5px">'+
+    '<button class="like-btn'+(liked?' liked':'')+'" id="like-btn-'+v.id+'" onclick="addLike(\''+v.id+'\',event)">'+
+    '<span class="like-heart">&#10084;</span><span class="like-count">'+likes+'</span></button>'+
+    '<button class="comp-add-btn'+(inComp?' selected':'')+'" id="comp-btn-'+v.id+'" onclick="toggleComp(\''+v.id+'\',event)">'+(inComp?'&#10003;':'+')+'</button>'+
+    '<button class="btn-card">VER</button>'+
+    '</div></div></div></div></div>';
 }
 const cardGalState={};
-function initCardGal(v){ cardGalState[v.id]={idx:0,len:(v.fotos||[]).length}; }
-function cardGalNav(id,dir,e){ e.stopPropagation();const s=cardGalState[id];if(!s||s.len<=1)return;s.idx=(s.idx+dir+s.len)%s.len;updateCardGal(id,s.idx,s.len); }
-function setCardGal(id,i,e){ e.stopPropagation();const s=cardGalState[id];if(!s)return;s.idx=i;updateCardGal(id,i,s.len); }
+function initCardGal(v){cardGalState[v.id]={idx:0,len:(v.fotos||[]).length};}
+function cardGalNav(id,dir,e){e.stopPropagation();const s=cardGalState[id];if(!s||s.len<=1)return;s.idx=(s.idx+dir+s.len)%s.len;updateCardGal(id,s.idx,s.len);}
+function setCardGal(id,i,e){e.stopPropagation();const s=cardGalState[id];if(!s)return;s.idx=i;updateCardGal(id,i,s.len);}
 function updateCardGal(id,idx,len){
-  const el=document.getElementById('slides-'+id);if(el)el.style.transform=`translateX(-${idx*100}%)`;
-  const c=document.getElementById('gcnt-'+id);if(c)c.textContent=`${idx+1}/${len}`;
-  document.querySelectorAll(`#gdots-${id} .gal-dot`).forEach((d,i)=>d.classList.toggle('active',i===idx));
+  const el=document.getElementById('slides-'+id);if(el)el.style.transform='translateX(-'+idx*100+'%)';
+  const c=document.getElementById('gcnt-'+id);if(c)c.textContent=(idx+1)+'/'+len;
+  document.querySelectorAll('#gdots-'+id+' .gal-dot').forEach((d,i)=>d.classList.toggle('active',i===idx));
 }
 function renderPag(pages){
   const el=document.getElementById('pagination');
   if(pages<=1){el.innerHTML='';return;}
-  let h=`<button class="pg" onclick="goPg(${currentPage2-1})" ${currentPage2===1?'disabled':''}>&#8592;</button>`;
-  for(let i=1;i<=pages;i++) h+=`<button class="pg ${i===currentPage2?'active':''}" onclick="goPg(${i})">${i}</button>`;
-  h+=`<button class="pg" onclick="goPg(${currentPage2+1})" ${currentPage2===pages?'disabled':''}>&#8594;</button>`;
+  let h='<button class="pg" onclick="goPg('+(currentPage2-1)+')" '+(currentPage2===1?'disabled':'')+'>&#8592;</button>';
+  for(let i=1;i<=pages;i++)h+='<button class="pg '+(i===currentPage2?'active':'')+'" onclick="goPg('+i+')">'+i+'</button>';
+  h+='<button class="pg" onclick="goPg('+(currentPage2+1)+')" '+(currentPage2===pages?'disabled':'')+'>&#8594;</button>';
   el.innerHTML=h;
 }
-function goPg(p){ currentPage2=p;renderGrid();window.scrollTo(0,380); }
+function goPg(p){currentPage2=p;renderGrid();window.scrollTo(0,380);}
 
-// ════════════════════════════════════════
+// ═══════════════════════════════════════════════════
 // MODAL DETALHES
-// ════════════════════════════════════════
+// ═══════════════════════════════════════════════════
 function openModal(id){
-  mCar=allCars.find(v=>v.id===id||v.id==id); if(!mCar)return;
-  addView(id); mGalIdx=0;
+  mCar=allCars.find(v=>v.id===id||v.id==id);if(!mCar)return;
+  addView(id);mGalIdx=0;
   const c=mCar;
-  document.getElementById('m-yr').textContent=`${c.anofab}/${c.anomod} — ${c.cond}`;
-  document.getElementById('m-nm').textContent=`${c.marca} ${c.modelo}`;
-  document.getElementById('m-vr').textContent=`${c.versao||''} — ${c.cor||''}`;
+  document.getElementById('m-yr').textContent=c.anofab+'/'+c.anomod+' — '+c.cond;
+  document.getElementById('m-nm').textContent=c.marca+' '+c.modelo;
+  document.getElementById('m-vr').textContent=(c.versao||'')+' — '+(c.cor||'');
   const specs=[
     {l:'Km Rodados',v:(c.km||0).toLocaleString('pt-BR')+' km'},{l:'Combustível',v:c.combustivel||'—'},
     {l:'Câmbio',v:c.cambio||'—'},{l:'Motor',v:c.motor||'—'},{l:'Potência',v:c.potencia?c.potencia+'cv':'—'},
@@ -2060,8 +2222,8 @@ function openModal(id){
     {l:'Proprietários',v:c.donos||'—'},{l:'IPVA Pago',v:c.ipva||'—'},
     {l:'Revisão em dia',v:c.revisao||'—'},{l:'Finais de placa',v:c.placa||'—'},
   ];
-  document.getElementById('m-specs').innerHTML=specs.map(s=>`<div class="spec-box"><div class="spec-l">${s.l}</div><div class="spec-v">${s.v}</div></div>`).join('');
-  if(c.opcionais&&c.opcionais.length){document.getElementById('m-opc-w').style.display='';document.getElementById('m-opc').innerHTML=c.opcionais.map(o=>`<span class="opc-tag">&#10003; ${o}</span>`).join('');}
+  document.getElementById('m-specs').innerHTML=specs.map(s=>'<div class="spec-box"><div class="spec-l">'+s.l+'</div><div class="spec-v">'+s.v+'</div></div>').join('');
+  if(c.opcionais&&c.opcionais.length){document.getElementById('m-opc-w').style.display='';document.getElementById('m-opc').innerHTML=c.opcionais.map(o=>'<span class="opc-tag">&#10003; '+o+'</span>').join('');}
   else document.getElementById('m-opc-w').style.display='none';
   if(c.descricao){document.getElementById('m-desc-w').style.display='';document.getElementById('m-desc').textContent=c.descricao;}
   else document.getElementById('m-desc-w').style.display='none';
@@ -2069,13 +2231,15 @@ function openModal(id){
   else document.getElementById('m-po').style.display='none';
   document.getElementById('m-p').textContent='R$ '+(c.preco||0).toLocaleString('pt-BR');
   const par=Math.round((c.preco||0)*(0.019*Math.pow(1.019,36))/(Math.pow(1.019,36)-1));
-  document.getElementById('m-par').textContent=par>0?`ou ${par.toLocaleString('pt-BR',{style:'currency',currency:'BRL'})} em 36x`:'';
+  document.getElementById('m-par').textContent=par>0?'ou '+par.toLocaleString('pt-BR',{style:'currency',currency:'BRL'})+' em 36x':'';
   const tags=[];
   if(c.troca==='Sim')tags.push('<span class="ti ok">Aceita troca</span>');
   if(c.financ==='Sim')tags.push('<span class="ti ok">Financiamento</span>');
   if(c.ipva==='Sim')tags.push('<span class="ti ok">IPVA pago</span>');
   if(c.revisao==='Sim')tags.push('<span class="ti ok">Revisão ok</span>');
   document.getElementById('m-tags').innerHTML=tags.join('');
+  // Reserva
+  mostrarTimerReserva(c.id);
   renderMGal();
   renderSimilares(c);
   document.getElementById('overlay').classList.add('open');
@@ -2085,33 +2249,30 @@ function closeModal(e){
   if(e&&e.target!==document.getElementById('overlay'))return;
   document.getElementById('overlay').classList.remove('open');
   document.body.style.overflow='';
+  if(reservaInterval)clearInterval(reservaInterval);
 }
 document.getElementById('overlay').addEventListener('click',function(e){
-  if(e.target===this){this.classList.remove('open');document.body.style.overflow='';}
+  if(e.target===this){this.classList.remove('open');document.body.style.overflow='';if(reservaInterval)clearInterval(reservaInterval);}
 });
 function renderMGal(){
   const imgs=mCar&&mCar.fotos&&mCar.fotos.length?mCar.fotos:[];
   if(!imgs.length){
     document.getElementById('mslides').innerHTML='<div class="mslide"><div class="mslide-ph">&#128663;</div></div>';
-    document.getElementById('mgal-thumbs').innerHTML='';
-    document.getElementById('mgal-ctr').textContent='';return;
+    document.getElementById('mgal-thumbs').innerHTML='';document.getElementById('mgal-ctr').textContent='';return;
   }
-  document.getElementById('mslides').innerHTML=imgs.map(f=>`<div class="mslide"><img src="${f}" loading="lazy"></div>`).join('');
-  document.getElementById('mslides').style.transform=`translateX(-${mGalIdx*100}%)`;
-  document.getElementById('mgal-ctr').textContent=`${mGalIdx+1}/${imgs.length}`;
-  document.getElementById('mgal-thumbs').innerHTML=imgs.map((f,i)=>`<img class="mthumb ${i===mGalIdx?'active':''}" src="${f}" onclick="setMGal(${i})" loading="lazy">`).join('');
+  document.getElementById('mslides').innerHTML=imgs.map(f=>'<div class="mslide"><img src="'+f+'" loading="lazy"></div>').join('');
+  document.getElementById('mslides').style.transform='translateX(-'+mGalIdx*100+'%)';
+  document.getElementById('mgal-ctr').textContent=(mGalIdx+1)+'/'+imgs.length;
+  document.getElementById('mgal-thumbs').innerHTML=imgs.map((f,i)=>'<img class="mthumb '+(i===mGalIdx?'active':'')+'" src="'+f+'" onclick="setMGal('+i+')" loading="lazy">').join('');
 }
 function mNav(d){if(!mCar||!mCar.fotos||!mCar.fotos.length)return;mGalIdx=(mGalIdx+d+mCar.fotos.length)%mCar.fotos.length;renderMGal();}
 function setMGal(i){mGalIdx=i;renderMGal();}
 function renderSimilares(c){
-  const sg=document.getElementById('similares-grid'); if(!sg)return;
-  const similares=allCars.filter(v=>v.id!==c.id&&v.status==='Ativo'&&(v.tipo===c.tipo||v.marca===c.marca||(v.preco>=(c.preco*.8)&&v.preco<=(c.preco*1.2)))).slice(0,6);
-  if(!similares.length){document.getElementById('modal-similares').style.display='none';return;}
+  const sg=document.getElementById('similares-grid');if(!sg)return;
+  const sims=allCars.filter(v=>v.id!==c.id&&v.status==='Ativo'&&(v.tipo===c.tipo||v.marca===c.marca||(v.preco>=(c.preco*.8)&&v.preco<=(c.preco*1.2)))).slice(0,6);
+  if(!sims.length){document.getElementById('modal-similares').style.display='none';return;}
   document.getElementById('modal-similares').style.display='';
-  sg.innerHTML=similares.map(v=>`<div class="sim-card" onclick="openModal('${v.id}')">
-    ${v.fotos&&v.fotos.length?`<img class="sim-img" src="${v.fotos[0]}" loading="lazy">`:`<div class="sim-img-ph">&#128663;</div>`}
-    <div class="sim-info"><div class="sim-nm">${v.marca} ${v.modelo}</div><div class="sim-pr">R$ ${(v.preco||0).toLocaleString('pt-BR')}</div></div>
-  </div>`).join('');
+  sg.innerHTML=sims.map(v=>'<div class="sim-card" onclick="openModal(\''+v.id+'\')">'+(v.fotos&&v.fotos.length?'<img class="sim-img" src="'+v.fotos[0]+'" loading="lazy">':'<div class="sim-img-ph">&#128663;</div>')+'<div class="sim-info"><div class="sim-nm">'+v.marca+' '+v.modelo+'</div><div class="sim-pr">R$ '+(v.preco||0).toLocaleString('pt-BR')+'</div></div></div>').join('');
 }
 function compartilharVeiculo(){
   if(!mCar)return;
@@ -2121,9 +2282,9 @@ function compartilharVeiculo(){
   if(st){st.classList.add('show');setTimeout(()=>st.classList.remove('show'),2500);}
 }
 
-// ════════════════════════════════════════
+// ═══════════════════════════════════════════════════
 // WHATSAPP
-// ════════════════════════════════════════
+// ═══════════════════════════════════════════════════
 function enviarContatoWhats(){
   const nome=(document.getElementById('ct-nome')?.value||'').trim();
   const fone=(document.getElementById('ct-fone')?.value||'').trim();
@@ -2147,9 +2308,16 @@ function abrirWhats(){
   window.open(wppLink('Ola! Vi o '+mCar.marca+' '+mCar.modelo+(mCar.versao?' '+mCar.versao:'')+' ('+mCar.anofab+'/'+mCar.anomod+') por R$ '+(mCar.preco||0).toLocaleString('pt-BR')+' no site da Garage Veiculos. Tenho interesse!'),'_blank');
 }
 
-// ════════════════════════════════════════
-// FINANCIAMENTO
-// ════════════════════════════════════════
+// ═══════════════════════════════════════════════════
+// FINANCIAMENTO — MÚLTIPLAS FINANCEIRAS
+// ═══════════════════════════════════════════════════
+const BANCOS=[
+  {nome:'BV Financeira',   taxa:0.0169,cor:'#00529b'},
+  {nome:'Santander',       taxa:0.0185,cor:'#ec0000'},
+  {nome:'Banco do Brasil', taxa:0.0190,cor:'#f8c605'},
+  {nome:'Bradesco',        taxa:0.0198,cor:'#cc092f'},
+  {nome:'Itaú',            taxa:0.0210,cor:'#003d80'},
+];
 function popularFinSelects(){
   const ativos=allCars.filter(v=>v.status==='Ativo');
   const el=document.getElementById('fin-veiculo-sel');if(!el)return;
@@ -2165,15 +2333,34 @@ function calcFin(){
   const ent=parseFloat(document.getElementById('fin-entrada')?.value)||0;
   const n=parseInt(document.getElementById('fin-prazo')?.value)||36;
   if(val<=0){document.getElementById('fin-result').style.display='none';return;}
-  const pv=Math.max(val-ent,0);const r=0.019;
-  const par=Math.round(pv*(r*Math.pow(1+r,n))/(Math.pow(1+r,n)-1));
+  const pv=Math.max(val-ent,0);
+  // Parcela principal (taxa média de referência)
+  const rRef=0.019;
+  const par=Math.round(pv*(rRef*Math.pow(1+rRef,n))/(Math.pow(1+rRef,n)-1));
   document.getElementById('fin-pv').textContent=par.toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
   const tf=document.getElementById('fin-total');const tp=document.getElementById('fin-total-pagar');
   if(tf)tf.textContent=pv.toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
   if(tp)tp.textContent=Math.round(par*n).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
   document.getElementById('fin-result').style.display='block';
+  // Tabela de bancos
+  const bancosWrap=document.getElementById('fin-bancos-wrap');
+  const bancosEl=document.getElementById('fin-bancos');
+  if(bancosEl&&pv>0){
+    const resultados=BANCOS.map(b=>{
+      const p=Math.round(pv*(b.taxa*Math.pow(1+b.taxa,n))/(Math.pow(1+b.taxa,n)-1));
+      return{...b,parcela:p,total:p*n};
+    }).sort((a,b)=>a.parcela-b.parcela);
+    const melhor=resultados[0].parcela;
+    bancosEl.innerHTML=resultados.map((b,i)=>'<div class="fin-banco-card '+(b.parcela===melhor?'melhor':'')+'">'+
+      '<div><div class="fin-banco-nm" style="color:'+b.cor+'">'+(b.parcela===melhor?'<span class="fin-melhor-badge">MELHOR</span> ':'')+b.nome+'</div>'+
+      '<div class="fin-banco-taxa">Taxa: '+((b.taxa*100).toFixed(2))+'% a.m.</div>'+
+      '<div class="fin-banco-total">Total: R$ '+b.total.toLocaleString('pt-BR')+'</div></div>'+
+      '<div class="fin-banco-par '+(b.parcela===melhor?'melhor-val':'')+'">'+(b.parcela).toLocaleString('pt-BR',{style:'currency',currency:'BRL'})+'</div>'+
+      '</div>').join('');
+    if(bancosWrap)bancosWrap.style.display='block';
+  }
 }
-function finApenasSimular(){const val=parseFloat(document.getElementById('fin-valor')?.value)||0;if(!val){toast('Informe o valor.','err');return;}calcFin();document.getElementById('fin-result').scrollIntoView({behavior:'smooth',block:'center'});}
+function finApenasSimular(){const val=parseFloat(document.getElementById('fin-valor')?.value)||0;if(!val){toast('Informe o valor.','err');return;}calcFin();document.getElementById('fin-result').scrollIntoView({behavior:'smooth',block:'start'});}
 function finEnviarProposta(){
   const nome=(document.getElementById('fin-nome')?.value||'').trim();const cpf=(document.getElementById('fin-cpf')?.value||'').trim();
   const nasc=document.getElementById('fin-nasc')?.value||'';const fone=(document.getElementById('fin-fone')?.value||'').trim();
@@ -2185,7 +2372,7 @@ function finEnviarProposta(){
   if(!val){toast('Informe o valor.','err');return;}
   const pv=Math.max(val-ent,0);const r=0.019;const par=Math.round(pv*(r*Math.pow(1+r,n))/(Math.pow(1+r,n)-1));
   const nascFmt=nasc?new Date(nasc+'T12:00:00').toLocaleDateString('pt-BR'):'nao informado';
-  window.open(wppLink('*SIMULACAO DE FINANCIAMENTO — GARAGE VEICULOS*\n\nNome: '+nome+'\nCPF: '+cpf+'\nNascimento: '+nascFmt+'\nWhatsApp: '+fone+'\nCNH: '+cnh+'\nRenda: '+(renda||'nao informado')+'\n\nVeiculo: '+veiculo+'\nValor: R$ '+val.toLocaleString('pt-BR')+'\nEntrada: R$ '+ent.toLocaleString('pt-BR')+'\nPrazo: '+n+' meses\nParcela estimada: '+par.toLocaleString('pt-BR',{style:'currency',currency:'BRL'})+'\n\n_Simulacao apenas informativa._'),'_blank');
+  window.open(wppLink('*SIMULACAO DE FINANCIAMENTO — GARAGE VEICULOS*\n\nNome: '+nome+'\nCPF: '+cpf+'\nNascimento: '+nascFmt+'\nWhatsApp: '+fone+'\nCNH: '+cnh+'\nRenda: '+(renda||'nao informado')+'\n\nVeiculo: '+veiculo+'\nValor: R$ '+val.toLocaleString('pt-BR')+'\nEntrada: R$ '+ent.toLocaleString('pt-BR')+'\nPrazo: '+n+' meses\nParcela estimada: '+par.toLocaleString('pt-BR',{style:'currency',currency:'BRL'})+'\n\n_Simulacao apenas informativa. Sujeita a analise de credito._'),'_blank');
 }
 function finComEsteVeiculo(){
   if(!mCar)return;
@@ -2197,9 +2384,82 @@ function finEnviarSimulacao(){finApenasSimular();}
 function propEnviarWhats(){finEnviarProposta();}
 function finTab(){}
 
-// ════════════════════════════════════════
-// ADMIN — VEÍCULOS + HISTÓRICO DE VENDIDOS
-// ════════════════════════════════════════
+// ═══════════════════════════════════════════════════
+// AVISE-ME (notificação de novo estoque)
+// ═══════════════════════════════════════════════════
+function enviarAviseMe(){
+  const nome=(document.getElementById('avise-nome')?.value||'').trim();
+  const fone=(document.getElementById('avise-fone')?.value||'').trim();
+  if(!nome||!fone){toast('Preencha seu nome e WhatsApp.','err');return;}
+  const tipo=document.getElementById('avise-tipo')?.value||'';
+  const preco=document.getElementById('avise-preco')?.value||'';
+  const marca=document.getElementById('avise-marca')?.value||'';
+  let msg='Ola! Meu nome e '+nome+', WhatsApp: '+fone+'.\n\nGostaria de ser AVISADO quando chegar:\n';
+  if(tipo)msg+='Tipo: '+tipo+'\n';
+  if(marca)msg+='Marca preferida: '+marca+'\n';
+  if(preco)msg+='Orçamento máximo: R$ '+parseInt(preco).toLocaleString('pt-BR')+'\n';
+  msg+='\nVi o site da Garage Veiculos.';
+  window.open(wppLink(msg),'_blank');
+  toast('Interesse enviado! Entraremos em contato quando chegar o veículo ideal.');
+}
+
+// ═══════════════════════════════════════════════════
+// TRADE-IN / AVALIAÇÃO DE TROCA
+// ═══════════════════════════════════════════════════
+function calcularTradeIn(){
+  const marca=(document.getElementById('t-marca')?.value||'').trim();
+  const modelo=(document.getElementById('t-modelo')?.value||'').trim();
+  const ano=parseInt(document.getElementById('t-ano')?.value)||0;
+  const km=parseInt(document.getElementById('t-km')?.value)||0;
+  const estado=document.getElementById('t-estado')?.value||'';
+  if(!marca||!modelo||!ano||!km){toast('Preencha marca, modelo, ano e km.','err');return;}
+  const anoAtual=new Date().getFullYear();
+  const idadeAnos=anoAtual-ano;
+  // Estimativa simplificada baseada em depreciação
+  const baseRef=50000;
+  let fatorIdade=Math.max(0.2,1-(idadeAnos*0.08));
+  let fatorKm=Math.max(0.7,1-(km/200000)*0.3);
+  let fatorEstado={excelente:1.0,bom:0.9,regular:0.75,ruim:0.6}[estado]||0.85;
+  const estimativa=Math.round(baseRef*fatorIdade*fatorKm*fatorEstado);
+  const min=Math.round(estimativa*0.88);
+  const max=Math.round(estimativa*1.12);
+  const rangeEl=document.getElementById('troca-range-val');
+  const obsEl=document.getElementById('troca-obs-txt');
+  const resultEl=document.getElementById('troca-result');
+  if(rangeEl)rangeEl.textContent='R$ '+min.toLocaleString('pt-BR')+' — R$ '+max.toLocaleString('pt-BR');
+  if(obsEl)obsEl.textContent='Estimativa de mercado para um '+marca+' '+modelo+' '+ano+' com '+km.toLocaleString('pt-BR')+' km em estado '+estado+'. Valor real definido após vistoria presencial. Entre em contato para confirmar.';
+  if(resultEl)resultEl.style.display='block';
+  toast('Estimativa calculada!');
+}
+function enviarTradeIn(){
+  const nome=(document.getElementById('t-nome')?.value||'').trim();
+  const fone=(document.getElementById('t-fone')?.value||'').trim();
+  const marca=(document.getElementById('t-marca')?.value||'').trim();
+  const modelo=(document.getElementById('t-modelo')?.value||'').trim();
+  const versao=document.getElementById('t-versao')?.value||'';
+  const ano=document.getElementById('t-ano')?.value||'';
+  const km=document.getElementById('t-km')?.value||'';
+  const comb=document.getElementById('t-comb')?.value||'';
+  const cambio=document.getElementById('t-cambio')?.value||'';
+  const estado=document.getElementById('t-estado')?.value||'';
+  const obs=document.getElementById('t-obs')?.value||'';
+  const interesse=document.getElementById('t-interesse')?.value||'';
+  if(!nome||!fone){toast('Preencha seu nome e WhatsApp.','err');return;}
+  if(!marca||!modelo){toast('Preencha marca e modelo do veículo.','err');return;}
+  let msg='*AVALIAÇÃO DE TROCA — GARAGE VEICULOS*\n\n';
+  msg+='*DADOS DO CLIENTE*\nNome: '+nome+'\nWhatsApp: '+fone+'\n\n';
+  msg+='*VEÍCULO PARA TROCA*\n'+marca+' '+modelo+(versao?' '+versao:'')+'\nAno: '+ano+' | Km: '+(km?parseInt(km).toLocaleString('pt-BR'):'n/i')+'\n';
+  if(comb)msg+='Combustível: '+comb+'\n';
+  if(cambio)msg+='Câmbio: '+cambio+'\n';
+  if(estado)msg+='Estado: '+estado+'\n';
+  if(obs)msg+='Observações: '+obs+'\n';
+  if(interesse)msg+='\n*VEÍCULO DE INTERESSE*\n'+interesse;
+  window.open(wppLink(msg),'_blank');
+}
+
+// ═══════════════════════════════════════════════════
+// ADMIN — VEÍCULOS + HISTÓRICO VENDIDOS
+// ═══════════════════════════════════════════════════
 function showSub(sub,btn){
   document.querySelectorAll('.asub').forEach(x=>x.classList.remove('active'));
   document.querySelectorAll('.atab').forEach(x=>x.classList.remove('active'));
@@ -2210,104 +2470,75 @@ function showSub(sub,btn){
   if(sub==='vendidos')renderVendidos();
 }
 function renderAdminList(){
-  const wrap=document.getElementById('admin-list'); if(!wrap)return;
+  const wrap=document.getElementById('admin-list');if(!wrap)return;
   const ativos=allCars.filter(v=>v.status!=='Vendido');
   if(!ativos.length){wrap.innerHTML='<div class="empty"><div class="empty-ic">&#128663;</div><p>Nenhum veículo cadastrado.</p></div>';return;}
-  wrap.innerHTML=`<table class="at"><thead><tr>
-    <th>Foto</th><th>Veículo</th><th>Ano</th><th>Km</th><th>Preço</th><th>Status</th>
-    <th style="text-align:center">&#10084; / &#128065;</th><th>Ações</th>
-  </tr></thead><tbody>${ativos.map(v=>`<tr>
-    <td>${v.fotos&&v.fotos.length?`<img class="at-thumb" src="${v.fotos[0]}" loading="lazy">`:`<div class="at-ph">&#128663;</div>`}</td>
-    <td><strong>${v.marca} ${v.modelo}</strong><br><span style="font-size:.78rem;color:var(--muted)">${v.versao||'—'}</span></td>
-    <td>${v.anofab||'—'}/${v.anomod||'—'}</td>
-    <td>${(v.km||0).toLocaleString('pt-BR')} km</td>
-    <td>R$ ${(v.preco||0).toLocaleString('pt-BR')}</td>
-    <td><span class="sbadge s-${(v.status||'ativo').toLowerCase()}">${v.status||'Ativo'}</span></td>
-    <td style="text-align:center;font-size:.85rem">
-      <span style="color:var(--red)">&#10084; ${getLikes(v.id)}</span>
-      &nbsp;
-      <span style="color:var(--muted)">&#128065; ${getViews(v.id)}</span>
-    </td>
-    <td>
-      <button class="btn-vender" onclick="marcarVendido('${v.id}')" title="Marcar como vendido">&#10003; VENDER</button>
-      <button class="bsm" onclick="editarV('${v.id}')">Editar</button>
-      <button class="bsm danger" onclick="deletarV('${v.id}')">Excluir</button>
-    </td>
-  </tr>`).join('')}</tbody></table>`;
+  wrap.innerHTML='<table class="at"><thead><tr><th>Foto</th><th>Veículo</th><th>Ano</th><th>Km</th><th>Preço</th><th>Status</th><th style="text-align:center">&#10084; / &#128065;</th><th>Ações</th></tr></thead><tbody>'+
+    ativos.map(v=>'<tr>'+
+    '<td>'+(v.fotos&&v.fotos.length?'<img class="at-thumb" src="'+v.fotos[0]+'" loading="lazy">':'<div class="at-ph">&#128663;</div>')+'</td>'+
+    '<td><strong>'+v.marca+' '+v.modelo+'</strong><br><span style="font-size:.78rem;color:var(--muted)">'+(v.versao||'—')+'</span></td>'+
+    '<td>'+(v.anofab||'—')+'/'+(v.anomod||'—')+'</td>'+
+    '<td>'+(v.km||0).toLocaleString('pt-BR')+' km</td>'+
+    '<td>R$ '+(v.preco||0).toLocaleString('pt-BR')+'</td>'+
+    '<td><span class="sbadge s-'+((v.status||'ativo').toLowerCase())+'">'+(v.status||'Ativo')+'</span></td>'+
+    '<td style="text-align:center;font-size:.85rem"><span style="color:var(--red)">&#10084; '+getLikes(v.id)+'</span> &nbsp; <span style="color:var(--muted)">&#128065; '+getViews(v.id)+'</span></td>'+
+    '<td>'+
+    '<button class="btn-vender" onclick="marcarVendido(\''+v.id+'\')">&#10003; VENDER</button>'+
+    '<button class="bsm" onclick="editarV(\''+v.id+'\')">Editar</button>'+
+    '<button class="bsm danger" onclick="deletarV(\''+v.id+'\')">Excluir</button>'+
+    '</td></tr>').join('')+
+    '</tbody></table>';
 }
-
 async function marcarVendido(id){
-  const v=allCars.find(x=>x.id===id||x.id==id); if(!v)return;
-  if(!confirm(`Marcar "${v.marca} ${v.modelo}" como VENDIDO?\n\nEle sairá do estoque público e irá para o histórico de vendidos.`))return;
+  const v=allCars.find(x=>x.id===id||x.id==id);if(!v)return;
+  if(!confirm('Marcar "'+v.marca+' '+v.modelo+'" como VENDIDO?\n\nEle sairá do estoque público e ficará no histórico de vendidos.'))return;
   try{
     const r=await fetch(API+'/api/veiculos?id='+id,{method:'PUT',headers:authHeader(),body:JSON.stringify({...v,status:'Vendido',vendidoEm:Date.now()})});
     if(!r.ok)throw new Error('Erro '+r.status);
-    // Atualizar local
     const idx=allCars.findIndex(x=>x.id===id||x.id==id);
     if(idx>=0){allCars[idx].status='Vendido';allCars[idx].vendidoEm=Date.now();}
     toast('✓ '+v.marca+' '+v.modelo+' marcado como VENDIDO!');
     renderAdminList();
   }catch(e){toast('Erro: '+e.message,'err');}
 }
-
 function renderVendidos(){
-  const wrap=document.getElementById('vendidos-admin-list'); if(!wrap)return;
+  const wrap=document.getElementById('vendidos-admin-list');if(!wrap)return;
   const vendidos=allCars.filter(v=>v.status==='Vendido').sort((a,b)=>(b.vendidoEm||0)-(a.vendidoEm||0));
-  if(!vendidos.length){
-    wrap.innerHTML='<div class="empty"><div class="empty-ic">&#127881;</div><p>Nenhuma venda registrada ainda.</p></div>';return;
-  }
-  wrap.innerHTML=`<table class="at"><thead><tr>
-    <th>Foto</th><th>Veículo</th><th>Ano</th><th>Km</th><th>Valor</th>
-    <th>&#10084;</th><th>&#128065;</th><th>Data venda</th><th>Ações</th>
-  </tr></thead><tbody>${vendidos.map(v=>{
-    const dataV=v.vendidoEm?new Date(v.vendidoEm).toLocaleDateString('pt-BR'):'—';
-    return `<tr class="vendido-row">
-      <td>${v.fotos&&v.fotos.length?`<img class="at-thumb" src="${v.fotos[0]}" loading="lazy">`:`<div class="at-ph">&#128663;</div>`}</td>
-      <td><strong>${v.marca} ${v.modelo}</strong><br><span style="font-size:.78rem;color:var(--muted)">${v.versao||'—'}</span></td>
-      <td>${v.anofab||'—'}/${v.anomod||'—'}</td>
-      <td>${(v.km||0).toLocaleString('pt-BR')} km</td>
-      <td style="color:var(--success);font-weight:700">R$ ${(v.preco||0).toLocaleString('pt-BR')}</td>
-      <td style="color:var(--red)">&#10084; ${getLikes(v.id)}</td>
-      <td style="color:var(--muted)">&#128065; ${getViews(v.id)}</td>
-      <td><span class="sold-badge">${dataV}</span></td>
-      <td>
-        <button class="bsm" onclick="reativarVeiculo('${v.id}')" title="Voltar para estoque">&#8617; REATIVAR</button>
-        <button class="bsm danger" onclick="deletarV('${v.id}')">Excluir</button>
-      </td>
-    </tr>`;
-  }).join('')}</tbody></table>
-  <div style="margin-top:1rem;padding:1rem;background:var(--navy3);border:1px solid var(--border);font-size:.82rem;color:var(--muted);font-family:'Barlow',sans-serif">
-    Total de vendas registradas: <strong style="color:var(--success)">${vendidos.length}</strong> veículos &nbsp;|&nbsp;
-    Valor total: <strong style="color:var(--success)">R$ ${vendidos.reduce((s,v)=>s+(v.preco||0),0).toLocaleString('pt-BR')}</strong>
-  </div>`;
+  if(!vendidos.length){wrap.innerHTML='<div class="empty"><div class="empty-ic">&#127881;</div><p>Nenhuma venda registrada ainda.</p></div>';return;}
+  wrap.innerHTML='<table class="at"><thead><tr><th>Foto</th><th>Veículo</th><th>Valor</th><th>&#10084;</th><th>&#128065;</th><th>Data</th><th>Ações</th></tr></thead><tbody>'+
+    vendidos.map(v=>{
+      const dataV=v.vendidoEm?new Date(v.vendidoEm).toLocaleDateString('pt-BR'):'—';
+      return '<tr class="vendido-row">'+
+      '<td>'+(v.fotos&&v.fotos.length?'<img class="at-thumb" src="'+v.fotos[0]+'" loading="lazy">':'<div class="at-ph">&#128663;</div>')+'</td>'+
+      '<td><strong>'+v.marca+' '+v.modelo+'</strong><br><span style="font-size:.78rem;color:var(--muted)">'+(v.versao||'—')+' — '+(v.anofab||'—')+'/'+(v.anomod||'—')+'</span></td>'+
+      '<td style="color:var(--success);font-weight:700">R$ '+(v.preco||0).toLocaleString('pt-BR')+'</td>'+
+      '<td style="color:var(--red)">'+getLikes(v.id)+'</td>'+
+      '<td style="color:var(--muted)">'+getViews(v.id)+'</td>'+
+      '<td><span class="sold-badge">'+dataV+'</span></td>'+
+      '<td><button class="bsm" onclick="reativarVeiculo(\''+v.id+'\')" title="Voltar ao estoque">&#8617; Reativar</button></td>'+
+      '</tr>';
+    }).join('')+
+    '</tbody></table>'+
+    '<div style="margin-top:1rem;padding:1rem;background:var(--navy3);border:1px solid var(--border);font-size:.85rem;font-family:\'Barlow\',sans-serif">'+
+    'Total vendido: <strong style="color:var(--success)">'+vendidos.length+' veículos</strong> &nbsp;|&nbsp; '+
+    'Receita total: <strong style="color:var(--success)">R$ '+vendidos.reduce((s,v)=>s+(v.preco||0),0).toLocaleString('pt-BR')+'</strong></div>';
 }
-
 async function reativarVeiculo(id){
-  const v=allCars.find(x=>x.id===id||x.id==id); if(!v)return;
-  if(!confirm(`Reativar "${v.marca} ${v.modelo}" no estoque?`))return;
+  const v=allCars.find(x=>x.id===id||x.id==id);if(!v)return;
+  if(!confirm('Reativar "'+v.marca+' '+v.modelo+'" no estoque?'))return;
   try{
     const r=await fetch(API+'/api/veiculos?id='+id,{method:'PUT',headers:authHeader(),body:JSON.stringify({...v,status:'Ativo',vendidoEm:null})});
     if(!r.ok)throw new Error('Erro '+r.status);
     const idx=allCars.findIndex(x=>x.id===id||x.id==id);
     if(idx>=0){allCars[idx].status='Ativo';allCars[idx].vendidoEm=null;}
-    toast('Veículo reativado no estoque!');
-    renderVendidos();
+    toast('Veículo reativado no estoque!');renderVendidos();
   }catch(e){toast('Erro: '+e.message,'err');}
 }
-
-function abrirVendidos(){
-  renderVendidos();
-  const ov=document.getElementById('vendidos-overlay');
-  if(ov){ov.style.display='flex';document.body.style.overflow='hidden';}
-}
-function fecharVendidos(){
-  const ov=document.getElementById('vendidos-overlay');
-  if(ov){ov.style.display='none';document.body.style.overflow='';}
-}
+function abrirVendidos(){const ov=document.getElementById('vendidos-overlay');if(ov){renderVendidos();ov.style.display='flex';document.body.style.overflow='hidden';}}
+function fecharVendidos(){const ov=document.getElementById('vendidos-overlay');if(ov){ov.style.display='none';document.body.style.overflow='';}}
 document.getElementById('vendidos-overlay').addEventListener('click',function(e){if(e.target===this)fecharVendidos();});
-
 function editarV(id){
-  const v=allCars.find(x=>x.id===id||x.id==id); if(!v)return;
+  const v=allCars.find(x=>x.id===id||x.id==id);if(!v)return;
   document.getElementById('edit-id').value=v.id;
   const set=(i,val)=>{const el=document.getElementById(i);if(el)el.value=val||''};
   set('f-marca',v.marca);set('f-modelo',v.modelo);set('f-versao',v.versao);set('f-anofab',v.anofab);
@@ -2325,32 +2556,27 @@ function editarV(id){
   window.scrollTo(0,300);
 }
 async function deletarV(id){
-  if(!confirm('Excluir permanentemente este veículo? Esta ação não pode ser desfeita.'))return;
+  if(!confirm('Excluir permanentemente? Esta ação não pode ser desfeita.'))return;
   try{
     await fetch(API+'/api/veiculos?id='+id,{method:'DELETE',headers:authHeader()});
     allCars=allCars.filter(v=>v.id!==id&&v.id!=id);
-    renderAdminList();toast('Veículo excluído permanentemente.');
+    renderAdminList();toast('Veículo excluído.');
   }catch(e){toast('Erro ao excluir.','err');}
 }
 async function salvarVeiculo(){
   const get=i=>(document.getElementById(i)?.value||'').trim();
   const marca=get('f-marca'),modelo=get('f-modelo'),preco=parseFloat(get('f-preco'));
-  if(!marca||!modelo){toast('Preencha ao menos Marca e Modelo.','err');return;}
+  if(!marca||!modelo){toast('Preencha Marca e Modelo.','err');return;}
   if(!preco){toast('Informe o preço.','err');return;}
   document.getElementById('btn-salvar').textContent='SALVANDO...';document.getElementById('btn-salvar').disabled=true;
   if(pendingFiles.length){
     document.getElementById('upload-status').textContent='Enviando '+pendingFiles.length+' foto(s)...';
     const erros=[];
     for(const f of pendingFiles){
-      try{
-        const b64=await fileToBase64(f);
-        const r=await fetch(API+'/api/upload',{method:'POST',headers:authHeader(),body:JSON.stringify({filename:f.name,data:b64})});
-        const d=await r.json();
-        if(d.url)adminPhotos.push({url:d.url,name:f.name});else erros.push(f.name+': '+(d.error||'sem URL'));
-      }catch(e){erros.push(f.name+': '+e.message);}
+      try{const b64=await fileToBase64(f);const r=await fetch(API+'/api/upload',{method:'POST',headers:authHeader(),body:JSON.stringify({filename:f.name,data:b64})});const d=await r.json();if(d.url)adminPhotos.push({url:d.url,name:f.name});else erros.push(f.name+': '+(d.error||'sem URL'));}
+      catch(e){erros.push(f.name+': '+e.message);}
     }
-    pendingFiles=[];
-    document.getElementById('upload-status').textContent=erros.length?'Erros: '+erros.join(' | '):'';
+    pendingFiles=[];document.getElementById('upload-status').textContent=erros.length?'Erros: '+erros.join(' | '):'';
   }
   const opcs=Array.from(document.querySelectorAll('.opt-ck:checked')).map(c=>c.value);
   const payload={marca,modelo,versao:get('f-versao'),anofab:parseInt(get('f-anofab'))||2024,anomod:parseInt(get('f-anomod'))||2024,tipo:get('f-tipo'),cond:get('f-cond')||'Usado',cor:get('f-cor'),km:parseInt(get('f-km'))||0,combustivel:get('f-combustivel'),cambio:get('f-cambio'),motor:get('f-motor'),potencia:parseInt(get('f-potencia'))||null,portas:get('f-portas'),tracao:get('f-tracao'),direcao:get('f-direcao'),placa:get('f-placa'),donos:get('f-donos'),ipva:get('f-ipva'),revisao:get('f-revisao'),preco,precoAnt:parseFloat(get('f-preco-ant'))||null,troca:get('f-troca'),financ:get('f-financ'),destaque:get('f-destaque'),status:get('f-status')||'Ativo',opcionais:opcs,descricao:get('f-desc'),obs:get('f-obs'),fotos:adminPhotos.map(p=>p.url)};
@@ -2362,11 +2588,8 @@ async function salvarVeiculo(){
     if(!r.ok){let e='Erro '+r.status;try{const d=await r.json();e=d.error||e;}catch{}throw new Error(e);}
     toast(editId?'Veículo atualizado!':'Veículo cadastrado!');
     resetForm();await loadCarsAdmin();showSub('lista',null);document.getElementById('atab-lista').classList.add('active');
-  }catch(e){toast('Erro: '+e.message,'err');console.error(e);}
-  finally{
-    document.getElementById('btn-salvar').textContent=document.getElementById('edit-id').value?'ATUALIZAR VEÍCULO':'SALVAR VEÍCULO';
-    document.getElementById('btn-salvar').disabled=false;
-  }
+  }catch(e){toast('Erro: '+e.message,'err');}
+  finally{document.getElementById('btn-salvar').textContent=document.getElementById('edit-id').value?'ATUALIZAR VEÍCULO':'SALVAR VEÍCULO';document.getElementById('btn-salvar').disabled=false;}
 }
 function resetForm(){
   document.getElementById('edit-id').value='';
@@ -2377,9 +2600,9 @@ function resetForm(){
   document.getElementById('btn-salvar').textContent='SALVAR VEÍCULO';
 }
 
-// ════════════════════════════════════════
+// ═══════════════════════════════════════════════════
 // FOTOS — DRAG & DROP + ORDEM
-// ════════════════════════════════════════
+// ═══════════════════════════════════════════════════
 function handlePhotos(e){const novos=Array.from(e.target.files).slice(0,10-adminPhotos.length-pendingFiles.length);pendingFiles.push(...novos);renderPhPrev();e.target.value='';}
 function renderPhPrev(){
   const all=[...adminPhotos.map(p=>({kind:'url',data:p})),...pendingFiles.map(f=>({kind:'file',data:f}))];
@@ -2388,13 +2611,10 @@ function renderPhPrev(){
     const src=item.kind==='url'?item.data.url:URL.createObjectURL(item.data);
     const lbl=idx===0?'CAPA':(idx+1)+'°';
     return '<div class="pt" draggable="true" data-idx="'+idx+'" ondragstart="dragStart(event,'+idx+')" ondragover="dragOver(event)" ondrop="dropPhoto(event,'+idx+')" ondragleave="this.classList.remove(\'drag-over\')" ondragend="document.querySelectorAll(\'.pt\').forEach(x=>x.classList.remove(\'dragging\',\'drag-over\'))">'+
-      '<img src="'+src+'">'+
-      '<div class="pt-order-btns">'+
-        (idx>0?'<button class="pt-up" onclick="movePhoto('+idx+',-1)">&#9650;</button>':'')+
-        (idx<all.length-1?'<button class="pt-dn" onclick="movePhoto('+idx+',1)">&#9660;</button>':'')+
-      '</div>'+
-      '<button class="pt-rm" onclick="rmPhotoGlobal('+idx+')">&#10005;</button>'+
-      '<div class="pt-lbl">'+lbl+'</div>'+
+    '<img src="'+src+'">'+
+    '<div class="pt-order-btns">'+(idx>0?'<button class="pt-up" onclick="movePhoto('+idx+',-1)">&#9650;</button>':'')+(idx<all.length-1?'<button class="pt-dn" onclick="movePhoto('+idx+',1)">&#9660;</button>':'')+'</div>'+
+    '<button class="pt-rm" onclick="rmPhotoGlobal('+idx+')">&#10005;</button>'+
+    '<div class="pt-lbl">'+lbl+'</div>'+
     '</div>';
   }).join('');
 }
@@ -2415,13 +2635,13 @@ function rmPhotoGlobal(idx){
 function rmPhoto(type,i){if(type==='url')adminPhotos.splice(i,1);else pendingFiles.splice(i,1);renderPhPrev();}
 function fileToBase64(file){return new Promise((res,rej)=>{const r=new FileReader();r.onload=e=>res(e.target.result);r.onerror=rej;r.readAsDataURL(file);});}
 
-// ════════════════════════════════════════
+// ═══════════════════════════════════════════════════
 // ENTREGAS — PÚBLICO
-// ════════════════════════════════════════
+// ═══════════════════════════════════════════════════
 let allEntregas=[];
 async function loadEntregas(){
-  try{const r=await fetch(API+'/api/entregas');if(!r.ok)throw new Error('HTTP '+r.status);allEntregas=await r.json();}
-  catch(e){console.warn('api/entregas indisponível');allEntregas=getDemoEntregas();}
+  try{const r=await fetch(API+'/api/entregas');if(!r.ok)throw new Error();allEntregas=await r.json();}
+  catch(e){allEntregas=getDemoEntregas();}
   renderEntregas();
 }
 function getDemoEntregas(){return[{id:'e1',nome:'Carlos Mendes',veiculo:'Fiat Pulse 2023',data:'2025-03-15',msg:'Sonho realizado! Atendimento incrível!',fotos:[]},{id:'e2',nome:'Ana Paula S.',veiculo:'VW T-Cross 2023',data:'2025-03-08',msg:'Melhor compra da minha vida!',fotos:[]},{id:'e3',nome:'Roberto Lima',veiculo:'Chevrolet S10 2021',data:'2025-02-28',msg:'Saí com minha S10 no mesmo dia!',fotos:[]},];}
@@ -2435,7 +2655,7 @@ function renderEntregas(){
   if(grid)grid.innerHTML=allEntregas.map((e,idx)=>{
     const imgSrc=e.fotos&&e.fotos.length?e.fotos[0]:'';
     const dataFmt=e.data?new Date(e.data+'T12:00:00').toLocaleDateString('pt-BR',{day:'numeric',month:'long',year:'numeric'}):'';
-    return '<div class="entrega-card" onclick="abrirLB('+idx+')"><div class="entrega-img">'+(imgSrc?'<img src="'+imgSrc+'" alt="'+e.nome+'" loading="lazy">':'<div class="entrega-img-ph">&#127881;</div>')+'<div class="entrega-badge">ENTREGUE &#10003;</div>'+(e.fotos&&e.fotos.length>1?'<div class="gal-count" style="position:absolute;bottom:8px;right:8px">&#128247; '+e.fotos.length+'</div>':'')+'</div><div class="entrega-info"><div class="entrega-nome">'+e.nome+'</div>'+(e.veiculo?'<div class="entrega-veiculo">'+e.veiculo+'</div>':'')+(e.msg?'<div class="entrega-msg">"'+e.msg+'"</div>':'')+(dataFmt?'<div class="entrega-data">'+dataFmt+'</div>':'')+'</div></div>';
+    return '<div class="entrega-card" onclick="abrirLB('+idx+')">'+'<div class="entrega-img">'+(imgSrc?'<img src="'+imgSrc+'" alt="'+e.nome+'" loading="lazy">':'<div class="entrega-img-ph">&#127881;</div>')+'<div class="entrega-badge">ENTREGUE &#10003;</div>'+(e.fotos&&e.fotos.length>1?'<div class="gal-count" style="position:absolute;bottom:8px;right:8px">&#128247; '+e.fotos.length+'</div>':'')+'</div>'+'<div class="entrega-info"><div class="entrega-nome">'+e.nome+'</div>'+(e.veiculo?'<div class="entrega-veiculo">'+e.veiculo+'</div>':'')+(e.msg?'<div class="entrega-msg">"'+e.msg+'"</div>':'')+(dataFmt?'<div class="entrega-data">'+dataFmt+'</div>':'')+'</div></div>';
   }).join('');
 }
 function abrirLB(idx){
@@ -2450,9 +2670,9 @@ function abrirLB(idx){
 function fecharLB(){document.getElementById('lb-overlay').classList.remove('open');document.body.style.overflow='';}
 document.getElementById('lb-overlay').addEventListener('click',function(e){if(e.target===this)fecharLB();});
 
-// ════════════════════════════════════════
+// ═══════════════════════════════════════════════════
 // ENTREGAS — ADMIN
-// ════════════════════════════════════════
+// ═══════════════════════════════════════════════════
 function mostrarFormEntrega(){
   document.getElementById('form-entrega').style.display='block';
   document.getElementById('ent-edit-id').value='';
@@ -2492,7 +2712,7 @@ async function salvarEntrega(){
     else r=await fetch(API+'/api/entregas',{method:'POST',headers:authHeader(),body:JSON.stringify(payload)});
     if(!r.ok){
       let errMsg='Erro HTTP '+r.status;
-      if(r.status===404)errMsg='Rota /api/entregas não encontrada. Verifique se api/entregas.js está no repositório e o deploy foi feito.';
+      if(r.status===404)errMsg='Rota /api/entregas não encontrada. Verifique se api/entregas.js está no repositório.';
       else if(r.status===401)errMsg='Sessão expirada. Faça login novamente.';
       else{try{const d=await r.json();errMsg=d.error||errMsg;}catch{}}
       throw new Error(errMsg);
@@ -2506,7 +2726,9 @@ async function renderAdminEntregas(){
   catch(e){allEntregas=getDemoEntregas();}
   const wrap=document.getElementById('admin-entregas-list');if(!wrap)return;
   if(!allEntregas.length){wrap.innerHTML='<div class="empty"><div class="empty-ic">&#127881;</div><p>Nenhuma entrega publicada.</p></div>';return;}
-  wrap.innerHTML='<table class="at"><thead><tr><th>Foto</th><th>Cliente</th><th>Veículo</th><th>Data</th><th>Ações</th></tr></thead><tbody>'+allEntregas.map(e=>'<tr><td>'+(e.fotos&&e.fotos.length?'<img class="at-thumb" src="'+e.fotos[0]+'" loading="lazy">':'<div class="at-ph">&#127881;</div>')+'</td><td><strong>'+e.nome+'</strong></td><td>'+(e.veiculo||'—')+'</td><td>'+(e.data?new Date(e.data+'T12:00:00').toLocaleDateString('pt-BR'):'—')+'</td><td><button class="bsm danger" onclick="deletarEntrega(\''+e.id+'\')">Excluir</button></td></tr>').join('')+'</tbody></table>';
+  wrap.innerHTML='<table class="at"><thead><tr><th>Foto</th><th>Cliente</th><th>Veículo</th><th>Data</th><th>Ações</th></tr></thead><tbody>'+
+    allEntregas.map(e=>'<tr><td>'+(e.fotos&&e.fotos.length?'<img class="at-thumb" src="'+e.fotos[0]+'" loading="lazy">':'<div class="at-ph">&#127881;</div>')+'</td><td><strong>'+e.nome+'</strong></td><td>'+(e.veiculo||'—')+'</td><td>'+(e.data?new Date(e.data+'T12:00:00').toLocaleDateString('pt-BR'):'—')+'</td><td><button class="bsm danger" onclick="deletarEntrega(\''+e.id+'\')">Excluir</button></td></tr>').join('')+
+    '</tbody></table>';
 }
 async function deletarEntrega(id){
   if(!confirm('Excluir esta entrega?'))return;
@@ -2514,9 +2736,9 @@ async function deletarEntrega(id){
   catch(e){toast('Erro ao excluir.','err');}
 }
 
-// ════════════════════════════════════════
+// ═══════════════════════════════════════════════════
 // TOAST
-// ════════════════════════════════════════
+// ═══════════════════════════════════════════════════
 let toastTimer;
 function toast(msg,type='ok'){
   const el=document.getElementById('toast-el');
@@ -2525,9 +2747,9 @@ function toast(msg,type='ok'){
   toastTimer=setTimeout(()=>el.classList.remove('show'),type==='err'?9000:3200);
 }
 
-// ════════════════════════════════════════
+// ═══════════════════════════════════════════════════
 // INIT
-// ════════════════════════════════════════
+// ═══════════════════════════════════════════════════
 loadCars();
 </script>
 </body>
