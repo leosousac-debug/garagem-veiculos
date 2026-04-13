@@ -1066,63 +1066,6 @@ footer{
   </div>
 
 
-  <!-- AVISE-ME QUANDO CHEGAR -->
-  <div class="avise-section">
-    <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:1rem">
-      <div>
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:.08em;color:var(--red);margin-bottom:.25rem">&#128276; AVISE-ME QUANDO CHEGAR</div>
-        <p style="font-size:.85rem;color:var(--muted);font-family:'Barlow',sans-serif;line-height:1.5">Não encontrou o veículo ideal? Cadastre seu interesse e te avisamos no WhatsApp quando chegar.</p>
-      </div>
-      <button class="filter-btn active" style="flex-shrink:0;padding:.5rem 1.25rem;font-size:.85rem" onclick="document.getElementById('avise-form').classList.toggle('hidden')">QUERO SER AVISADO</button>
-    </div>
-    <div id="avise-form" class="hidden" style="margin-top:1.25rem">
-      <div class="avise-grid">
-        <div class="fg"><label class="fl2">Seu nome <span class="req">*</span></label><input type="text" class="fi" id="avise-nome" placeholder="Ex: João Silva"></div>
-        <div class="fg"><label class="fl2">WhatsApp <span class="req">*</span></label><input type="tel" class="fi" id="avise-fone" placeholder="(34) 99999-9999"></div>
-        <div class="fg"><label class="fl2">Tipo de veículo</label>
-          <select class="fs" id="avise-tipo">
-            <option value="">Qualquer</option><option>Hatch</option><option>Sedan</option>
-            <option>SUV</option><option>Pickup</option><option>Moto</option>
-          </select>
-        </div>
-        <div class="fg"><label class="fl2">Orçamento máximo (R$)</label><input type="number" class="fi" id="avise-preco" placeholder="Ex: 80000"></div>
-        <div class="fg"><label class="fl2">Marca preferida</label><input type="text" class="fi" id="avise-marca" placeholder="Ex: Fiat, VW, Chevrolet..."></div>
-      </div>
-      <button class="btn-save2" style="background:#25d366;border-color:#25d366;display:flex;align-items:center;gap:8px;margin-top:.5rem" onclick="enviarAviseMe()">
-        <svg style="width:17px;height:17px;fill:#fff;flex-shrink:0" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-        ENVIAR INTERESSE VIA WHATSAPP
-      </button>
-    </div>
-  </div>
-
-  <!-- FEED INSTAGRAM -->
-  <div class="ig-feed-section">
-    <div style="max-width:1400px;margin:0 auto">
-      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:1.25rem">
-        <div>
-          <div class="section-title">Siga no Instagram</div>
-          <p style="font-size:.82rem;color:var(--muted);font-family:'Barlow',sans-serif;margin-top:.35rem">@garageveiculosaraguari — novidades, entregas e bastidores</p>
-        </div>
-        <a href="https://www.instagram.com/garageveiculosaraguari/" target="_blank" rel="noopener"
-           style="display:flex;align-items:center;gap:7px;background:linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);color:#fff;padding:.55rem 1.1rem;text-decoration:none;font-family:'Bebas Neue',sans-serif;font-size:.95rem;letter-spacing:.08em;transition:opacity .15s"
-           onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
-          <svg style="width:16px;height:16px;fill:#fff" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-          VER INSTAGRAM
-        </a>
-      </div>
-      <div class="ig-feed-grid" id="ig-feed-grid">
-        <!-- Preenchido dinamicamente ou com placeholders -->
-        <div class="ig-post" onclick="window.open('https://www.instagram.com/garageveiculosaraguari/','_blank')"><div class="ig-post-ph">&#128247;</div><div class="ig-post-overlay"><svg style="width:22px;fill:#fff" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg><span style="color:#fff;font-size:.75rem;font-weight:600">@garageveiculosaraguari</span></div></div>
-        <div class="ig-post" onclick="window.open('https://www.instagram.com/garageveiculosaraguari/','_blank')"><div class="ig-post-ph">🚗</div><div class="ig-post-overlay"><svg style="width:22px;fill:#fff" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></div></div>
-        <div class="ig-post" onclick="window.open('https://www.instagram.com/garageveiculosaraguari/','_blank')"><div class="ig-post-ph">🎉</div><div class="ig-post-overlay"><svg style="width:22px;fill:#fff" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></div></div>
-        <div class="ig-post" onclick="window.open('https://www.instagram.com/garageveiculosaraguari/','_blank')"><div class="ig-post-ph">🏆</div><div class="ig-post-overlay"><svg style="width:22px;fill:#fff" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></div></div>
-        <div class="ig-post" onclick="window.open('https://www.instagram.com/garageveiculosaraguari/','_blank')"><div class="ig-post-ph">⭐</div><div class="ig-post-overlay"><svg style="width:22px;fill:#fff" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></div></div>
-        <div class="ig-post" onclick="window.open('https://www.instagram.com/garageveiculosaraguari/','_blank')"><div class="ig-post-ph">🚘</div><div class="ig-post-overlay"><svg style="width:22px;fill:#fff" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></div></div>
-      </div>
-      <p style="text-align:center;margin-top:1rem;font-size:.78rem;color:var(--muted);font-family:'Barlow',sans-serif">
-        Para adicionar fotos reais do Instagram, consulte o Guia de Implantação — seção "Instagram Feed"
-      </p>
-    </div>
   </div>
 
   <footer>
@@ -1135,8 +1078,7 @@ footer{
         <h5>Atendimento</h5>
         <p>Seg–Sex: 8h às 18h</p>
         <p>Sábado: 8h às 12h</p>
-        <a href="Garageveiculosaraguari@gmail.com"><span class="__cf_email__" data-cfemail="b1f6d0c3d0d6d4c7d4d8d2c4dddec2d0c3d0d6c4d0c3d8f1d6dcd0d8dd9fd2dedc"><span class="__cf_email__" data-cfemail="6225031003050714070b01170e0d11031003051703100b22050f030b0e4c010d0f">[email&#160;protected]</span></span></a>
-        <a href="https://wa.me/5534988920535" target="_blank">(34) 98892-0535</a>
+        <a href="mailto:garageveiculosaraguari@gmail.com">garageveiculosaraguari@gmail.com</a>
         <a href="https://wa.me/5534984408003" target="_blank">(34) 98440-8003</a>
       </div>
       <div class="fc">
@@ -1152,6 +1094,10 @@ footer{
         </a>
         <a href="#">Política de Privacidade</a>
       </div>
+    </div>
+    <div style="display:flex;justify-content:center;gap:.75rem;margin-bottom:1rem;flex-wrap:wrap">
+      <button onclick="abrirAviseme()" style="background:transparent;border:1px solid var(--border);color:var(--muted);padding:.4rem 1rem;font-family:'Bebas Neue',sans-serif;font-size:.8rem;letter-spacing:.08em;cursor:pointer;transition:all .15s" onmouseover="this.style.borderColor='var(--red)';this.style.color='var(--red)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--muted)'">&#128276; AVISE-ME QUANDO CHEGAR</button>
+      <button onclick="abrirIGModal()" style="background:transparent;border:1px solid var(--border);color:var(--muted);padding:.4rem 1rem;font-family:'Bebas Neue',sans-serif;font-size:.8rem;letter-spacing:.08em;cursor:pointer;transition:all .15s" onmouseover="this.style.borderColor='var(--red)';this.style.color='var(--red)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--muted)'">&#128247; INSTAGRAM</button>
     </div>
     <div class="footer-btm">© 2025 Garage Veículos — Araguari MG. Todos os direitos reservados.</div>
   </footer>
@@ -1919,6 +1865,57 @@ footer{
   &#9878; COMPARAR (<span id="comp-float-count">0</span>)
 </button>
 
+<!-- MODAL AVISE-ME -->
+<div id="avise-modal-overlay" style="display:none;position:fixed;inset:0;z-index:400;background:rgba(0,0,0,.88);backdrop-filter:blur(6px);align-items:center;justify-content:center;padding:1.5rem">
+  <div style="background:var(--navy2);border:1px solid var(--border);border-top:3px solid var(--red);max-width:640px;width:100%;animation:su .25s ease;max-height:90vh;overflow-y:auto">
+    <div style="padding:1.25rem 1.5rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:.08em;color:var(--red)">&#128276; AVISE-ME QUANDO CHEGAR</div>
+      <button onclick="fecharAviseme()" style="background:none;border:none;color:var(--muted);font-size:1.2rem;cursor:pointer">&#10005;</button>
+    </div>
+    <div style="padding:1.5rem">
+      <p style="font-size:.88rem;color:var(--silver);font-family:'Barlow',sans-serif;line-height:1.6;margin-bottom:1.25rem">Não encontrou o carro ideal? Cadastre seu interesse e te avisamos no WhatsApp assim que chegar.</p>
+      <div class="avise-grid">
+        <div class="fg"><label class="fl2">Seu nome <span class="req">*</span></label><input type="text" class="fi" id="avise-nome" placeholder="Ex: João Silva"></div>
+        <div class="fg"><label class="fl2">WhatsApp <span class="req">*</span></label><input type="tel" class="fi" id="avise-fone" placeholder="(34) 99999-9999"></div>
+        <div class="fg"><label class="fl2">Tipo de veículo</label>
+          <select class="fs" id="avise-tipo"><option value="">Qualquer</option><option>Hatch</option><option>Sedan</option><option>SUV</option><option>Pickup</option><option>Moto</option></select>
+        </div>
+        <div class="fg"><label class="fl2">Orçamento máximo (R$)</label><input type="number" class="fi" id="avise-preco" placeholder="Ex: 80000"></div>
+        <div class="fg"><label class="fl2">Marca preferida</label><input type="text" class="fi" id="avise-marca" placeholder="Ex: Fiat, VW, Chevrolet..."></div>
+      </div>
+      <button class="btn-save2" style="background:#25d366;border-color:#25d366;display:flex;align-items:center;gap:8px;margin-top:1rem;width:100%" onclick="enviarAviseMe()">
+        <svg style="width:17px;height:17px;fill:#fff;flex-shrink:0" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        ENVIAR INTERESSE VIA WHATSAPP
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL INSTAGRAM -->
+<div id="ig-modal-overlay" style="display:none;position:fixed;inset:0;z-index:400;background:rgba(0,0,0,.88);backdrop-filter:blur(6px);align-items:center;justify-content:center;padding:1.5rem">
+  <div style="background:var(--navy2);border:1px solid var(--border);border-top:3px solid var(--red);max-width:700px;width:100%;animation:su .25s ease">
+    <div style="padding:1.25rem 1.5rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:.08em">&#128247; INSTAGRAM @garageveiculosaraguari</div>
+      <button onclick="fecharIGModal()" style="background:none;border:none;color:var(--muted);font-size:1.2rem;cursor:pointer">&#10005;</button>
+    </div>
+    <div style="padding:1.5rem">
+      <div class="ig-feed-grid" style="margin-top:0;margin-bottom:1rem">
+        <div class="ig-post" onclick="window.open('https://www.instagram.com/garageveiculosaraguari/','_blank')"><div class="ig-post-ph">&#128247;</div><div class="ig-post-overlay"><span style="color:#fff;font-size:.75rem;font-weight:600">@garageveiculosaraguari</span></div></div>
+        <div class="ig-post" onclick="window.open('https://www.instagram.com/garageveiculosaraguari/','_blank')"><div class="ig-post-ph">&#128663;</div><div class="ig-post-overlay"></div></div>
+        <div class="ig-post" onclick="window.open('https://www.instagram.com/garageveiculosaraguari/','_blank')"><div class="ig-post-ph">&#127881;</div><div class="ig-post-overlay"></div></div>
+        <div class="ig-post" onclick="window.open('https://www.instagram.com/garageveiculosaraguari/','_blank')"><div class="ig-post-ph">&#11088;</div><div class="ig-post-overlay"></div></div>
+        <div class="ig-post" onclick="window.open('https://www.instagram.com/garageveiculosaraguari/','_blank')"><div class="ig-post-ph">&#128081;</div><div class="ig-post-overlay"></div></div>
+        <div class="ig-post" onclick="window.open('https://www.instagram.com/garageveiculosaraguari/','_blank')"><div class="ig-post-ph">&#128664;</div><div class="ig-post-overlay"></div></div>
+      </div>
+      <a href="https://www.instagram.com/garageveiculosaraguari/" target="_blank" rel="noopener"
+         style="display:flex;align-items:center;justify-content:center;gap:8px;background:linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);color:#fff;padding:.875rem;text-decoration:none;font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:.1em">
+        <svg style="width:16px;height:16px;fill:#fff" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+        SEGUIR @GARAGEVEICULOSARAGUARI
+      </a>
+    </div>
+  </div>
+</div>
+
 <!-- CHAT IA -->
 <button class="chat-bubble" id="chat-bubble" onclick="toggleChat()" title="Falar com assistente">
   <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/></svg>
@@ -1951,6 +1948,7 @@ footer{
 <div class="share-toast" id="share-toast">Link copiado! 🔗</div>
 
 <script>
+
 
 // ═══════════════════════════════════════════════════
 // CONFIG
@@ -3093,6 +3091,29 @@ async function enviarChat(){
 }
 
 // ═══════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════
+// MODAIS: AVISE-ME + INSTAGRAM
+// ═══════════════════════════════════════════════════
+function abrirAviseme(){
+  const el=document.getElementById('avise-modal-overlay');
+  if(el){el.style.display='flex';document.body.style.overflow='hidden';}
+}
+function fecharAviseme(){
+  const el=document.getElementById('avise-modal-overlay');
+  if(el){el.style.display='none';document.body.style.overflow='';}
+}
+function abrirIGModal(){
+  const el=document.getElementById('ig-modal-overlay');
+  if(el){el.style.display='flex';document.body.style.overflow='hidden';}
+}
+function fecharIGModal(){
+  const el=document.getElementById('ig-modal-overlay');
+  if(el){el.style.display='none';document.body.style.overflow='';}
+}
+// Fechar modais ao clicar no overlay
+document.getElementById('avise-modal-overlay').addEventListener('click',function(e){if(e.target===this)fecharAviseme();});
+document.getElementById('ig-modal-overlay').addEventListener('click',function(e){if(e.target===this)fecharIGModal();});
+
 // INIT
 // ═══════════════════════════════════════════════════
 loadCars();
@@ -3103,7 +3124,6 @@ setTimeout(()=>{
     if(unread)unread.style.display='flex';
   }
 },8000);
-
 </script>
 </body>
 </html>
