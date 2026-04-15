@@ -1047,7 +1047,7 @@ footer{
 .sk-line{height:13px;margin-bottom:8px;border-radius:2px}
 .sk-line.w60{width:60%}.sk-line.w40{width:40%}.sk-line.w80{width:80%}
 /* ══ FADE-IN imagens ══ */
-.slides img{opacity:0;transition:opacity .25s}
+.slides img{display:block;width:100%;height:100%;object-fit:cover;transition:opacity .15s}
 .slides img.loaded,.mslide img.loaded{opacity:1}
 </style>
 <link rel="dns-prefetch" href="https://fonts.googleapis.com">
@@ -2782,7 +2782,7 @@ function renderGrid(){
 }
 function cardHTML(v){
   const imgs=v.fotos&&v.fotos.length?v.fotos:[];
-  const slides=imgs.length?imgs.map(f=>'<div class="slide"><img src="'+f+'" alt="'+v.marca+' '+v.modelo+'" loading="lazy" onload="this.classList.add(\"loaded\")"></div>').join(''):'<div class="slide"><div class="slide-placeholder">&#128663;</div></div>';
+  const slides=imgs.length?imgs.map(f=>'<div class="slide"><img src="'+f+'" alt="'+v.marca+' '+v.modelo+'" onload="this.classList.add(\"loaded\")"></div>').join(''):'<div class="slide"><div class="slide-placeholder">&#128663;</div></div>';
   const dots=imgs.length>1?imgs.map((_,i)=>'<button class="gal-dot'+(i===0?' active':'')+'" onclick="setCardGal(\''+v.id+'\','+i+',event)"></button>').join(''):'';
   const bCls=v.destaque==='Sim'?'badge-dest':v.cond==='Novo'?'badge-novo':v.cond==='Seminovo'?'badge-semi':'badge-usado';
   const bTxt=v.destaque==='Sim'?'DESTAQUE':v.cond.toUpperCase();
