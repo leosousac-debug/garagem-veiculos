@@ -1049,6 +1049,69 @@ footer{
 /* ══ FADE-IN imagens ══ */
 .slides img{display:block;width:100%;height:100%;object-fit:cover;transition:opacity .15s}
 .slides img.loaded,.mslide img.loaded{opacity:1}
+
+/* ══ AVALIE SUA TROCA ══ */
+.troca-steps{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:1rem;
+  margin-bottom:2rem;
+}
+@media(max-width:600px){.troca-steps{grid-template-columns:1fr}}
+.troca-step{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-top:2px solid var(--red);
+  padding:1.25rem;
+  text-align:center;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:.35rem;
+}
+.troca-step-n{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:2.5rem;
+  color:var(--red);
+  line-height:1;
+}
+.troca-step-l{
+  font-size:.82rem;
+  color:var(--muted);
+  font-weight:700;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  font-family:'Barlow',sans-serif;
+}
+.troca-result{
+  display:none;
+  background:var(--navy3);
+  border:1px solid var(--border);
+  border-left:4px solid var(--success);
+  padding:1.5rem;
+  margin-top:1.5rem;
+}
+.troca-range{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:2rem;
+  color:var(--success);
+  margin:.5rem 0;
+}
+/* ══ CHEGANDO EM BREVE — badge admin ══ */
+.chegando-admin-badge{
+  background:rgba(74,159,255,.1);
+  border:1px solid #4a9fff;
+  color:#4a9fff;
+  padding:.75rem 1.25rem;
+  font-size:.85rem;
+  font-family:'Barlow',sans-serif;
+  line-height:1.6;
+  margin-bottom:1.25rem;
+  display:flex;
+  align-items:flex-start;
+  gap:.75rem;
+}
+.chegando-admin-badge strong{color:#fff}
 </style>
 <link rel="dns-prefetch" href="https://fonts.googleapis.com">
 <meta name="robots" content="index, follow">
@@ -1923,6 +1986,14 @@ footer{
     <!-- FORM -->
     <div class="asub" id="sub-form-novo">
       <input type="hidden" id="edit-id">
+      <!-- BADGE CHEGANDO EM BREVE -->
+      <div class="chegando-admin-badge" id="chegando-dica" style="display:none">
+        <span style="font-size:1.2rem;flex-shrink:0">🔵</span>
+        <div>
+          <strong>Chegando em Breve / Em Vistoria</strong><br>
+          O veículo aparecerá na página <strong>Chegando</strong> do site com o badge de status. Clientes poderão clicar em "AVISAR-ME" para receberem notificação via WhatsApp quando ficar disponível. Quando o carro chegar, basta editar e mudar o status para <strong>Ativo</strong>.
+        </div>
+      </div>
       <form onsubmit="return false">
 
         <div class="fsec">
@@ -2038,7 +2109,7 @@ footer{
               <select class="fs" id="f-destaque"><option>Não</option><option>Sim</option></select>
             </div>
             <div class="fg"><label class="fl2">Status</label>
-              <select class="fs" id="f-status"><option>Ativo</option><option>Inativo</option><option>Vendido</option><option>Chegando em Breve</option><option>Em Vistoria</option></select>
+              <select class="fs" id="f-status" onchange="toggleChegandoDica(this.value)"><option>Ativo</option><option>Inativo</option><option>Vendido</option><option>Chegando em Breve</option><option>Em Vistoria</option></select>
             </div>
           </div>
         </div>
@@ -2411,6 +2482,7 @@ footer{
 <div class="share-toast" id="share-toast">Link copiado! 🔗</div>
 
 <script>
+
 // ═══════════════════════════════════════════════════
 // CONFIG
 // ═══════════════════════════════════════════════════
@@ -2782,7 +2854,7 @@ function renderGrid(){
 }
 function cardHTML(v){
   const imgs=v.fotos&&v.fotos.length?v.fotos:[];
-  const slides=imgs.length?imgs.map(f=>'<div class="slide"><img src="'+f+'" alt="'+v.marca+' '+v.modelo+'" onload="this.classList.add(\"loaded\")"></div>').join(''):'<div class="slide"><div class="slide-placeholder">&#128663;</div></div>';
+  const slides=imgs.length?imgs.map(f=>'<div class="slide"><img src="'+f+'" alt="'+v.marca+' '+v.modelo+' onload="this.classList.add(\"loaded\")"></div>').join(''):'<div class="slide"><div class="slide-placeholder">&#128663;</div></div>';
   const dots=imgs.length>1?imgs.map((_,i)=>'<button class="gal-dot'+(i===0?' active':'')+'" onclick="setCardGal(\''+v.id+'\','+i+',event)"></button>').join(''):'';
   const bCls=v.destaque==='Sim'?'badge-dest':v.cond==='Novo'?'badge-novo':v.cond==='Seminovo'?'badge-semi':'badge-usado';
   const bTxt=v.destaque==='Sim'?'DESTAQUE':v.cond.toUpperCase();
@@ -3220,6 +3292,7 @@ function editarV(id){
   set('f-placa',v.placa);set('f-donos',v.donos);set('f-ipva',v.ipva);set('f-revisao',v.revisao);
   set('f-preco',v.preco);set('f-preco-ant',v.precoAnt||'');set('f-troca',v.troca);set('f-financ',v.financ);
   set('f-destaque',v.destaque);set('f-status',v.status);set('f-desc',v.descricao);set('f-obs',v.obs||'');
+  toggleChegandoDica(v.status||'Ativo');
   document.querySelectorAll('.opt-ck').forEach(c=>c.checked=false);
   (v.opcionais||[]).forEach(o=>document.querySelectorAll('.opt-ck').forEach(c=>{if(c.value===o)c.checked=true;}));
   adminPhotos=(v.fotos||[]).map(url=>({url,name:'existente'}));pendingFiles=[];renderPhPrev();
@@ -3574,12 +3647,22 @@ function toast(msg,type='ok'){
 }
 
 // ═══════════════════════════════════════════════════
+// ADMIN — DICA CHEGANDO EM BREVE
+// ═══════════════════════════════════════════════════
+function toggleChegandoDica(val){
+  const el=document.getElementById('chegando-dica');
+  if(!el)return;
+  el.style.display=(val==='Chegando em Breve'||val==='Em Vistoria')?'flex':'none';
+}
+
+// ═══════════════════════════════════════════════════
 // INIT
 // ═══════════════════════════════════════════════════
 loadCars();
 initCookieBanner();
 atualizarFavBadge();
 setTimeout(()=>{if(!chatAberto){const u=document.getElementById('chat-unread');if(u)u.style.display='flex';}},8000);
+
 
 </script>
 </body>
