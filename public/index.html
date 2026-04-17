@@ -2492,6 +2492,7 @@ footer{
 <script>
 
 
+
 // ═══════════════════════════════════════════════════
 // CONFIG
 // ═══════════════════════════════════════════════════
@@ -2683,8 +2684,7 @@ function getDemoCars(){
     {id:'demo3',marca:'Fiat',modelo:'Pulse',versao:'Audace 1.3 Turbo',anofab:2023,anomod:2023,tipo:'SUV',cond:'Seminovo',cor:'Vermelho',km:8000,combustivel:'Flex',cambio:'CVT',motor:'1.3 Turbo 107cv',potencia:107,portas:'5 portas',tracao:'FWD',direcao:'Elétrica',placa:'1 e 2',donos:'1 dono',ipva:'Sim',revisao:'Sim',preco:98000,precoAnt:null,troca:'Não',financ:'Sim',destaque:'Sim',status:'Ativo',criadoEm:Date.now()-86400000*1,opcionais:['Ar-condicionado','Central multimídia'],descricao:'Apenas 8 mil km.',fotos:[]},
     {id:'demo4',marca:'Chevrolet',modelo:'S10',versao:'High Country 2.8 4x4',anofab:2020,anomod:2021,tipo:'Pickup',cond:'Usado',cor:'Preto',km:65000,combustivel:'Diesel',cambio:'Automático',motor:'2.8 Diesel 200cv',potencia:200,portas:'4 portas',tracao:'AWD',direcao:'Hidráulica',placa:'7 e 8',donos:'2 donos',ipva:'Sim',revisao:'Sim',preco:185000,precoAnt:199000,troca:'Sim',financ:'Sim',destaque:'Não',status:'Ativo',criadoEm:Date.now()-86400000*10,opcionais:['Bancos de couro','4x4'],descricao:'Pickup topo de linha.',fotos:[]},
     {id:'demo5',marca:'Honda',modelo:'Civic',versao:'EXL 1.5 Turbo',anofab:2019,anomod:2020,tipo:'Sedan',cond:'Usado',cor:'Azul',km:72000,combustivel:'Flex',cambio:'CVT',motor:'1.5 Turbo 173cv',potencia:173,portas:'4 portas',tracao:'FWD',direcao:'Elétrica',placa:'9 e 0',donos:'2 donos',ipva:'Sim',revisao:'Não',preco:89000,precoAnt:95000,troca:'Sim',financ:'Sim',destaque:'Não',status:'Ativo',criadoEm:Date.now()-86400000*15,opcionais:['Teto solar','Bancos de couro'],descricao:'Civic EXL completo.',fotos:[]},
-    {id:'demo6',marca:'Jeep',modelo:'Compass',versao:'Longitude 1.3 T270',anofab:2022,anomod:2023,tipo:'SUV',cond:'Seminovo',cor:'Branco',km:22000,combustivel:'Flex',cambio:'Automático',motor:'1.3 Turbo 185cv',potencia:185,portas:'5 portas',tracao:'FWD',direcao:'Elétrica',placa:'3 e 4',donos:'1 dono',ipva:'Sim',revisao:'Sim',preco:162000,precoAnt:null,troca:'Consultar',financ:'Sim',destaque:'Não',status:'Ativo',criadoEm:Date.now()-86400000*3,opcionais:['Câmera de ré'],descricao:'Compass bem conservado.',fotos:[]},
-    {id:'demo7',marca:'Toyota',modelo:'Hilux',versao:'SRV 2.8 Diesel 4x4',anofab:2022,anomod:2023,tipo:'Pickup',cond:'Seminovo',cor:'Branco',km:35000,combustivel:'Diesel',cambio:'Automático',motor:'2.8 Diesel 204cv',potencia:204,portas:'4 portas',tracao:'AWD',direcao:'Elétrica',placa:'1 e 2',donos:'1 dono',ipva:'Sim',revisao:'Sim',preco:265000,precoAnt:null,troca:'Consultar',financ:'Sim',destaque:'Não',status:'Chegando em Breve',criadoEm:Date.now(),opcionais:['Bancos de couro','4x4','GPS/Navegação'],descricao:'Hilux SRV chegando em breve.',fotos:[]},
+    {id:'demo6',marca:'Jeep',modelo:'Compass',versao:'Longitude 1.3 T270',anofab:2022,anomod:2023,tipo:'SUV',cond:'Seminovo',cor:'Branco',km:22000,combustivel:'Flex',cambio:'Automático',motor:'1.3 Turbo 185cv',potencia:185,portas:'5 portas',tracao:'FWD',direcao:'Elétrica',placa:'3 e 4',donos:'1 dono',ipva:'Sim',revisao:'Sim',preco:162000,precoAnt:null,troca:'Consultar',financ:'Sim',destaque:'Não',status:'Ativo',criadoEm:Date.now()-86400000*3,opcionais:['Câmera de ré'],descricao:'Compass bem conservado.',fotos:[]}
   ];
 }
 
@@ -2942,6 +2942,8 @@ function goPg(p){currentPage2=p;renderGrid();window.scrollTo(0,380);}
 function openModal(id){
   mCar=allCars.find(v=>v.id===id||v.id==id);if(!mCar)return;
   addView(id);mGalIdx=0;
+  // Atualizar URL da barra do navegador — permite copiar link direto
+  try{history.pushState({vid:id},'',window.location.pathname+'?v='+id);}catch(e){}
   const c=mCar;
   document.getElementById('m-yr').textContent=c.anofab+'/'+c.anomod+' — '+c.cond;
   document.getElementById('m-nm').textContent=c.marca+' '+c.modelo;
@@ -2982,9 +2984,24 @@ function closeModal(e){
   document.getElementById('overlay').classList.remove('open');
   document.body.style.overflow='';
   if(reservaInterval)clearInterval(reservaInterval);
+  try{history.replaceState({},'',window.location.pathname);}catch(e){}
 }
 document.getElementById('overlay').addEventListener('click',function(e){
-  if(e.target===this){this.classList.remove('open');document.body.style.overflow='';if(reservaInterval)clearInterval(reservaInterval);}
+  if(e.target===this){
+    this.classList.remove('open');
+    document.body.style.overflow='';
+    if(reservaInterval)clearInterval(reservaInterval);
+    try{history.replaceState({},'',window.location.pathname);}catch(e){}
+  }
+});
+// Fechar modal com botão Voltar do navegador
+window.addEventListener('popstate',function(e){
+  const ov=document.getElementById('overlay');
+  if(ov&&ov.classList.contains('open')){
+    ov.classList.remove('open');
+    document.body.style.overflow='';
+    if(reservaInterval)clearInterval(reservaInterval);
+  }
 });
 function renderMGal(){
   const imgs=mCar&&mCar.fotos&&mCar.fotos.length?mCar.fotos:[];
@@ -3720,6 +3737,7 @@ loadCars().then(()=>{
 initCookieBanner();
 atualizarFavBadge();
 setTimeout(()=>{if(!chatAberto){const u=document.getElementById('chat-unread');if(u)u.style.display='flex';}},8000);
+
 
 
 
