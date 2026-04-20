@@ -2493,6 +2493,7 @@ footer{
 
 
 
+
 // ═══════════════════════════════════════════════════
 // CONFIG
 // ═══════════════════════════════════════════════════
@@ -2589,10 +2590,10 @@ function showPage(p){
   if(p==='financiamento')setTimeout(popularFinSelects,400);
   if(p==='entregas')loadEntregas();
   if(p==='destaque'){if(!allCars.length){loadCars().then(renderDestaque);}else renderDestaque();}
-  if(p==='chegando'){if(!allCars.length){loadCars().then(renderChegando);}else renderChegando();}
+  if(p==='chegando')loadCars().then(renderChegando);
   if(p==='favoritos')renderFavoritos();
   if(p==='como'){}
-  if(p==='admin'){if(!adminToken){openLogin();return;}renderAdminList();}
+  if(p==='admin'){if(!adminToken){openLogin();return;}loadCarsAdmin();}
   window.scrollTo(0,0);
 }
 
@@ -3237,7 +3238,22 @@ function renderDestaque(){
   if(empty)empty.style.display='none';
   if(grid){grid.innerHTML=destaques.map(v=>cardHTML(v)).join('');destaques.forEach(v=>initCardGal(v));}
 }
-function renderChegando(){
+async function renderChegando(){
+  // Buscar dados frescos — a API pública pode filtrar só Ativos
+  // então fazemos uma chamada separada sem filtro de status
+  try{
+    const r=await fetch(API+'/api/veiculos?status=todos');
+    if(r.ok){
+      const todos=await r.json();
+      // Mesclar: manter allCars e adicionar veículos não-Ativos
+      const novos=todos.filter(v=>v.status==='Chegando em Breve'||v.status==='Em Vistoria');
+      // Remover duplicatas e adicionar
+      novos.forEach(v=>{
+        const idx=allCars.findIndex(x=>x.id===v.id||x.id==v.id);
+        if(idx>=0)allCars[idx]=v;else allCars.push(v);
+      });
+    }
+  }catch(e){}
   const lista=allCars.filter(v=>v.status==='Chegando em Breve'||v.status==='Em Vistoria');
   const grid=document.getElementById('chegando-grid');
   const empty=document.getElementById('chegando-empty');
@@ -3737,6 +3753,7 @@ loadCars().then(()=>{
 initCookieBanner();
 atualizarFavBadge();
 setTimeout(()=>{if(!chatAberto){const u=document.getElementById('chat-unread');if(u)u.style.display='flex';}},8000);
+
 
 
 
