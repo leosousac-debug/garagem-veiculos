@@ -3239,18 +3239,14 @@ function renderDestaque(){
   if(grid){grid.innerHTML=destaques.map(v=>cardHTML(v)).join('');destaques.forEach(v=>initCardGal(v));}
 }
 async function renderChegando(){
-  // Buscar dados frescos — a API pública pode filtrar só Ativos
-  // então fazemos uma chamada separada sem filtro de status
+  // Buscar dados frescos — garante que Chegando em Breve aparece em qualquer browser
   try{
-    const r=await fetch(API+'/api/veiculos?status=todos');
+    const r=await fetch(API+'/api/veiculos');
     if(r.ok){
-      const todos=await r.json();
-      // Mesclar: manter allCars e adicionar veículos não-Ativos
-      const novos=todos.filter(v=>v.status==='Chegando em Breve'||v.status==='Em Vistoria');
-      // Remover duplicatas e adicionar
-      novos.forEach(v=>{
-        const idx=allCars.findIndex(x=>x.id===v.id||x.id==v.id);
-        if(idx>=0)allCars[idx]=v;else allCars.push(v);
+      const fresh=await r.json();
+      fresh.forEach(v=>{
+        const i=allCars.findIndex(x=>x.id===v.id||x.id==v.id);
+        if(i>=0)allCars[i]=v;else allCars.push(v);
       });
     }
   }catch(e){}
@@ -3268,17 +3264,17 @@ async function renderChegando(){
     const cor=v.status==='Em Vistoria'?'#e8a020':'#4a9fff';
     return '<div class="chegando-card">'+
       '<div class="chegando-img">'+foto+
-      '<div class="chegando-overlay"><div class="chegando-badge-main" style="background:'+cor+'">'+v.status.toUpperCase()+'</div><div class="chegando-eta">Consulte disponibilidade</div></div></div>'+
-      '<div class="chegando-info"><div class="car-yr">'+v.anofab+'/'+v.anomod+'</div><div class="car-nm">'+v.marca+' '+v.modelo+'</div><div class="car-vr">'+(v.versao||'')+'</div>'+
+      '<div class="chegando-overlay"><div class="chegando-badge-main" style="background:'+cor+'">'+v.status.toUpperCase()+'</div>'+
+      '<div class="chegando-eta">Consulte disponibilidade</div></div></div>'+
+      '<div class="chegando-info"><div class="car-yr">'+v.anofab+'/'+v.anomod+'</div>'+
+      '<div class="car-nm">'+v.marca+' '+v.modelo+'</div>'+
+      '<div class="car-vr">'+(v.versao||'')+'</div>'+
       '<div class="car-bottom"><div>'+(v.preco?'<div class="price-main">R$ '+v.preco.toLocaleString('pt-BR')+'</div>':'<div style="font-size:.9rem;color:var(--muted)">Preço a confirmar</div>')+'</div>'+
-      '<a href="https://wa.me/5534984408003?text='+encodeURIComponent('Olá! Vi o '+v.marca+' '+v.modelo+' que está chegando em breve. Tenho interesse!')+'" target="_blank" class="btn-card" style="text-decoration:none;padding:.35rem .875rem;display:inline-block">AVISAR-ME</a>'+
+      '<a href="https://wa.me/5534984408003?text='+encodeURIComponent('Olá! Vi que está chegando: '+v.marca+' '+v.modelo+'. Tenho interesse!')+'" target="_blank" class="btn-card" style="text-decoration:none;padding:.35rem .875rem;display:inline-block">AVISAR-ME</a>'+
       '</div></div></div>';
   }).join('');
 }
 
-// ═══════════════════════════════════════════════════
-// ADMIN — VEÍCULOS
-// ═══════════════════════════════════════════════════
 function showSub(sub,btn){
   document.querySelectorAll('.asub').forEach(x=>x.classList.remove('active'));
   document.querySelectorAll('.atab').forEach(x=>x.classList.remove('active'));
