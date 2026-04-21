@@ -29,13 +29,12 @@ function verifyToken(req){
   const auth=req.headers['authorization']||'';
   const token=auth.replace('Bearer ','').trim();
   if(!token)return false;
-  // Token válido por 24h: hash diário
-  const today=new Date().toISOString().slice(0,10).replace(/-/g,'');
   const pwd=process.env.ADMIN_PASSWORD||'garage2024';
-  const expected=Buffer.from(pwd+today).toString('base64');
-  // Aceitar também token do dia anterior (evita logout na virada do dia)
-  const yesterday=new Date(Date.now()-86400000).toISOString().slice(0,10).replace(/-/g,'');
-  const expectedYest=Buffer.from(pwd+yesterday).toString('base64');
+  // Formato IGUAL ao auth.js: Base64(pwd + ':' + 'YYYY-MM-DD')
+  const today=new Date().toISOString().split('T')[0];
+  const yesterday=new Date(Date.now()-86400000).toISOString().split('T')[0];
+  const expected=Buffer.from(pwd+':'+today).toString('base64');
+  const expectedYest=Buffer.from(pwd+':'+yesterday).toString('base64');
   return token===expected||token===expectedYest;
 }
 
