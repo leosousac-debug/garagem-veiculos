@@ -3239,38 +3239,40 @@ function renderDestaque(){
   if(grid){grid.innerHTML=destaques.map(v=>cardHTML(v)).join('');destaques.forEach(v=>initCardGal(v));}
 }
 async function renderChegando(){
-  // Buscar dados frescos — garante que Chegando em Breve aparece em qualquer browser
-  try{
-    const r=await fetch(API+'/api/veiculos');
-    if(r.ok){
-      const fresh=await r.json();
-      fresh.forEach(v=>{
-        const i=allCars.findIndex(x=>x.id===v.id||x.id==v.id);
-        if(i>=0)allCars[i]=v;else allCars.push(v);
-      });
-    }
-  }catch(e){}
-  const lista=allCars.filter(v=>v.status==='Chegando em Breve'||v.status==='Em Vistoria');
   const grid=document.getElementById('chegando-grid');
   const empty=document.getElementById('chegando-empty');
   const cnt=document.getElementById('chegando-count');
-  const rc=document.getElementById('chegando-result-count');
+  const rc2=document.getElementById('chegando-result-count');
+  if(grid)grid.innerHTML='<div style="grid-column:1/-1;padding:3rem;text-align:center;color:var(--muted)"><div class="spinner" style="margin:0 auto 1rem"></div><span>Carregando...</span></div>';
+  let lista=[];
+  try{
+    const r=await fetch(API+'/api/chegando');
+    if(r.ok)lista=await r.json();
+  }catch(e){
+    lista=allCars.filter(v=>v.status==='Chegando em Breve'||v.status==='Em Vistoria');
+  }
   if(cnt)cnt.textContent=lista.length;
-  if(rc)rc.textContent=lista.length+' veículo'+(lista.length!==1?'s':'');
+  if(rc2)rc2.textContent=lista.length+' ve\u00edculo'+(lista.length!==1?'s':'');
   if(!lista.length){if(grid)grid.innerHTML='';if(empty)empty.style.display='block';return;}
   if(empty)empty.style.display='none';
   if(grid)grid.innerHTML=lista.map(v=>{
     const foto=v.fotos&&v.fotos.length?'<img src="'+v.fotos[0]+'" loading="lazy">':'<div class="chegando-img-ph">&#128663;</div>';
     const cor=v.status==='Em Vistoria'?'#e8a020':'#4a9fff';
+    const preco=v.preco?'<div class="price-main">R$ '+v.preco.toLocaleString('pt-BR')+'</div>':'<div style="font-size:.9rem;color:var(--muted)">Pre\u00e7o a confirmar</div>';
+    const wppMsg=encodeURIComponent('Ol\u00e1! Vi o '+v.marca+' '+v.modelo+' chegando em breve. Tenho interesse!');
     return '<div class="chegando-card">'+
       '<div class="chegando-img">'+foto+
-      '<div class="chegando-overlay"><div class="chegando-badge-main" style="background:'+cor+'">'+v.status.toUpperCase()+'</div>'+
-      '<div class="chegando-eta">Consulte disponibilidade</div></div></div>'+
-      '<div class="chegando-info"><div class="car-yr">'+v.anofab+'/'+v.anomod+'</div>'+
+      '<div class="chegando-overlay">'+
+      '<div class="chegando-badge-main" style="background:'+cor+'">'+v.status.toUpperCase()+'</div>'+
+      '<div class="chegando-eta">Consulte disponibilidade</div>'+
+      '</div></div>'+
+      '<div class="chegando-info">'+
+      '<div class="car-yr">'+v.anofab+'/'+v.anomod+'</div>'+
       '<div class="car-nm">'+v.marca+' '+v.modelo+'</div>'+
       '<div class="car-vr">'+(v.versao||'')+'</div>'+
-      '<div class="car-bottom"><div>'+(v.preco?'<div class="price-main">R$ '+v.preco.toLocaleString('pt-BR')+'</div>':'<div style="font-size:.9rem;color:var(--muted)">Preço a confirmar</div>')+'</div>'+
-      '<a href="https://wa.me/5534984408003?text='+encodeURIComponent('Olá! Vi que está chegando: '+v.marca+' '+v.modelo+'. Tenho interesse!')+'" target="_blank" class="btn-card" style="text-decoration:none;padding:.35rem .875rem;display:inline-block">AVISAR-ME</a>'+
+      '<div class="car-bottom">'+
+      '<div>'+preco+'</div>'+
+      '<a href="https://wa.me/5534984408003?text='+wppMsg+'" target="_blank" class="btn-card" style="text-decoration:none;padding:.35rem .875rem;display:inline-block">AVISAR-ME</a>'+
       '</div></div></div>';
   }).join('');
 }
