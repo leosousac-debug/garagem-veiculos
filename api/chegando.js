@@ -1,6 +1,4 @@
-// api/chegando.js — Rota PÚBLICA dedicada para veículos "Chegando em Breve" e "Em Vistoria"
-// GET /api/chegando → retorna veículos com status Chegando em Breve ou Em Vistoria
-// Sem autenticação — dados públicos
+// api/chegando.js — Veículos "Chegando em Breve" e "Em Vistoria"
 
 function getConfig(){
   const url=process.env.KV_REST_API_URL||process.env.UPSTASH_REDIS_REST_URL||process.env.KV_URL;
@@ -16,7 +14,7 @@ async function rCmd(cfg,cmd,...args){
     headers:{'Authorization':'Bearer '+cfg.token,'Content-Type':'application/json'},
     body
   });
-  if(!r.ok)throw new Error('Redis '+r.status);
+  if(!r.ok){const t=await r.text().catch(()=>'');throw new Error('Redis '+r.status+': '+t.slice(0,100));}
   const d=await r.json();
   return d.result;
 }
@@ -24,7 +22,6 @@ async function rCmd(cfg,cmd,...args){
 export default async function handler(req,res){
   res.setHeader('Access-Control-Allow-Origin','*');
   res.setHeader('Access-Control-Allow-Methods','GET,OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers','Content-Type');
   if(req.method==='OPTIONS')return res.status(200).end();
   if(req.method!=='GET')return res.status(405).json({error:'Método não permitido'});
 
@@ -32,19 +29,27 @@ export default async function handler(req,res){
   if(!cfg)return res.status(200).json([]);
 
   try{
-    const keys=await rCmd(cfg,'KEYS','veiculo:*');
-    if(!keys||!keys.length)return res.status(200).json([]);
+    // Usar SCAN (mais robusto que KEYS no Vercel KV)
+    let keys=[];
+    let cursor='0';
+    do{
+      const scanResult=await rCmd(cfg,'SCAN',cursor,'MATCH','veiculo:*','COUNT','200');
+      cursor=String(scanResult[0]);
+      if(scanResult[1]&&scanResult[1].length)keys.push(...scanResult[1]);
+    }while(cursor!=='0');
 
-    const vals=await Promise.all(keys.map(k=>rCmd(cfg,'GET',k)));
+    if(!keys.length)return res.status(200).json([]);
+
+    const vals=await Promise.all(keys.map(k=>rCmd(cfg,'GET',k).catch(()=>null)));
     const chegando=vals
       .filter(Boolean)
-      .map(v=>{try{return JSON.parse(v);}catch{return null;}})
+      .map(v=>{try{return JSON.parse(v);}catch{return null;}}  )
       .filter(v=>v&&(v.status==='Chegando em Breve'||v.status==='Em Vistoria'))
       .sort((a,b)=>(b.criadoEm||0)-(a.criadoEm||0));
 
     return res.status(200).json(chegando);
   }catch(e){
-    console.error('GET /api/chegando error:',e);
+    console.error('[chegando] ERRO:',e.message);
     return res.status(500).json({error:e.message});
   }
 }
