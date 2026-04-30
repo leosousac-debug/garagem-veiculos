@@ -23,19 +23,19 @@ export default async function handler(req,res){
   res.setHeader('Access-Control-Allow-Origin','*');
   res.setHeader('Access-Control-Allow-Methods','GET,OPTIONS');
   if(req.method==='OPTIONS')return res.status(200).end();
-  if(req.method!=='GET')return res.status(405).json({error:'Método não permitido'});
+  if(req.method!=='GET')return res.status(405).json({error:'Metodo nao permitido'});
 
   const cfg=getConfig();
   if(!cfg)return res.status(200).json([]);
 
   try{
-    // Usar SCAN (mais robusto que KEYS no Vercel KV)
+    // SCAN percorre todas as chaves (mais confiavel que KEYS no Vercel KV)
     let keys=[];
     let cursor='0';
     do{
-      const scanResult=await rCmd(cfg,'SCAN',cursor,'MATCH','veiculo:*','COUNT','200');
-      cursor=String(scanResult[0]);
-      if(scanResult[1]&&scanResult[1].length)keys.push(...scanResult[1]);
+      const r2=await rCmd(cfg,'SCAN',cursor,'MATCH','veiculo:*','COUNT','200');
+      cursor=String(r2[0]);
+      if(r2[1]&&r2[1].length)keys.push(...r2[1]);
     }while(cursor!=='0');
 
     if(!keys.length)return res.status(200).json([]);
@@ -43,7 +43,7 @@ export default async function handler(req,res){
     const vals=await Promise.all(keys.map(k=>rCmd(cfg,'GET',k).catch(()=>null)));
     const chegando=vals
       .filter(Boolean)
-      .map(v=>{try{return JSON.parse(v);}catch{return null;}}  )
+      .map(v=>{try{return JSON.parse(v);}catch{return null;}})
       .filter(v=>v&&(v.status==='Chegando em Breve'||v.status==='Em Vistoria'))
       .sort((a,b)=>(b.criadoEm||0)-(a.criadoEm||0));
 
