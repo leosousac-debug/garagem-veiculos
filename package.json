@@ -1,9 +1,10 @@
 {
   "name": "garagem-veiculos",
   "version": "2.0.0",
-  "description": "Site de vendas - Garagem Veículos",
+  "description": "Site de vendas - Garagem Ve\u00edculos",
   "scripts": {
     "dev": "vercel dev"
   },
-  "dependencies": {}
+  "dependencies": {},
+  "type": "module"
 }
