@@ -294,10 +294,10 @@ nav{
 .modal-x:hover{background:var(--red);color:#fff;border-color:var(--red)}
 
 /* galeria modal */
-.mgal{position:relative;aspect-ratio:16/9;background:var(--navy3);overflow:hidden}
+.mgal{position:relative;aspect-ratio:4/3;background:#000;overflow:hidden}
 .mgal .mslides{display:flex;height:100%;transition:transform 0.35s cubic-bezier(0.4,0,0.2,1)}
 .mgal .mslide{flex-shrink:0;width:100%;height:100%}
-.mgal .mslide img{width:100%;height:100%;object-fit:cover;display:block}
+.mgal .mslide img{width:100%;height:100%;object-fit:contain;display:block;background:#000}
 .mgal .mslide-ph{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:6rem;color:var(--border)}
 .mgal-nav{
   position:absolute;top:50%;transform:translateY(-50%);
