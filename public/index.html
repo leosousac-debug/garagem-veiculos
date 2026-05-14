@@ -216,10 +216,10 @@ nav{
 .car-card:hover::before{transform:scaleY(1)}
 
 /* ── GALERIA INLINE ── */
-.car-gallery{position:relative;overflow:hidden;aspect-ratio:16/10;background:var(--navy3)}
+.car-gallery{position:relative;overflow:hidden;aspect-ratio:4/3;background:var(--navy3)}
 .car-gallery .slides{display:flex;height:100%;transition:transform 0.35s cubic-bezier(0.4,0,0.2,1)}
 .car-gallery .slide{flex-shrink:0;width:100%;height:100%}
-.car-gallery .slide img{width:100%;height:100%;object-fit:contain;display:block;background:var(--navy3)}
+.car-gallery .slide img{width:100%;height:100%;object-fit:cover;object-position:center center;display:block;background:var(--navy3)}
 .car-gallery .slide-placeholder{
   width:100%;height:100%;display:flex;align-items:center;justify-content:center;
   font-size:3.5rem;color:var(--border);
