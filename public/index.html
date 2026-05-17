@@ -1540,7 +1540,7 @@ footer{
           </div>
           <div class="fg">
             <label class="fl2">Renda comprovada por</label>
-            <select class="fs" id="fin-renda">
+            <select class="fs" id="fin-renda" onchange="finToggleRendaValor()">
               <option value="">Selecione</option>
               <option value="Holerite">Holerite</option>
               <option value="Extrato bancario">Extrato bancário</option>
@@ -1548,6 +1548,10 @@ footer{
               <option value="Pro labore">Pró-labore</option>
               <option value="Nao tenho">Não tenho comprovante</option>
             </select>
+          </div>
+          <div class="fg" id="fin-renda-valor-wrap" style="display:none">
+            <label class="fl2">Valor da renda mensal <span style="color:var(--red)">*</span></label>
+            <input type="number" class="fi" id="fin-renda-valor" placeholder="Ex: 3500" min="0">
           </div>
         </div>
       </div>
@@ -2904,7 +2908,6 @@ function cardHTML(v){
     '<div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px">'+
     '<div class="km-badge">'+(v.km||0).toLocaleString('pt-BR')+' km</div>'+
     '<div style="display:flex;align-items:center;gap:5px">'+
-    '<button class="like-btn'+(liked?' liked':'')+'" id="like-btn-'+v.id+'" onclick="addLike(\''+v.id+'\',event)"><span class="like-heart">&#10084;</span><span class="like-count">'+likes+'</span></button>'+
     '<button class="comp-add-btn'+(inComp?' selected':'')+'" id="comp-btn-'+v.id+'" onclick="toggleComp(\''+v.id+'\',event)">'+(inComp?'&#10003;':'+')+'</button>'+
     '<button class="btn-card">VER</button>'+
     '</div></div></div></div></div>';
@@ -3191,18 +3194,28 @@ function calcFin(){
   document.getElementById('fin-result').style.display='block';
 }
 function finApenasSimular(){const val=parseFloat(document.getElementById('fin-valor')?.value)||0;if(!val){toast('Informe o valor.','err');return;}calcFin();document.getElementById('fin-result').scrollIntoView({behavior:'smooth',block:'start'});}
+function finToggleRendaValor(){
+  const renda=document.getElementById('fin-renda')?.value||'';
+  const wrap=document.getElementById('fin-renda-valor-wrap');
+  if(wrap) wrap.style.display=(renda&&renda!=='Nao tenho')?'block':'none';
+  if(renda==='Nao tenho'&&document.getElementById('fin-renda-valor'))document.getElementById('fin-renda-valor').value='';
+}
 function finEnviarProposta(){
   const nome=(document.getElementById('fin-nome')?.value||'').trim();const cpf=(document.getElementById('fin-cpf')?.value||'').trim();
   const nasc=document.getElementById('fin-nasc')?.value||'';const fone=(document.getElementById('fin-fone')?.value||'').trim();
   const cnh=document.getElementById('fin-cnh')?.value||'';const renda=document.getElementById('fin-renda')?.value||'';
+  const rendaValor=document.getElementById('fin-renda-valor')?.value||'';
   const val=parseFloat(document.getElementById('fin-valor')?.value)||0;const ent=parseFloat(document.getElementById('fin-entrada')?.value)||0;
   const n=parseInt(document.getElementById('fin-prazo')?.value)||36;
-  const sel=document.getElementById('fin-veiculo-sel');const veiculo=sel&&sel.selectedIndex>0?sel.options[sel.selectedIndex].textContent:'Nao especificado';
+  const sel=document.getElementById('fin-veiculo-sel');const veiculo=sel&&sel.selectedIndex>0?sel.options[sel.selectedIndex].textContent:'';
+  if(!veiculo){toast('Selecione o veículo de interesse.','err');document.getElementById('fin-veiculo-sel')?.focus();return;}
   if(!nome||!cpf||!fone||!cnh){toast('Preencha Nome, CPF, WhatsApp e CNH.','err');return;}
   if(!val){toast('Informe o valor.','err');return;}
+  if(renda&&renda!=='Nao tenho'&&!rendaValor){toast('Informe o valor da sua renda mensal.','err');document.getElementById('fin-renda-valor')?.focus();return;}
   const pv=Math.max(val-ent,0);const r=0.019;const par=Math.round(pv*(r*Math.pow(1+r,n))/(Math.pow(1+r,n)-1));
   const nascFmt=nasc?new Date(nasc+'T12:00:00').toLocaleDateString('pt-BR'):'nao informado';
-  window.open(wppLink('*SIMULACAO DE FINANCIAMENTO — GARAGE VEICULOS*\n\nNome: '+nome+'\nCPF: '+cpf+'\nNascimento: '+nascFmt+'\nWhatsApp: '+fone+'\nCNH: '+cnh+'\nRenda: '+(renda||'nao informado')+'\n\nVeiculo: '+veiculo+'\nValor: R$ '+val.toLocaleString('pt-BR')+'\nEntrada: R$ '+ent.toLocaleString('pt-BR')+'\nPrazo: '+n+' meses\nParcela: '+par.toLocaleString('pt-BR',{style:'currency',currency:'BRL'})+'\n\n_Simulacao apenas informativa._'),'_blank');
+  const rendaInfo=renda?(renda==='Nao tenho'?'Sem comprovante':renda+' — R$ '+parseFloat(rendaValor).toLocaleString('pt-BR')):'nao informado';
+  window.open(wppLink('*SIMULACAO DE FINANCIAMENTO — GARAGE VEICULOS*\n\nNome: '+nome+'\nCPF: '+cpf+'\nNascimento: '+nascFmt+'\nWhatsApp: '+fone+'\nCNH: '+cnh+'\nRenda: '+rendaInfo+'\n\nVeiculo: '+veiculo+'\nValor: R$ '+val.toLocaleString('pt-BR')+'\nEntrada: R$ '+ent.toLocaleString('pt-BR')+'\nPrazo: '+n+' meses\nParcela: '+par.toLocaleString('pt-BR',{style:'currency',currency:'BRL'})+'\n\n_Simulacao apenas informativa._'),'_blank');
 }
 function finComEsteVeiculo(){
   if(!mCar)return;
