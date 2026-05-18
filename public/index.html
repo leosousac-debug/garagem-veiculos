@@ -2867,7 +2867,7 @@ function renderGrid(){
 }
 function cardHTML(v){
   const imgs=v.fotos&&v.fotos.length?v.fotos:[];
-  const slides=imgs.length?imgs.map(f=>'<div class="slide"><img src="'+f+'" alt="'+v.marca+' '+v.modelo+' onload="this.classList.add(\"loaded\")"></div>').join(''):'<div class="slide"><div class="slide-placeholder">&#128663;</div></div>';
+  const slides=imgs.length?imgs.map(f=>'<div class="slide"><img src="'+f+'" alt="'+v.marca+' '+v.modelo+'" loading="lazy" onload="this.classList.add(\'loaded\')"></div>').join(''):'<div class="slide"><div class="slide-placeholder">&#128663;</div></div>';
   const dots=imgs.length>1?imgs.map((_,i)=>'<button class="gal-dot'+(i===0?' active':'')+'" onclick="setCardGal(\''+v.id+'\','+i+',event)"></button>').join(''):'';
   const bCls=v.destaque==='Sim'?'badge-dest':v.cond==='Novo'?'badge-novo':v.cond==='Seminovo'?'badge-semi':'badge-usado';
   const bTxt=v.destaque==='Sim'?'DESTAQUE':v.cond.toUpperCase();
