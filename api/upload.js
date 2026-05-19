@@ -40,7 +40,15 @@ export default async function handler(req, res) {
 
     const timestamp = Math.floor(Date.now() / 1000);
     const folder = 'garagem-veiculos';
-    const paramsToSign = `folder=${folder}&timestamp=${timestamp}`;
+    // Transformações aplicadas no momento do upload:
+    // w_1200: limita largura máxima a 1200px
+    // h_900: limita altura máxima a 900px
+    // c_limit: reduz sem cortar (mantém proporção)
+    // q_auto:good: qualidade automática otimizada
+    // f_auto: formato automático (webp quando possível)
+    // strip: remove metadados desnecessários (EXIF, GPS)
+    const transformation = 'w_1200,h_900,c_limit,q_auto:good,f_auto,fl_strip_profile';
+    const paramsToSign = `folder=${folder}&timestamp=${timestamp}&transformation=${transformation}`;
 
     const crypto = await import('crypto');
     const signature = crypto.default
@@ -54,6 +62,7 @@ export default async function handler(req, res) {
     formData.append('api_key', apiKey);
     formData.append('signature', signature);
     formData.append('folder', folder);
+    formData.append('transformation', transformation);
 
     const uploadRes = await fetch(
       `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
@@ -70,8 +79,8 @@ export default async function handler(req, res) {
     }
 
     const result = await uploadRes.json();
-    const url = result.secure_url.replace('/upload/', '/upload/q_auto,f_auto/');
-    return res.status(200).json({ url });
+    // URL já vem otimizada pois a transformação foi aplicada no upload
+    return res.status(200).json({ url: result.secure_url });
 
   } catch (err) {
     console.error('Upload error:', err.message);
