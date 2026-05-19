@@ -1,4 +1,4 @@
-// api/upload.js — Vercel Blob via REST (sem SDK @vercel/blob)
+// api/upload.js — Cloudinary (sem SDK, via REST API)
 
 function verifyToken(req) {
   const auth = req.headers.authorization || '';
@@ -26,40 +26,53 @@ export default async function handler(req, res) {
 
   if (!verifyToken(req)) return res.status(401).json({ error: 'Não autorizado' });
 
-  const blobToken = process.env.BLOB_READ_WRITE_TOKEN;
-  if (!blobToken) return res.status(500).json({ error: 'BLOB_READ_WRITE_TOKEN não configurado' });
+  const cloudName = process.env.CLOUDINARY_CLOUD_NAME;
+  const apiKey    = process.env.CLOUDINARY_API_KEY;
+  const apiSecret = process.env.CLOUDINARY_API_SECRET;
+
+  if (!cloudName || !apiKey || !apiSecret) {
+    return res.status(500).json({ error: 'Cloudinary não configurado. Verifique as variáveis de ambiente.' });
+  }
 
   try {
-    const { filename, data } = req.body;
+    const { data } = req.body;
     if (!data) return res.status(400).json({ error: 'Nenhuma imagem recebida' });
 
-    // Remove prefixo data:image/...;base64,
-    const base64 = data.replace(/^data:image\/\w+;base64,/, '');
-    const buffer = Buffer.from(base64, 'base64');
+    const timestamp = Math.floor(Date.now() / 1000);
+    const folder = 'garagem-veiculos';
+    const paramsToSign = `folder=${folder}&timestamp=${timestamp}`;
 
-    const ext = (filename || 'foto.jpg').split('.').pop().toLowerCase() || 'jpg';
-    const mimeMap = { jpg: 'image/jpeg', jpeg: 'image/jpeg', png: 'image/png', webp: 'image/webp' };
-    const mime = mimeMap[ext] || 'image/jpeg';
-    const blobName = `veiculos/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
+    const crypto = await import('crypto');
+    const signature = crypto.default
+      .createHash('sha256')
+      .update(paramsToSign + apiSecret)
+      .digest('hex');
 
-    // PUT direto na API do Vercel Blob
-    const blobRes = await fetch(`https://blob.vercel-storage.com/${blobName}`, {
-      method: 'PUT',
-      headers: {
-        Authorization: `Bearer ${blobToken}`,
-        'Content-Type': mime,
-        'x-content-type': mime,
-      },
-      body: buffer
-    });
+    const formData = new URLSearchParams();
+    formData.append('file', data);
+    formData.append('timestamp', timestamp);
+    formData.append('api_key', apiKey);
+    formData.append('signature', signature);
+    formData.append('folder', folder);
 
-    if (!blobRes.ok) {
-      const txt = await blobRes.text();
-      throw new Error(`Blob error ${blobRes.status}: ${txt}`);
+    const uploadRes = await fetch(
+      `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: formData.toString()
+      }
+    );
+
+    if (!uploadRes.ok) {
+      const txt = await uploadRes.text();
+      throw new Error(`Cloudinary error ${uploadRes.status}: ${txt}`);
     }
 
-    const blobData = await blobRes.json();
-    return res.status(200).json({ url: blobData.url });
+    const result = await uploadRes.json();
+    const url = result.secure_url.replace('/upload/', '/upload/q_auto,f_auto/');
+    return res.status(200).json({ url });
+
   } catch (err) {
     console.error('Upload error:', err.message);
     return res.status(500).json({ error: err.message });
